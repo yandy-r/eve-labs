@@ -24,9 +24,7 @@
     "test": "./scripts/check-labs.py"
   },
   "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ],
+    "extends": ["@commitlint/config-conventional"],
     "rules": {
       "type-enum": [
         2,
@@ -45,22 +43,9 @@
           "revert"
         ]
       ],
-      "subject-case": [
-        2,
-        "never",
-        [
-          "pascal-case",
-          "upper-case"
-        ]
-      ],
-      "header-max-length": [
-        2,
-        "always",
-        100
-      ],
-      "body-max-line-length": [
-        0
-      ]
+      "subject-case": [2, "never", ["pascal-case", "upper-case"]],
+      "header-max-length": [2, "always", 100],
+      "body-max-line-length": [0]
     }
   }
 }

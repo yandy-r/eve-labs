@@ -31,7 +31,6 @@ Closes #<!-- issue number -->
 - [ ] Linter passes
 - [ ] Tests pass
 
-
 ## Reviewer Notes
 
 <!-- Anything reviewers should know: risks, areas needing extra scrutiny, migration notes -->

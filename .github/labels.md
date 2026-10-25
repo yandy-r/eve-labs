@@ -5,32 +5,32 @@ customize for your project. `area:` labels are project-specific; add them yourse
 
 ## Label Families
 
-| Label | Family | Description |
-|---|---|---|
-| `type:bug` | type | Something isn't working |
-| `type:feature` | type | New functionality |
-| `type:docs` | type | Documentation only |
-| `type:refactor` | type | No functional changes |
-| `type:perf` | type | Performance improvement |
-| `type:test` | type | Adding or fixing tests |
-| `type:build` | type | Build system or dependencies |
-| `type:ci` | type | CI/CD pipeline changes |
-| `type:chore` | type | Routine maintenance |
-| `type:migration` | type | Migration or upgrade |
-| `type:security` | type | Security fix or audit |
-| `priority:critical` | priority | Must fix immediately |
-| `priority:high` | priority | Fix in current milestone |
-| `priority:medium` | priority | Fix in next milestone |
-| `priority:low` | priority | Nice to have |
-| `status:needs-triage` | status | Awaiting review |
-| `status:in-progress` | status | Actively being worked on |
-| `status:blocked` | status | Blocked by external factor |
-| `status:needs-info` | status | Waiting for more information |
-| `good first issue` | standalone | Suitable for newcomers |
-| `help wanted` | standalone | Extra attention needed |
-| `duplicate` | standalone | Already reported |
-| `wontfix` | standalone | Intentionally not addressed |
-| `regression` | standalone | Broke something that worked |
+| Label                 | Family     | Description                  |
+| --------------------- | ---------- | ---------------------------- |
+| `type:bug`            | type       | Something isn't working      |
+| `type:feature`        | type       | New functionality            |
+| `type:docs`           | type       | Documentation only           |
+| `type:refactor`       | type       | No functional changes        |
+| `type:perf`           | type       | Performance improvement      |
+| `type:test`           | type       | Adding or fixing tests       |
+| `type:build`          | type       | Build system or dependencies |
+| `type:ci`             | type       | CI/CD pipeline changes       |
+| `type:chore`          | type       | Routine maintenance          |
+| `type:migration`      | type       | Migration or upgrade         |
+| `type:security`       | type       | Security fix or audit        |
+| `priority:critical`   | priority   | Must fix immediately         |
+| `priority:high`       | priority   | Fix in current milestone     |
+| `priority:medium`     | priority   | Fix in next milestone        |
+| `priority:low`        | priority   | Nice to have                 |
+| `status:needs-triage` | status     | Awaiting review              |
+| `status:in-progress`  | status     | Actively being worked on     |
+| `status:blocked`      | status     | Blocked by external factor   |
+| `status:needs-info`   | status     | Waiting for more information |
+| `good first issue`    | standalone | Suitable for newcomers       |
+| `help wanted`         | standalone | Extra attention needed       |
+| `duplicate`           | standalone | Already reported             |
+| `wontfix`             | standalone | Intentionally not addressed  |
+| `regression`          | standalone | Broke something that worked  |
 
 ## Apply with `gh label create`
 

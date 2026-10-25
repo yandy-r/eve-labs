@@ -18,15 +18,14 @@ The script installs the `lefthook` binary (prefers the project's package manager
 falls back to Homebrew, Go, Cargo, or pipx) and wires hooks via `lefthook install`.
 It is safe to re-run.
 
-
 ---
 
 ## What the hooks do
 
-| Stage        | Purpose                                            | When it fires                |
-| ------------ | -------------------------------------------------- | ---------------------------- |
-| `pre-commit` | Lint + format staged files (stack-specific)        | Before each `git commit`     |
-| `pre-push`   | Not configured (no test command detected)          | —                            |
+| Stage        | Purpose                                     | When it fires            |
+| ------------ | ------------------------------------------- | ------------------------ |
+| `pre-commit` | Lint + format staged files (stack-specific) | Before each `git commit` |
+| `pre-push`   | Not configured (no test command detected)   | —                        |
 
 Pre-commit commands receive `{staged_files}` from lefthook so they only touch
 files in the git index — fast, focused feedback. Files auto-fixed by the linter
