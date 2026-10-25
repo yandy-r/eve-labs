@@ -1,0 +1,59 @@
+name: Feature request
+description: "Propose a new feature for eve-labs"
+title: "[Feature]: "
+labels: ["type:feature", "status:needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature for **eve-labs**! Please describe what
+        you'd like and why it matters.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Feature Category
+      description: "What area does this feature relate to? Customize these options for your project."
+      options:
+        - Core Functionality
+        - Developer Experience
+        - Performance
+        - Documentation
+        - Build / Packaging
+        - CLI / Arguments
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / Use Case
+      description: "What problem does this solve, or what use case does it enable?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: "Describe how you'd like this to work."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: "Any alternative solutions or workarounds you've considered."
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: duplicate-check
+    attributes:
+      label: Duplicate Check
+      description: "Please search existing issues before filing a new one."
+      options:
+        - label: "I have searched existing issues and this feature has not been requested."
+          required: false

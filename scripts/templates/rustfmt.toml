@@ -1,0 +1,41 @@
+edition = "2021"
+max_width = 100
+hard_tabs = false
+tab_spaces = 4
+newline_style = "Unix"
+use_small_heuristics = "Default"
+reorder_imports = true
+reorder_modules = true
+remove_nested_parens = true
+merge_derives = true
+use_field_init_shorthand = true
+use_try_shorthand = true
+
+# Canonical well-known paths — keep aligned with
+# scripts/bundle/lib/excludes.sh (STYLE_EXCLUDES).
+# NOTE: `ignore` is unstable as of rustfmt 1.x; nightly rustfmt honors it,
+# stable rustfmt will warn and continue. Safe to keep — the file-list filter
+# in modified-files.sh covers stable-rustfmt users for scoped runs.
+ignore = [
+    "node_modules",
+    "target",
+    "build",
+    "dist",
+    "out",
+    "coverage",
+    "vendor",
+    ".venv",
+    "venv",
+    "env",
+    "__pycache__",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".next",
+    ".nuxt",
+    ".cache",
+    ".terraform",
+    ".cursor-plugin",
+    ".codex-plugin",
+    ".opencode-plugin",
+]

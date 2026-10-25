@@ -1,0 +1,55 @@
+# Validates PR titles as Conventional Commits and rejects placeholder subjects
+# like "[WIP]" / "Draft:" / "Initial plan" that agents sometimes open PRs with.
+#
+# Rationale and full contributor guidance:
+#   - AGENTS.md                        (canonical project rules; CLAUDE.md imports it)
+#   - .github/copilot-instructions.md  (code-agent pointer to AGENTS.md)
+#
+# The PR title becomes the squash-merge commit subject verbatim and lands in
+# CHANGELOG.md / git log as-is — that's why this check is required to merge.
+name: PR title
+
+on:
+  pull_request_target:
+    types: [opened, edited, reopened, synchronize]
+
+permissions:
+  pull-requests: read
+
+concurrency:
+  group: pr-title-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Validate Conventional Commit PR title
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # Keep this list in sync with AGENTS.md § "MUST / MUST NOT" and
+          # references/conventional-commits.md; adjust for custom types.
+          types: |
+            feat
+            fix
+            docs
+            refactor
+            perf
+            test
+            build
+            ci
+            chore
+            style
+          requireScope: false
+          # Squash merges use the PR title as the commit subject, so reject
+          # placeholder prefixes agents sometimes open PRs with. Keep the
+          # exact escaping — YAML + regex is easy to break.
+          subjectPattern: '^(?!\[WIP\]|\[Draft\]|Initial plan|WIP:|Draft:).+'
+          subjectPatternError: |
+            The PR title subject "{subject}" looks like a placeholder.
+            Remove "[WIP]" / "[Draft]" / "Draft:" / "WIP:" / "Initial plan"
+            and use a Conventional Commit title — the PR title becomes the
+            squash-merge commit subject and lands in CHANGELOG.md verbatim.
+            Use GitHub's native Draft PR status for work-in-progress instead.

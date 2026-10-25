@@ -1,0 +1,32 @@
+# lefthook.yml — git hook manager for eve-labs
+#
+# Install with ./scripts/install-lefthook.sh (bootstraps the binary and runs
+# `lefthook install` to wire .git/hooks). See docs/lefthook-usage.md for details.
+#
+# Bypass a hook once:   git commit --no-verify / git push --no-verify
+# Skip in CI:           lefthook checks CI=true automatically; no config needed.
+
+pre-commit:
+  parallel: true
+  commands:
+    style-lint:
+      run: ./scripts/style.sh lint --staged --fix
+      stage_fixed: true
+    style-format:
+      run: ./scripts/style.sh format --staged
+      stage_fixed: true
+    check-labs:
+      run: ./scripts/check-labs.py {staged_files}
+      glob: "*.unl"
+
+pre-push:
+  commands:
+    style-ci:
+      run: ./scripts/style.sh lint
+    test:
+      run: make test
+
+commit-msg:
+  commands:
+    commitlint:
+      run: pnpm exec commitlint --edit {1}

@@ -6,3 +6,35 @@
 *.swp
 *~
 .DS_Store
+Thumbs.db
+*.swo
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.cursor/*
+!.cursor/rules/
+!.cursor/rules/**
+.zed/
+
+# Environment / secrets — NEVER commit these
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+
+# AI coding agents — managed repo-local worktrees and scratch
+.claude/worktrees/
+.opencode/worktrees/
+.codex/worktrees/
+.cursor/worktrees/
+.omp/worktrees/
+.agents/worktrees/
+.claude/session-data/
+.claude/plans/
+
+# Node tooling (lint/format/commitlint)
+node_modules/

@@ -1,0 +1,41 @@
+name: Docs request
+description: "Request documentation updates or additions"
+title: "[Docs]: "
+labels: ["type:docs", "status:needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Help us improve the **eve-labs** documentation. Use this form to report
+        missing, unclear, or incorrect documentation.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Documentation Area
+      description: "Which part of the documentation needs attention?"
+      options:
+        - README
+        - API Reference
+        - Tutorial / Getting Started
+        - Reference Guide
+        - Changelog / Migration
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: unclear
+    attributes:
+      label: What Is Unclear or Missing
+      description: "Describe what documentation is missing, wrong, or confusing."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-edit
+    attributes:
+      label: Proposed Edit or Sketch
+      description: "If you have a suggestion for how to improve it, describe it here."
+    validations:
+      required: false

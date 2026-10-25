@@ -1,0 +1,101 @@
+name: PR title autofix
+
+# Normalizes PR titles from coding agents so they pass pr-title.yml. Two passes:
+#
+#   1. Strip placeholder prefixes ("[WIP]", "Draft:", "Initial plan", …) that
+#      .github/copilot-instructions.md forbids. When a placeholder is stripped,
+#      convert the PR to draft to preserve the WIP intent.
+#   2. If the (possibly stripped) title starts with a known Conventional Commit
+#      type word followed by whitespace instead of a colon (e.g. "Refactor X"),
+#      rewrite it as "<type>: X" with the type lowercased. Also lowercase an
+#      already-colon'd capitalized type ("Refactor: X" -> "refactor: X"). This
+#      pass never forces draft — it only fixes capitalization/punctuation.
+#
+# The agent's runtime token often lacks pull_requests:write, so the agent itself
+# cannot fix the title after the fact — this workflow does it server-side with
+# the repo's GITHUB_TOKEN. The existing pr-title.yml validator re-runs on the
+# edited title. Both passes are idempotent so re-runs on already-clean titles
+# are a no-op and the title-edit webhook can't ping-pong.
+
+on:
+  pull_request_target:
+    types: [opened, edited, reopened]
+
+permissions:
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: pr-title-autofix-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  autofix:
+    name: Strip placeholder prefix from PR title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Strip placeholder prefix
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_DRAFT: ${{ github.event.pull_request.draft }}
+        run: |
+          set -euo pipefail
+
+          # Pass 1: strip known placeholder leaders, plus any trailing
+          # colon/whitespace. Case-insensitive.
+          cleaned="$(
+            printf '%s' "$PR_TITLE" | sed -E \
+              's/^[[:space:]]*(\[WIP\]|\[Draft\]|WIP|Draft|Initial plan( for #?[0-9]+)?)[[:space:]:]*//I'
+          )"
+          stripped_placeholder=false
+          if [[ "$cleaned" != "$PR_TITLE" ]]; then
+            stripped_placeholder=true
+          fi
+
+          if [[ -z "${cleaned// }" ]]; then
+            echo "Title was entirely a placeholder; not clearing it. Converting to draft and commenting."
+            if [[ "$PR_DRAFT" != "true" ]]; then
+              gh pr ready "$PR_NUMBER" --undo
+            fi
+            gh pr comment "$PR_NUMBER" --body \
+              "This PR title (\`$PR_TITLE\`) is a placeholder. The PR title is the squash-merge commit subject and lands in \`CHANGELOG.md\` verbatim — please rewrite it as a Conventional Commit (e.g. \`feat(scope): …\`). The PR has been marked as draft."
+            exit 0
+          fi
+
+          # Pass 2a: "Type X" (type word + whitespace, no colon) -> "type: X".
+          # Matches known Conventional Commit types from pr-title.yml. Does not
+          # match "Type:" / "Type(scope):" because the character after the type
+          # word must be whitespace.
+          cleaned="$(
+            printf '%s' "$cleaned" | sed -E \
+              's/^[[:space:]]*(feat|fix|docs|refactor|perf|test|build|ci|chore|style)[[:space:]]+([^[:space:]].*)$/\L\1\E: \2/I'
+          )"
+
+          # Pass 2b: lowercase a leading capitalized type prefix with colon,
+          # e.g. "Refactor: X" -> "refactor: X", "Feat(auth): X" -> "feat(auth): X".
+          cleaned="$(
+            printf '%s' "$cleaned" | sed -E \
+              's/^[[:space:]]*(feat|fix|docs|refactor|perf|test|build|ci|chore|style)(\([^)]+\))?(!?):/\L\1\E\2\3:/I'
+          )"
+
+          if [[ "$cleaned" == "$PR_TITLE" ]]; then
+            echo "Title already clean; nothing to do."
+            exit 0
+          fi
+
+          echo "Rewriting title: '$PR_TITLE' -> '$cleaned'"
+          gh pr edit "$PR_NUMBER" --title "$cleaned"
+
+          if [[ "$stripped_placeholder" == "true" ]]; then
+            if [[ "$PR_DRAFT" != "true" ]]; then
+              gh pr ready "$PR_NUMBER" --undo
+            fi
+            gh pr comment "$PR_NUMBER" --body \
+              "Auto-stripped placeholder prefix and converted to draft. Original: \`$PR_TITLE\` → \`$cleaned\`. Mark ready for review when the title and content are final."
+          else
+            gh pr comment "$PR_NUMBER" --body \
+              "Auto-normalized PR title to Conventional Commit format. Original: \`$PR_TITLE\` → \`$cleaned\`."
+          fi
