@@ -1,0 +1,69 @@
+name: Lint autofix
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: lint-autofix-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  format-and-push:
+    name: Format and push fixes
+    # Fork PRs cannot be pushed back to; the check workflow (lint.yml) still runs authoritatively.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR head branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --no-cache-dir ruff black
+
+      - name: Install shellcheck
+        run: ./scripts/install-shellcheck.sh
+
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Apply formatters
+        run: ./scripts/style.sh format
+
+      - name: Apply auto-fixable lint
+        # Unfixable violations are reported by the check workflow (lint.yml); do not block the push-back here.
+        run: ./scripts/style.sh lint --fix
+        continue-on-error: true
+
+      - name: Commit and push if changed
+        env:
+          PR_HEAD_REF: ${{ github.head_ref }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "No autofix changes."
+            exit 0
+          fi
+          # Customize exclusions here, e.g.:
+          #   git add -u -- . ':(exclude)CHANGELOG.md' ':(exclude)docs/internal/**'
+          git add -u -- .
+          if git diff --cached --quiet; then
+            echo "No autofix changes remain after exclusions."
+            exit 0
+          fi
+          git commit -m "chore: apply format + lint --fix (autofix workflow)"
+          git push origin "HEAD:${PR_HEAD_REF}"

@@ -9,7 +9,24 @@
 pre-commit:
   parallel: true
   commands:
+    style-lint:
+      run: ./scripts/style.sh lint --staged --fix
+      stage_fixed: true
+    style-format:
+      run: ./scripts/style.sh format --staged
+      stage_fixed: true
+    check-labs:
+      run: ./scripts/check-labs.py {staged_files}
+      glob: "*.unl"
 
-# No test command was detected, so no pre-push hook is configured.
-# Add `pre-push: commands: test: run: <your test command>` when one exists.
+pre-push:
+  commands:
+    style-ci:
+      run: ./scripts/style.sh lint
+    test:
+      run: make test
 
+commit-msg:
+  commands:
+    commitlint:
+      run: pnpm exec commitlint --edit {1}

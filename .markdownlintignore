@@ -1,0 +1,38 @@
+# Canonical well-known paths — keep aligned with
+# ../lib/excludes.sh (STYLE_EXCLUDES).
+
+# Language package / build output
+node_modules/
+target/
+build/
+dist/
+out/
+coverage/
+vendor/
+
+# Python environments & cache
+.venv/
+venv/
+env/
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# JS meta-framework caches
+.next/
+.nuxt/
+.cache/
+
+# Infrastructure tooling
+.terraform/
+
+# Generated plugin bundles
+.cursor-plugin/
+.codex-plugin/
+.opencode-plugin/
+scripts/templates/markdownlint.json
+
+# Version control
+.git/
+CHANGELOG.md

@@ -1,0 +1,80 @@
+# Managed by ycc:formatters — Ruff + Black configuration.
+# If you have an existing pyproject.toml, MERGE these sections manually.
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+# Canonical well-known paths — keep aligned with
+# scripts/bundle/lib/excludes.sh (STYLE_EXCLUDES).
+extend-exclude = [
+    "node_modules",
+    "target",
+    "build",
+    "dist",
+    "out",
+    "coverage",
+    "vendor",
+    ".venv",
+    "venv",
+    "env",
+    "__pycache__",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".next",
+    ".nuxt",
+    ".cache",
+    ".terraform",
+    ".cursor-plugin",
+    ".codex-plugin",
+    ".opencode-plugin",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+    "SIM", # flake8-simplify
+    "C4",  # flake8-comprehensions
+]
+ignore = [
+    "E501",  # line too long — handled by the formatter
+]
+
+[tool.ruff.lint.isort]
+known-first-party = []
+
+[tool.black]
+line-length = 100
+target-version = ["py311"]
+# Canonical well-known paths — keep aligned with
+# scripts/bundle/lib/excludes.sh (STYLE_EXCLUDES).
+extend-exclude = '''
+/(
+    node_modules
+  | target
+  | build
+  | dist
+  | out
+  | coverage
+  | vendor
+  | \.venv
+  | venv
+  | env
+  | __pycache__
+  | \.mypy_cache
+  | \.pytest_cache
+  | \.ruff_cache
+  | \.next
+  | \.nuxt
+  | \.cache
+  | \.terraform
+  | \.cursor-plugin
+  | \.codex-plugin
+  | \.opencode-plugin
+)/
+'''

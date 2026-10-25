@@ -35,3 +35,6 @@ Thumbs.db
 .agents/worktrees/
 .claude/session-data/
 .claude/plans/
+
+# Node tooling (lint/format/commitlint)
+node_modules/
