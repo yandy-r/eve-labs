@@ -6,15 +6,16 @@ the essentials are repeated here in case it cannot follow links.
 ## Commands
 
 ```bash
-# not detected
+pnpm install                 # dev tooling (prettier, markdownlint, biome, commitlint)
+bash scripts/install-lefthook.sh  # git hooks
 ```
 
 ```bash
-# not detected
+make test                    # validate .unl labs (XML + unique <lab id>); also `pnpm test`
 ```
 
 ```bash
-# not detected
+make lint                    # ./scripts/style.sh lint; `make format` to auto-format
 ```
 
 ## Essentials

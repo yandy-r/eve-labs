@@ -26,6 +26,37 @@ cd /opt/unetlab/labs && git add -A && git commit -m "..." && git push
 
 Ignored: the code-search `index`, `.updated` marker, lock/temp files.
 
+## Development
+
+Tooling runs on a workstation clone, not on the EVE host. Requires Node (LTS) with pnpm,
+Python 3.11+, and `make`.
+
+```bash
+pnpm install                       # pinned prettier, markdownlint, biome, commitlint
+bash scripts/install-lefthook.sh   # wire pre-commit / pre-push / commit-msg hooks
+git config commit.template .gitmessage
+```
+
+| Task            | Command                                                       |
+| --------------- | ------------------------------------------------------------- |
+| Test            | `make test` (or `pnpm test`) — `.unl` XML + unique `<lab id>` |
+| Lint            | `make lint` (or `./scripts/style.sh lint`)                    |
+| Lint, auto-fix  | `make lint-fix`                                               |
+| Format          | `make format`                                                 |
+| Commit messages | Conventional Commits, enforced by commitlint and PR-title CI  |
+
+CI runs `Lint`, `Test`, and `PR title` on every pull request; `Lint autofix` pushes
+formatting fixes back to same-repo PR branches.
+
+## Releasing
+
+Releases are trunk-only: tags `vX.Y.Z` cut from `main` by a maintainer. See
+[`RELEASING.md`](RELEASING.md) for the rules and steps.
+
+## License
+
+[MIT](LICENSE)
+
 ## Linting & Formatting
 
 This project uses a self-contained lint/format bundle rooted in `scripts/style.sh`. Run it directly,
@@ -53,20 +84,21 @@ If you cloned this repo fresh and `scripts/style.sh` is missing (it ships manage
 
 ### Per-language tools
 
-- **Docs**: `markdownlint` + `prettier` (`.markdownlint.json`, `.prettierrc`) for Markdown/YAML. In
-  docs-only repos, Prettier also owns JSON/JSONC.
+- **Docs**: `markdownlint` + `prettier` (`.markdownlint.json`, `.prettierrc`) for Markdown/YAML.
+- **JSON**: `biome` (`biome.json`).
+- **Python**: `ruff` + `black` for `scripts/*.py`.
 
 - **Shell**: `shellcheck --severity=warning` on `*.sh`.
 
 ### CI
 
-To wire lint into CI, run `ycc:formatters --ci` (installs both `lint.yml` and `lint-autofix.yml`) or
-pair it with `--no-autofix` to skip the autofix workflow.
+`.github/workflows/lint.yml` runs the check; `lint-autofix.yml` applies fixes on PRs.
 
-### Pre-commit hook (optional)
+### Hooks
 
-A pre-commit hook is installed. It runs `./scripts/style.sh lint --modified --fix` before every
-commit. To bypass once: `git commit --no-verify`.
+`lefthook.yml` runs `style.sh lint --staged --fix`, `style.sh format --staged`, and
+`check-labs.py` on commit, `lint` + `make test` on push, and commitlint on the message.
+To bypass once: `git commit --no-verify`.
 
 ### Advanced
 

@@ -7,15 +7,16 @@ This is the canonical, tool-neutral repository policy.
 ## Commands
 
 ```bash
-# not detected
+pnpm install                 # dev tooling (prettier, markdownlint, biome, commitlint)
+bash scripts/install-lefthook.sh  # git hooks
 ```
 
 ```bash
-# not detected
+make test                    # validate .unl labs (XML + unique <lab id>); also `pnpm test`
 ```
 
 ```bash
-# not detected
+make lint                    # ./scripts/style.sh lint; `make format` to auto-format
 ```
 
 ## Project conventions
