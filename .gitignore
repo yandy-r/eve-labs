@@ -1,0 +1,8 @@
+# EVE-NG runtime / generated files
+/index
+/.updated
+*.lock
+*.tmp
+*.swp
+*~
+.DS_Store

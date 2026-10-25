@@ -1,0 +1,6 @@
+*.unl text eol=lf diff
+*.unl.jpeg.* binary
+*.unl.png.* binary
+*.png binary
+*.jpg binary
+*.jpeg binary
