@@ -5,7 +5,6 @@ EVE-NG Pro lab files (`/opt/unetlab/labs` on host `eve`, EVE-NG Pro 7.2).
 ## Layout
 
 - `Yandy/` – personal labs (CCIE, Datacenter, Cloud, Customers)
-- `Clients/` – client labs
 - `Shared/`, `Users/` – EVE default folders
 
 ## Conventions (this host)
