@@ -44,10 +44,10 @@ fi
 # -----------------------------------------------------------------------------
 install_lefthook_binary() {
     # Prefer the project's own package manager if it can install lefthook.
-    # unknown was detected at init time.
+    # pnpm was detected at init time.
     if [[ -f "$REPO_ROOT/package.json" ]]; then
-        log "package.json present — running 'unknown install' to pull devDependencies."
-        local pm="unknown"
+        log "package.json present — running 'pnpm install' to pull devDependencies."
+        local pm="pnpm"
         case "$pm" in
             pnpm) pnpm install ;;
             yarn) yarn install ;;
