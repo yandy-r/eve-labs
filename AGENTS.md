@@ -39,3 +39,9 @@ description`. Use `docs(internal): …` for internal plans or research docs.
 - Follow [CONTRIBUTING.md](CONTRIBUTING.md) and the label taxonomy in
   [`.github/labels.md`](.github/labels.md) when present.
 - **Modularity**: small, cohesive units with minimal coupling; extract shared logic instead of copy-pasting.
+
+## Branching & releases
+
+[`RELEASING.md`](RELEASING.md) is the source of truth for branches and releases. Branch
+off `main` and PR back into it; every release is tagged from `main`. Never merge one
+long-lived branch into another to sync it.
