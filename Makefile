@@ -39,3 +39,11 @@ test: check-labs
 
 check-labs:
 	./scripts/check-labs.py
+
+.PHONY: fix-perms fix-perms-dry-run
+
+fix-perms:
+	./scripts/fix-lab-permissions.sh
+
+fix-perms-dry-run:
+	./scripts/fix-lab-permissions.sh --dry-run

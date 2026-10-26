@@ -44,6 +44,9 @@ Faster alternative that fixes only the labs tree (skips `.git/` and `node_module
 /opt/unetlab/labs/scripts/fix-lab-permissions.sh --dry-run  # print the commands only
 ```
 
+Or `make fix-perms` / `make fix-perms-dry-run` from `/opt/unetlab/labs` (`make` ships on the
+Ubuntu host; `pnpm fix-perms` also works where Node is installed).
+
 One-time git setup in the host clone:
 
 ```bash

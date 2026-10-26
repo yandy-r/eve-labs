@@ -21,7 +21,8 @@
     "format:modified": "./scripts/style.sh format --modified",
     "format:staged": "./scripts/style.sh format --staged",
     "format:unstaged": "./scripts/style.sh format --unstaged",
-    "test": "./scripts/check-labs.py"
+    "test": "./scripts/check-labs.py",
+    "fix-perms": "./scripts/fix-lab-permissions.sh"
   },
   "commitlint": {
     "extends": ["@commitlint/config-conventional"],
