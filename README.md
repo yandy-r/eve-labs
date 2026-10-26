@@ -25,6 +25,47 @@ cd /opt/unetlab/labs && git add -A && git commit -m "..." && git push
 
 Ignored: the code-search `index`, `.updated` marker, lock/temp files.
 
+## Host maintenance (after git pull/push)
+
+Git operations on the host run as your shell user (usually `root`), so pulled or checked-out
+files lose the `www-data` ownership and modes EVE needs. Symptoms: labs won't open or save,
+"permission denied" or empty lab reads, nodes failing to start. Run these on host `eve`.
+
+Restore EVE permissions (run after every `git pull`, checkout, merge, or rebase):
+
+```bash
+/opt/unetlab/wrappers/unl_wrapper -a fixpermissions
+```
+
+Equivalent manual fix for just the labs tree:
+
+```bash
+chown -R www-data:www-data /opt/unetlab/labs
+find /opt/unetlab/labs -type d -exec chmod 2775 {} +
+find /opt/unetlab/labs -type f -exec chmod 664 {} +
+```
+
+One-time git setup in the host clone:
+
+```bash
+cd /opt/unetlab/labs
+git config --global --add safe.directory /opt/unetlab/labs  # repo owned by www-data, git run as root
+git config core.fileMode false                               # ignore chmod churn from fixpermissions
+```
+
+Optional: run `fixpermissions` automatically after pulls and checkouts with git hooks:
+
+```bash
+cd /opt/unetlab/labs
+for h in post-merge post-checkout post-rewrite; do
+  printf '#!/bin/sh\n/opt/unetlab/wrappers/unl_wrapper -a fixpermissions\n' > ".git/hooks/$h"
+  chmod +x ".git/hooks/$h"
+done
+```
+
+If a lab still misbehaves, close it in the UI and stop its nodes before pulling; pulling over a
+lab that is open or running can leave EVE's copy out of sync with the file on disk.
+
 ## Development
 
 Tooling runs on a workstation clone, not on the EVE host. Requires Node (LTS) with pnpm,
