@@ -27,7 +27,7 @@ binary exists, the script installs it with Homebrew, Go, Cargo, or pipx, then ru
 | ------------ | --------------------------------------------------------------- | ------------------------ |
 | `pre-commit` | Lint and format staged files; `check-labs.py` on staged `*.unl` | Before each `git commit` |
 | `pre-push`   | `style.sh lint` and `make test`                                 | Before each `git push`   |
-| `commit-msg` | `pnpm exec commitlint --edit`                                   | On the commit message    |
+| `commit-msg` | `pnpm exec commitlint --edit {1}`                               | On the commit message    |
 
 Lint runs `./scripts/style.sh lint --staged --fix` and format runs
 `./scripts/style.sh format --staged`. Both read the git index. `check-labs.py` is
