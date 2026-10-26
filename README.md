@@ -37,12 +37,11 @@ Restore EVE permissions (run after every `git pull`, checkout, merge, or rebase)
 /opt/unetlab/wrappers/unl_wrapper -a fixpermissions
 ```
 
-Equivalent manual fix for just the labs tree:
+Faster alternative that fixes only the labs tree (skips `.git/` and `node_modules/`):
 
 ```bash
-chown -R www-data:www-data /opt/unetlab/labs
-find /opt/unetlab/labs -type d -exec chmod 2775 {} +
-find /opt/unetlab/labs -type f -exec chmod 664 {} +
+/opt/unetlab/labs/scripts/fix-lab-permissions.sh            # chown www-data, dirs 2775, files 664
+/opt/unetlab/labs/scripts/fix-lab-permissions.sh --dry-run  # print the commands only
 ```
 
 One-time git setup in the host clone:
@@ -53,12 +52,12 @@ git config --global --add safe.directory /opt/unetlab/labs  # repo owned by www-
 git config core.fileMode false                               # ignore chmod churn from fixpermissions
 ```
 
-Optional: run `fixpermissions` automatically after pulls and checkouts with git hooks:
+Optional: fix permissions automatically after pulls and checkouts with git hooks:
 
 ```bash
 cd /opt/unetlab/labs
 for h in post-merge post-checkout post-rewrite; do
-  printf '#!/bin/sh\n/opt/unetlab/wrappers/unl_wrapper -a fixpermissions\n' > ".git/hooks/$h"
+  printf '#!/bin/sh\nexec ./scripts/fix-lab-permissions.sh\n' > ".git/hooks/$h"
   chmod +x ".git/hooks/$h"
 done
 ```
