@@ -1,0 +1,516 @@
+
+
+!Command: show running-config
+!Running configuration last done at: Fri Dec 29 00:02:06 2023
+!Time: Fri Dec 29 00:02:07 2023
+
+version 10.3(3) Bios:version  
+hostname dc1-bgw1
+vdc dc1-bgw1 id 1
+  limit-resource vlan minimum 16 maximum 4094
+  limit-resource vrf minimum 2 maximum 4097
+  limit-resource port-channel minimum 0 maximum 511
+  limit-resource m4route-mem minimum 58 maximum 58
+  limit-resource m6route-mem minimum 8 maximum 8
+
+feature nxapi
+feature bash-shell
+feature scp-server
+feature sftp-server
+cfs eth distribute
+nv overlay evpn
+feature ospf
+feature bgp
+feature pim
+feature nxsdk
+feature netconf
+feature restconf
+feature pbr
+feature interface-vlan
+feature vn-segment-vlan-based
+feature lacp
+feature dhcp
+feature lldp
+feature bfd
+feature nv overlay
+evpn multisite border-gateway 65001
+  delay-restore time 300
+feature ngoam
+
+no password strength-check
+username admin password admin123  role network-admin
+username cisco password admin123  role network-admin
+username cisco passphrase  lifetime 99999 warntime 14 gracetime 3
+username ndfc password admin123  role network-admin
+username ndfc passphrase  lifetime 99999 warntime 14 gracetime 3
+username automation password admin123  role network-admin
+username automation passphrase  lifetime 99999 warntime 14 gracetime 3
+no ip domain-lookup
+ip domain-name netlab.local
+copp profile strict
+snmp-server user ndfc network-admin auth md5 480A5A26098BEDAF95DECFA7DC6C08C6DDA2 priv aes-128 205B75023E94E498BAFBF9849932469688FA localizedV2key
+snmp-server user admin network-admin auth md5 043EEC6B7052F60ED1A4747A8BC1CA96D2F2 priv aes-128 206FC6405B718D4581E1252E8993C9C381A4 localizedV2key
+snmp-server user cisco network-admin auth md5 21659C0B117EE611D1FE2D7B81CBCC96D7AA priv aes-128 0167C14B036AC523E3EF2C70939284DC8AAA localizedV2key
+snmp-server user automation network-admin auth md5 0041DE762A87DA4D40A3685A8FAB9E73F942 priv aes-128 0172DB6A67D5841532BD73079DF58F66AA19 localizedV2key
+rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
+rmon event 2 log trap public description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
+rmon event 4 log trap public description WARNING(4) owner PMON@WARNING
+rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
+snmp-server community NETBRAIN group network-operator
+
+fabric forwarding anycast-gateway-mac 0000.0000.aaaa
+ip pim rp-address 169.254.255.100 group-list 224.0.0.0/4
+ip pim ssm range 232.0.0.0/8
+vlan 1,100-101,501-502
+vlan 100
+  vn-segment 100100
+vlan 101
+  vn-segment 100101
+vlan 501
+  vn-segment 50001
+vlan 502
+  vn-segment 50002
+
+route-map CONN-VRF-TO-BGP permit 100
+  match tag 100 
+route-map CONN-VRF-TO-BGP permit 200
+  match tag 200 
+route-map DIRECT-TO-BGP permit 10
+  match tag 12 
+route-map DIRECT-TO-BGP permit 20
+  match tag 54321 
+route-map INT-CONN-VRF-TO-BGP permit 666
+  match tag 666 
+route-map INTERNET-TO-TENANTS permit 10
+  match tag 666 
+service dhcp
+ip dhcp relay
+ipv6 dhcp relay
+vrf context TENANT1
+  vni 50001
+  rd auto
+  address-family ipv4 unicast
+    route-target both auto
+    route-target both auto evpn
+    route-target import 666:666
+vrf context TENANT2
+  vni 50002
+  ip pim ssm range 232.0.0.0/8
+  rd auto
+  address-family ipv4 unicast
+    route-target both auto
+    route-target both auto evpn
+    route-target import 666:666
+vrf context management
+  ip name-server 172.21.255.12 172.21.255.13
+  ip route 0.0.0.0/0 172.21.203.254
+
+
+interface Vlan1
+
+interface Vlan501
+  no shutdown
+  vrf member TENANT1
+  ip forward
+
+interface Vlan502
+  no shutdown
+  vrf member TENANT2
+  ip forward
+
+interface nve1
+  no shutdown
+  host-reachability protocol bgp
+  source-interface loopback1
+  global ingress-replication protocol bgp
+  multisite border-gateway interface loopback100
+  member vni 50001 associate-vrf
+  member vni 50002 associate-vrf
+  member vni 100100
+    multisite ingress-replication
+    ingress-replication protocol bgp
+  member vni 100101
+    multisite ingress-replication
+    ingress-replication protocol bgp
+
+interface Ethernet1/1
+  description Link to spine1
+  no switchport
+  mtu 9216
+  medium p2p
+  ip unnumbered loopback0
+  ip ospf network point-to-point
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+  no shutdown
+  evpn multisite fabric-tracking
+
+interface Ethernet1/2
+  description Link to spine2
+  no switchport
+  mtu 9216
+  medium p2p
+  ip unnumbered loopback0
+  ip ospf network point-to-point
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+  no shutdown
+  evpn multisite fabric-tracking
+
+interface Ethernet1/3
+  shutdown
+
+interface Ethernet1/4
+  shutdown
+
+interface Ethernet1/5
+  description Link to c8k-30
+  no switchport
+  mtu 9000
+  no ip redirects
+  no shutdown
+  evpn multisite dci-tracking
+
+interface Ethernet1/5.100
+  mtu 9000
+  encapsulation dot1q 100
+  vrf member TENANT1
+  no ip redirects
+  ip address 169.13.30.1/30 tag 100
+  no ipv6 redirects
+  no shutdown
+
+interface Ethernet1/5.200
+  mtu 9000
+  encapsulation dot1q 200
+  vrf member TENANT2
+  no ip redirects
+  ip address 169.13.30.1/30 tag 200
+  no ipv6 redirects
+  no shutdown
+
+interface Ethernet1/6
+  description Link to c8k-31
+  no switchport
+  mtu 9000
+  no ip redirects
+  no shutdown
+  evpn multisite dci-tracking
+
+interface Ethernet1/6.100
+  mtu 9000
+  encapsulation dot1q 100
+  vrf member TENANT1
+  no ip redirects
+  ip address 169.13.31.1/30 tag 100
+  no ipv6 redirects
+  no shutdown
+
+interface Ethernet1/6.200
+  mtu 9000
+  encapsulation dot1q 200
+  vrf member TENANT2
+  no ip redirects
+  ip address 169.13.31.1/30 tag 200
+  no ipv6 redirects
+  no shutdown
+
+interface Ethernet1/7
+  description to c8kv-75
+  no switchport
+  mtu 9000
+  no ip redirects
+  ip address 169.13.75.1/30 tag 54321
+  no shutdown
+  evpn multisite dci-tracking
+
+interface Ethernet1/8
+  description to c8kv-76
+  no switchport
+  mtu 9000
+  ip address 169.13.76.1/30 tag 54321
+  no shutdown
+  evpn multisite dci-tracking
+
+interface Ethernet1/9
+  shutdown
+
+interface Ethernet1/10
+  shutdown
+
+interface Ethernet1/11
+  shutdown
+
+interface Ethernet1/12
+  shutdown
+
+interface Ethernet1/13
+  shutdown
+
+interface Ethernet1/14
+  shutdown
+
+interface Ethernet1/15
+  shutdown
+
+interface Ethernet1/16
+  shutdown
+
+interface Ethernet1/17
+  shutdown
+
+interface Ethernet1/18
+  shutdown
+
+interface Ethernet1/19
+  shutdown
+
+interface Ethernet1/20
+  shutdown
+
+interface Ethernet1/21
+  shutdown
+
+interface Ethernet1/22
+  shutdown
+
+interface Ethernet1/23
+  shutdown
+
+interface Ethernet1/24
+  shutdown
+
+interface Ethernet1/25
+  shutdown
+
+interface Ethernet1/26
+  shutdown
+
+interface Ethernet1/27
+  shutdown
+
+interface Ethernet1/28
+  shutdown
+
+interface Ethernet1/29
+  shutdown
+
+interface Ethernet1/30
+  shutdown
+
+interface Ethernet1/31
+  shutdown
+
+interface Ethernet1/32
+  shutdown
+
+interface Ethernet1/33
+  shutdown
+
+interface Ethernet1/34
+  shutdown
+
+interface Ethernet1/35
+  shutdown
+
+interface Ethernet1/36
+  shutdown
+
+interface Ethernet1/37
+  shutdown
+
+interface Ethernet1/38
+  shutdown
+
+interface Ethernet1/39
+  shutdown
+
+interface Ethernet1/40
+  shutdown
+
+interface Ethernet1/41
+  shutdown
+
+interface Ethernet1/42
+  shutdown
+
+interface Ethernet1/43
+  shutdown
+
+interface Ethernet1/44
+  shutdown
+
+interface Ethernet1/45
+  shutdown
+
+interface Ethernet1/46
+  shutdown
+
+interface Ethernet1/47
+  shutdown
+
+interface Ethernet1/48
+  shutdown
+
+interface Ethernet1/49
+  shutdown
+
+interface Ethernet1/50
+  shutdown
+
+interface Ethernet1/51
+  shutdown
+
+interface Ethernet1/52
+  shutdown
+
+interface Ethernet1/53
+  shutdown
+
+interface Ethernet1/54
+  shutdown
+
+interface Ethernet1/55
+  shutdown
+
+interface Ethernet1/56
+  shutdown
+
+interface Ethernet1/57
+  shutdown
+
+interface Ethernet1/58
+  shutdown
+
+interface Ethernet1/59
+  shutdown
+
+interface Ethernet1/60
+  shutdown
+
+interface Ethernet1/61
+  shutdown
+
+interface Ethernet1/62
+  shutdown
+
+interface Ethernet1/63
+  shutdown
+
+interface Ethernet1/64
+  shutdown
+
+interface mgmt0
+  no cdp enable
+  vrf member management
+  ip address 172.21.203.16/24
+
+interface loopback0
+  ip address 169.254.255.10/32 tag 12
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+
+interface loopback1
+  description VTEP loopback interface
+  ip address 169.254.255.110/32 tag 54321
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+
+interface loopback100
+  description Loopback for EVPN Border Gateway
+  ip address 169.168.12.10/32 tag 12
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+icam monitor scale
+
+cli alias name wr copy run start
+line console
+  exec-timeout 0
+line vty
+  exec-timeout 60
+boot nxos bootflash:/nxos64-cs.10.3.3.F.bin 
+router ospf UNDERLAY
+  router-id 169.254.255.10
+router bgp 65001
+  router-id 169.254.255.10
+  address-family ipv4 unicast
+    redistribute direct route-map DIRECT-TO-BGP
+  address-family l2vpn evpn
+    advertise-pip
+  neighbor 169.13.75.2
+    remote-as 65011
+    update-source Ethernet1/7
+    address-family ipv4 unicast
+      send-community
+      send-community extended
+      next-hop-self
+  neighbor 169.13.76.2
+    remote-as 65011
+    update-source Ethernet1/8
+    address-family ipv4 unicast
+      next-hop-self
+  neighbor 169.168.12.22
+    remote-as 65002
+    update-source loopback100
+    ebgp-multihop 5
+    peer-type fabric-external
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+      rewrite-evpn-rt-asn
+  neighbor 169.168.12.23
+    remote-as 65002
+    update-source loopback100
+    ebgp-multihop 5
+    peer-type fabric-external
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+      rewrite-evpn-rt-asn
+  neighbor 169.254.255.1
+    remote-as 65001
+    update-source loopback0
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+  neighbor 169.254.255.2
+    remote-as 65001
+    update-source loopback0
+    address-family l2vpn evpn
+      send-community
+      send-community extended
+  vrf TENANT1
+    address-family ipv4 unicast
+      redistribute direct route-map CONN-VRF-TO-BGP
+    neighbor 169.13.30.2
+      remote-as 65011
+      address-family ipv4 unicast
+        send-community
+        send-community extended
+    neighbor 169.13.31.2
+      remote-as 65011
+      address-family ipv4 unicast
+        send-community
+        send-community extended
+  vrf TENANT2
+    address-family ipv4 unicast
+      redistribute direct route-map CONN-VRF-TO-BGP
+    neighbor 169.13.30.2
+      remote-as 65011
+      address-family ipv4 unicast
+        send-community
+        send-community extended
+    neighbor 169.13.31.2
+      remote-as 65011
+      address-family ipv4 unicast
+        send-community
+        send-community extended
+ip tcp path-mtu-discovery
+
+
+!
+
+
+!end
+!end

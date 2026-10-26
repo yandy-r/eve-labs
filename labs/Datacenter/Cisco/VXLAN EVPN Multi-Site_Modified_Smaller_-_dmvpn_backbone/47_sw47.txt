@@ -1,0 +1,297 @@
+!
+! Last configuration change at 18:34:29 UTC Thu Dec 28 2023
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname sw47
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition CAMPUS-INTERNET
+ rd 1166:1166
+ !
+ address-family ipv4
+  route-target export 1166:1166
+  route-target import 1101:1101
+  route-target import 1102:1102
+  route-target import 1166:1166
+ exit-address-family
+!
+vrf definition Mgmt-vrf
+ rd 203:203
+ !
+ address-family ipv4
+ exit-address-family
+!
+enable secret admin123
+!
+username cisco privilege 15 secret admin123
+username admin privilege 15 secret admin123
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip domain-name netlab.local
+ip cef
+no ipv6 cef
+mpls ldp graceful-restart
+!
+!
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ no shutdown
+ ip address 169.254.47.47 255.255.255.255
+ ip ospf 1 area 0.0.0.0
+!
+interface GigabitEthernet0/0
+ no shutdown
+ no switchport
+ ip address 169.46.47.2 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
+ ip ospf network point-to-point
+ ip ospf 1 area 0.0.0.0
+ negotiation auto
+ no ipv6 redirects
+ mpls ip
+!
+interface GigabitEthernet0/1
+ no shutdown
+ no switchport
+ ip address 169.46.47.6 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
+ ip ospf network point-to-point
+ ip ospf 1 area 0.0.0.0
+ negotiation auto
+ no ipv6 redirects
+ mpls ip
+!
+interface GigabitEthernet0/2
+ no shutdown
+ negotiation auto
+!
+interface GigabitEthernet0/3
+ no shutdown
+ no switchport
+ ip address 169.44.47.2 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
+ ip ospf network point-to-point
+ ip ospf 1 area 0.0.0.0
+ negotiation auto
+ no ipv6 redirects
+ mpls ip
+!
+interface GigabitEthernet1/0
+ no shutdown
+ negotiation auto
+!
+interface GigabitEthernet1/1
+ no shutdown
+ negotiation auto
+!
+interface GigabitEthernet1/2
+ no shutdown
+ no switchport
+ vrf forwarding CAMPUS-INTERNET
+ ip address 169.33.0.6 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
+ negotiation auto
+ no ipv6 redirects
+!
+interface GigabitEthernet1/3
+ no shutdown
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ no shutdown
+ negotiation auto
+!
+interface GigabitEthernet2/1
+ no shutdown
+ negotiation auto
+!
+interface GigabitEthernet2/2
+ no shutdown
+ negotiation auto
+!
+interface GigabitEthernet2/3
+ no shutdown
+ negotiation auto
+!
+interface GigabitEthernet3/0
+ no shutdown
+ negotiation auto
+!
+interface GigabitEthernet3/1
+ no shutdown
+ negotiation auto
+!
+interface GigabitEthernet3/2
+ no shutdown
+ negotiation auto
+!
+interface GigabitEthernet3/3
+ no shutdown
+ description Management interface
+ no switchport
+ no ip address
+ no ip redirects
+ no ip proxy-arp
+ negotiation auto
+ no ipv6 redirects
+!
+interface GigabitEthernet3/3.203
+ no shutdown
+ encapsulation dot1Q 203
+ vrf forwarding Mgmt-vrf
+ ip address 172.21.203.47 255.255.255.0
+ no ip redirects
+ no ip proxy-arp
+ no ipv6 redirects
+!
+router ospf 1
+ router-id 169.254.47.47
+!
+router bgp 65033
+ template peer-policy RR
+  next-hop-self
+  send-community both
+ exit-peer-policy
+ !
+ template peer-session RR
+  remote-as 65033
+  update-source Loopback0
+ exit-peer-session
+ !
+ bgp router-id 169.254.47.47
+ bgp always-compare-med
+ bgp log-neighbor-changes
+ bgp deterministic-med
+ bgp graceful-restart
+ bgp bestpath med missing-as-worst
+ bgp bestpath compare-routerid
+ no bgp default ipv4-unicast
+ neighbor 169.254.42.42 inherit peer-session RR
+ neighbor 169.254.45.45 inherit peer-session RR
+ !
+ address-family vpnv4
+  neighbor 169.254.42.42 activate
+  neighbor 169.254.42.42 send-community extended
+  neighbor 169.254.42.42 inherit peer-policy RR
+  neighbor 169.254.45.45 activate
+  neighbor 169.254.45.45 send-community extended
+  neighbor 169.254.45.45 inherit peer-policy RR
+ exit-address-family
+ !
+ address-family ipv4 vrf CAMPUS-INTERNET
+  redistribute connected route-map CONN-INTERNET-TO-BGP
+  neighbor 169.33.0.5 remote-as 64001
+  neighbor 169.33.0.5 activate
+  neighbor 169.33.0.5 route-map CAMPUS-TO-BGP-OUT out
+ exit-address-family
+!
+ip forward-protocol nd
+!
+ip bgp-community new-format
+no ip http server
+no ip http secure-server
+!
+ip route vrf Mgmt-vrf 0.0.0.0 0.0.0.0 172.21.203.254
+ip ssh version 2
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+!
+!
+!
+ip prefix-list CAMPUS-TO-BGP-OUT seq 5 permit 169.44.0.0/16 le 32
+!
+!
+route-map CAMPUS-TO-BGP-OUT permit 10
+ match ip address prefix-list CAMPUS-TO-BGP-OUT
+ set as-path prepend 65033 65033
+!
+route-map CAMPUS-TO-BGP-OUT permit 100
+!
+route-map CONN-INTERNET-TO-BGP permit 100
+ set origin igp
+ set community 1166:1166
+!
+mpls ldp router-id Loopback0
+!
+snmp-server community NETBRAIN RO
+!
+control-plane
+!
+banner exec ^CC
+IOSv - Cisco Systems Confidential -
+
+Supplemental End User License Restrictions
+
+This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.
+
+By using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.
+^C
+banner incoming ^CC
+IOSv - Cisco Systems Confidential -
+
+Supplemental End User License Restrictions
+
+This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.
+
+By using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.
+^C
+banner login ^CC
+IOSv - Cisco Systems Confidential -
+
+Supplemental End User License Restrictions
+
+This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.
+
+By using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.
+^C
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line aux 0
+line vty 0 4
+ exec-timeout 60 0
+ privilege level 15
+ logging synchronous
+ login local
+ transport input ssh
+!
