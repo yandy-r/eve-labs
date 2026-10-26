@@ -4,7 +4,7 @@ EVE-NG Pro lab files (`/opt/unetlab/labs` on host `eve`, EVE-NG Pro 7.2).
 
 ## Layout
 
-- `Yandy/` – personal labs (CCIE, Datacenter, Cloud)
+- `labs/CCIE/`, `labs/Datacenter/`, `labs/Cloud/` – personal labs
 - `Shared/`, `Users/` – EVE default folders
 
 ## Conventions (this host)
@@ -40,7 +40,7 @@ Restore EVE permissions (run after every `git pull`, checkout, merge, or rebase)
 Faster alternative that fixes only the labs tree (skips `.git/` and `node_modules/`):
 
 ```bash
-/opt/unetlab/labs/scripts/fix-lab-permissions.sh            # chown www-data, dirs 2775, files 664
+/opt/unetlab/labs/scripts/fix-lab-permissions.sh            # owner www-data:www-data; dirs 2775; files 664; scripts 775
 /opt/unetlab/labs/scripts/fix-lab-permissions.sh --dry-run  # print the commands only
 ```
 
