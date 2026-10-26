@@ -14,22 +14,25 @@ Run the bootstrap once per checkout:
 ./scripts/install-lefthook.sh
 ```
 
-The script installs the `lefthook` binary (prefers the project's package manager,
-falls back to Homebrew, Go, Cargo, or pipx) and wires hooks via `lefthook install`.
-It is safe to re-run.
+When `package.json` is present the script runs `pnpm install`, then uses `lefthook`
+from `node_modules/.bin` or `PATH`. Lefthook is not a pnpm dependency; if neither
+binary exists, the script installs it with Homebrew, Go, Cargo, or pipx, then runs
+`lefthook install`. Safe to re-run.
 
 ---
 
 ## What the hooks do
 
-| Stage        | Purpose                                     | When it fires            |
-| ------------ | ------------------------------------------- | ------------------------ |
-| `pre-commit` | Lint + format staged files (stack-specific) | Before each `git commit` |
-| `pre-push`   | Not configured (no test command detected)   | —                        |
+| Stage        | Purpose                                                         | When it fires            |
+| ------------ | --------------------------------------------------------------- | ------------------------ |
+| `pre-commit` | Lint and format staged files; `check-labs.py` on staged `*.unl` | Before each `git commit` |
+| `pre-push`   | `style.sh lint` and `make test`                                 | Before each `git push`   |
+| `commit-msg` | `pnpm exec commitlint --edit`                                   | On the commit message    |
 
-Pre-commit commands receive `{staged_files}` from lefthook so they only touch
-files in the git index — fast, focused feedback. Files auto-fixed by the linter
-are re-staged via `stage_fixed: true`.
+Lint runs `./scripts/style.sh lint --staged --fix` and format runs
+`./scripts/style.sh format --staged`. Both read the git index. `check-labs.py` is
+the only pre-commit command that receives `{staged_files}`, and only for `*.unl`.
+Auto-fixed files are re-staged (`stage_fixed: true`).
 
 ---
 
