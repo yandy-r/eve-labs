@@ -221,7 +221,7 @@
         <interface id="1" name="port2" type="ethernet" network_id="45" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
         <interface id="7" name="port8" type="ethernet" network_id="144" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
       </node>
-      <node id="27" name="dc1-srv27" type="docker" template="docker" image="eve-gui-server:latest" ethernet="1" ram="1024" cpu="1" console="telnet" e0dhcp="0" dock_ipv6="0" delay="0" sat="0" icon="Server_Linux.png" width="47" config="2" left="364" top="361">
+      <node id="27" name="dc1-srv27" type="docker" template="docker" image="eve-server-yr:latest" ethernet="1" ram="1024" cpu="1" console="telnet" e0dhcp="0" dock_ipv6="0" delay="0" sat="0" icon="Server_Linux.png" width="47" config="2" left="364" top="361">
         <interface id="0" name="eth0" type="ethernet" network_id="11" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
       </node>
       <node id="79" name="mgmt-79" type="iol" template="iol" image="" ethernet="4" nvram="1024" ram="1024" serial="0" keepalive="1" delay="0" sat="0" icon="Switch.png" width="0" config="2" left="686" top="487">
