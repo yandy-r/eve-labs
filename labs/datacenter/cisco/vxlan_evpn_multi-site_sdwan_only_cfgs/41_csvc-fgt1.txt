@@ -385,7 +385,19 @@ config router static
         set dst 10.100.0.0 255.255.0.0
         set gateway 10.100.204.1
         set device "oob-mgmt"
-        set comment "home-lab / OOB management networks"
+        set comment "home-lab server/mgmt VLANs via EVE-MGMT-204"
+    next
+    edit 3
+        set dst 10.25.0.0 255.255.248.0
+        set gateway 10.100.204.1
+        set device "oob-mgmt"
+        set comment "LAN-WIFI via EVE-MGMT-204"
+    next
+    edit 4
+        set dst 192.168.0.0 255.255.255.0
+        set gateway 10.100.204.1
+        set device "oob-mgmt"
+        set comment "Default LAN via EVE-MGMT-204"
     next
 end
 config router bgp
@@ -443,27 +455,27 @@ end
 #### firewall policies
 config firewall policy
     edit 0
-        set name "LOCAL-PEERING-HUB1"
-        set srcintf "sdwan-lo"
-        set dstintf "HUB1"
-        set srcaddr "all"
+        set name "HUB1-to-LOOPBACK"
+        set srcintf "HUB1"
+        set dstintf "sdwan-lo"
+        set srcaddr "SDWAN-LOOPBACKS"
         set dstaddr "all"
         set action accept
         set schedule "always"
         set service "PING" "BGP"
-        set comments "BGP + SLA probes sourced from sdwan-lo"
+        set comments "inbound BGP/ping to sdwan-lo (hub, ADVPN peers)"
         set logtraffic all
     next
     edit 0
-        set name "LOCAL-PEERING-HUB2"
-        set srcintf "sdwan-lo"
-        set dstintf "HUB2"
-        set srcaddr "all"
+        set name "HUB2-to-LOOPBACK"
+        set srcintf "HUB2"
+        set dstintf "sdwan-lo"
+        set srcaddr "SDWAN-LOOPBACKS"
         set dstaddr "all"
         set action accept
         set schedule "always"
         set service "PING" "BGP"
-        set comments "BGP + SLA probes sourced from sdwan-lo"
+        set comments "inbound BGP/ping to sdwan-lo (hub, ADVPN peers)"
         set logtraffic all
     next
     edit 0

@@ -15,8 +15,8 @@ tmsh modify sys ntp servers replace-all-with { pool.ntp.org }
 #   (if the management-ip / management-route already exist, use "modify" instead of "create")
 #
 #### network
-tmsh create net vlan EXT-TENANT1 interfaces replace-all-with { 1.1 { untagged } } description "to dc1-bgw2 E1/14"
-tmsh create net vlan INT-TENANT2 interfaces replace-all-with { 1.2 { untagged } } description "to dc1-bgw2 E1/15"
+tmsh create net vlan EXT-TENANT1 interfaces replace-all-with { 1.1 { untagged } } description '"to dc1-bgw2 E1/14"'
+tmsh create net vlan INT-TENANT2 interfaces replace-all-with { 1.2 { untagged } } description '"to dc1-bgw2 E1/15"'
 tmsh create net self EXT-TENANT1-self address 169.15.38.2/30 vlan EXT-TENANT1 allow-service none
 tmsh create net self INT-TENANT2-self address 169.15.38.6/30 vlan INT-TENANT2 allow-service none
 tmsh create net route default gw 169.15.38.1 network default

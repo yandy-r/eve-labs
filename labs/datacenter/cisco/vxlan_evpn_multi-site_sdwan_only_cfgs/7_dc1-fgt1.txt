@@ -251,7 +251,19 @@ config router static
         set dst 10.100.0.0 255.255.0.0
         set gateway 10.100.204.1
         set device "oob-mgmt"
-        set comment "home-lab / OOB management networks"
+        set comment "home-lab server/mgmt VLANs via EVE-MGMT-204"
+    next
+    edit 4
+        set dst 10.25.0.0 255.255.248.0
+        set gateway 10.100.204.1
+        set device "oob-mgmt"
+        set comment "LAN-WIFI via EVE-MGMT-204"
+    next
+    edit 5
+        set dst 192.168.0.0 255.255.255.0
+        set gateway 10.100.204.1
+        set device "oob-mgmt"
+        set comment "Default LAN via EVE-MGMT-204"
     next
 end
 config router bgp
