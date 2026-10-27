@@ -1,0 +1,536 @@
+# csvc-fgt1 — SD-WAN spoke
+# FortiOS 7.6.8 CLI. Paste section by section, in order (each section only references objects created
+# above it). Lines starting with # are comments.
+#
+# Role: SD-WAN spoke — 2 ISP VLANs (EVE-INET-201, EVE-INET-202) tagged on port1/port3 (pnet0 trunk),
+# 4 IP-less overlays (2 hubs x 2 ISPs), BGP on loopback 10.200.0.71 to both hubs (iBGP AS 64001), ADVPN 2.0
+# (advpn-select on zones HUB1/HUB2), eBGP + default-originate to the LAN router(s), local internet breakout.
+# DC-APPS uses tie-break fib-best-match so host routes (/32s from the BGWs) pick the hub of the site owning the host.
+# INET VLANs: static addressing; reserve .71 on EVE-INET-202 (it has a DHCP pool). PSK is a lab placeholder.
+#
+
+#### system / management
+config system global
+    set hostname "csvc-fgt1"
+    set admintimeout 30
+    set admin-lockout-threshold 5
+    set admin-lockout-duration 300
+    set strong-crypto enable
+    set admin-https-redirect enable
+end
+config system settings
+    set location-id 10.200.0.71
+end
+config system dns
+    set primary 1.1.1.1
+    set secondary 1.0.0.1
+end
+config system interface
+    edit "port8"
+        set mode static
+        set alias "pnet0-trunk"
+        set description "EVE-MGMT-204 arrives tagged (VLAN 3)"
+    next
+    edit "oob-mgmt"
+        set vdom "root"
+        set interface "port8"
+        set vlanid 3
+        set ip 10.100.204.71 255.255.255.0
+        set allowaccess ping https ssh
+        set role lan
+        set alias "EVE-MGMT-204"
+    next
+end
+
+#### interfaces
+config system interface
+    edit "port1"
+        set mode static
+        set alias "pnet0-trunk"
+        set description "EVE-INET-201 arrives tagged (VLAN 201)"
+    next
+    edit "wan1"
+        set vdom "root"
+        set interface "port1"
+        set vlanid 201
+        set ip 10.100.201.71 255.255.255.0
+        set allowaccess ping
+        set role wan
+        set alias "EVE-INET-201"
+    next
+    edit "port3"
+        set mode static
+        set alias "pnet0-trunk"
+        set description "EVE-INET-202 arrives tagged (VLAN 202)"
+    next
+    edit "wan2"
+        set vdom "root"
+        set interface "port3"
+        set vlanid 202
+        set ip 10.100.202.71 255.255.255.0
+        set allowaccess ping
+        set role wan
+        set alias "EVE-INET-202"
+    next
+    edit "port2"
+        set mode static
+        set ip 169.33.0.1 255.255.255.252
+        set allowaccess ping
+        set role lan
+        set alias "to-sw46"
+        set description "to sw46 (eBGP 169.33.0.2)"
+    next
+    edit "port4"
+        set mode static
+        set ip 169.33.0.5 255.255.255.252
+        set allowaccess ping
+        set role lan
+        set alias "to-sw47"
+        set description "to sw47 (eBGP 169.33.0.6)"
+    next
+    edit "sdwan-lo"
+        set vdom "root"
+        set type loopback
+        set ip 10.200.0.71 255.255.255.255
+        set allowaccess ping
+    next
+end
+
+#### IPsec overlays (IKEv2, ADVPN receiver, IKE route injection of sdwan-lo)
+config vpn ipsec phase1-interface
+    edit "H1_INET1"
+        set interface "wan1"
+        set ike-version 2
+        set peertype any
+        set proposal aes256gcm-prfsha384 aes256-sha256
+        set dhgrp 20 21
+        set add-route disable
+        set dpd on-idle
+        set network-overlay enable
+        set net-device enable
+        set exchange-interface-ip enable
+        set exchange-ip-addr4 10.200.0.71
+        set auto-discovery-receiver enable
+        set network-id 11
+        set remote-gw 10.100.201.31
+        set psksecret CHANGE-ME-sdwan-lab-psk
+        set comments "dc1-fgt1 via EVE-INET-201"
+    next
+    edit "H1_INET2"
+        set interface "wan2"
+        set ike-version 2
+        set peertype any
+        set proposal aes256gcm-prfsha384 aes256-sha256
+        set dhgrp 20 21
+        set add-route disable
+        set dpd on-idle
+        set network-overlay enable
+        set net-device enable
+        set exchange-interface-ip enable
+        set exchange-ip-addr4 10.200.0.71
+        set auto-discovery-receiver enable
+        set network-id 12
+        set remote-gw 10.100.202.31
+        set psksecret CHANGE-ME-sdwan-lab-psk
+        set comments "dc1-fgt1 via EVE-INET-202"
+    next
+    edit "H2_INET1"
+        set interface "wan1"
+        set ike-version 2
+        set peertype any
+        set proposal aes256gcm-prfsha384 aes256-sha256
+        set dhgrp 20 21
+        set add-route disable
+        set dpd on-idle
+        set network-overlay enable
+        set net-device enable
+        set exchange-interface-ip enable
+        set exchange-ip-addr4 10.200.0.71
+        set auto-discovery-receiver enable
+        set network-id 21
+        set remote-gw 10.100.201.41
+        set psksecret CHANGE-ME-sdwan-lab-psk
+        set comments "dc2-fgt1 via EVE-INET-201"
+    next
+    edit "H2_INET2"
+        set interface "wan2"
+        set ike-version 2
+        set peertype any
+        set proposal aes256gcm-prfsha384 aes256-sha256
+        set dhgrp 20 21
+        set add-route disable
+        set dpd on-idle
+        set network-overlay enable
+        set net-device enable
+        set exchange-interface-ip enable
+        set exchange-ip-addr4 10.200.0.71
+        set auto-discovery-receiver enable
+        set network-id 22
+        set remote-gw 10.100.202.41
+        set psksecret CHANGE-ME-sdwan-lab-psk
+        set comments "dc2-fgt1 via EVE-INET-202"
+    next
+end
+config vpn ipsec phase2-interface
+    edit "H1_INET1"
+        set phase1name "H1_INET1"
+        set proposal aes256gcm aes256-sha256
+        set dhgrp 20 21
+        set keepalive enable
+        set auto-negotiate enable
+    next
+    edit "H1_INET2"
+        set phase1name "H1_INET2"
+        set proposal aes256gcm aes256-sha256
+        set dhgrp 20 21
+        set keepalive enable
+        set auto-negotiate enable
+    next
+    edit "H2_INET1"
+        set phase1name "H2_INET1"
+        set proposal aes256gcm aes256-sha256
+        set dhgrp 20 21
+        set keepalive enable
+        set auto-negotiate enable
+    next
+    edit "H2_INET2"
+        set phase1name "H2_INET2"
+        set proposal aes256gcm aes256-sha256
+        set dhgrp 20 21
+        set keepalive enable
+        set auto-negotiate enable
+    next
+end
+config system interface
+    edit "H1_INET1"
+        set tcp-mss 1350
+        set allowaccess ping
+    next
+    edit "H1_INET2"
+        set tcp-mss 1350
+        set allowaccess ping
+    next
+    edit "H2_INET1"
+        set tcp-mss 1350
+        set allowaccess ping
+    next
+    edit "H2_INET2"
+        set tcp-mss 1350
+        set allowaccess ping
+    next
+end
+
+#### zones
+config system zone
+    edit "LAN"
+        set interface "port2" "port4"
+    next
+end
+
+config firewall address
+    edit "DC-NET-1"
+        set subnet 169.1.0.0 255.255.0.0
+    next
+    edit "CORP-NET-1"
+        set subnet 169.26.100.0 255.255.255.0
+    next
+    edit "CORP-NET-2"
+        set subnet 169.27.100.0 255.255.255.0
+    next
+    edit "CORP-NET-3"
+        set subnet 169.44.0.0 255.255.0.0
+    next
+    edit "SDWAN-LOOPBACKS"
+        set subnet 10.200.0.0 255.255.0.0
+    next
+end
+config firewall addrgrp
+    edit "DC-NETS"
+        set member "DC-NET-1"
+    next
+    edit "CORP-NETS"
+        set member "CORP-NET-1" "CORP-NET-2" "CORP-NET-3"
+    next
+end
+
+#### SD-WAN
+config system sdwan
+    set status enable
+    config zone
+        edit "underlay"
+        next
+        edit "HUB1"
+        next
+        edit "HUB2"
+        next
+    end
+    config members
+        edit 1
+            set interface "wan1"
+            set zone "underlay"
+            set gateway 10.100.201.1
+        next
+        edit 2
+            set interface "wan2"
+            set zone "underlay"
+            set gateway 10.100.202.1
+        next
+        edit 11
+            set interface "H1_INET1"
+            set zone "HUB1"
+            set source 10.200.0.71
+        next
+        edit 12
+            set interface "H1_INET2"
+            set zone "HUB1"
+            set source 10.200.0.71
+        next
+        edit 21
+            set interface "H2_INET1"
+            set zone "HUB2"
+            set source 10.200.0.71
+        next
+        edit 22
+            set interface "H2_INET2"
+            set zone "HUB2"
+            set source 10.200.0.71
+        next
+    end
+    config health-check
+        edit "HUB_HC"
+            set server "10.200.255.251"
+            set protocol ping
+            set update-cascade-interface disable
+            set update-static-route disable
+            set members 11 12 21 22
+            config sla
+                edit 1
+                    set latency-threshold 150
+                    set jitter-threshold 30
+                    set packetloss-threshold 2
+                next
+            end
+        next
+        edit "INET_HC"
+            set server "1.1.1.1" "8.8.8.8"
+            set protocol ping
+            set members 1 2
+            config sla
+                edit 1
+                    set latency-threshold 150
+                    set jitter-threshold 30
+                    set packetloss-threshold 2
+                next
+            end
+        next
+    end
+    config zone
+        edit "HUB1"
+            set advpn-select enable
+            set advpn-health-check "HUB_HC"
+        next
+        edit "HUB2"
+            set advpn-select enable
+            set advpn-health-check "HUB_HC"
+        next
+    end
+    config service
+        edit 1
+            set name "DC-APPS"
+            set mode sla
+            set dst "DC-NETS"
+            set src "all"
+            set tie-break fib-best-match
+            config sla
+                edit "HUB_HC"
+                    set id 1
+                next
+            end
+            set priority-members 11 12 21 22
+        next
+        edit 2
+            set name "CORP-OVERLAY"
+            set mode sla
+            set dst "CORP-NETS"
+            set src "all"
+            config sla
+                edit "HUB_HC"
+                    set id 1
+                next
+            end
+            set priority-members 11 12 21 22
+        next
+        edit 3
+            set name "INTERNET-DIA"
+            set mode sla
+            set dst "all"
+            set src "all"
+            config sla
+                edit "INET_HC"
+                    set id 1
+                next
+            end
+            set priority-members 1 2
+        next
+    end
+end
+
+#### routing
+config router static
+    edit 1
+        set sdwan-zone "underlay"
+        set comment "local internet breakout"
+    next
+    edit 2
+        set dst 10.100.0.0 255.255.0.0
+        set gateway 10.100.204.1
+        set device "oob-mgmt"
+        set comment "home-lab / OOB management networks"
+    next
+end
+config router bgp
+    set as 64001
+    set router-id 10.200.0.71
+    set keepalive-timer 10
+    set holdtime-timer 30
+    set ibgp-multipath enable
+    set ebgp-multipath enable
+    set recursive-next-hop enable
+    set graceful-restart enable
+    config neighbor
+        edit "10.200.255.1"
+            set description "dc1-fgt1 bgp-lo"
+            set remote-as 64001
+            set interface "sdwan-lo"
+            set update-source "sdwan-lo"
+            set connect-timer 1
+            set advertisement-interval 1
+            set soft-reconfiguration enable
+            set capability-graceful-restart enable
+            set next-hop-self enable
+        next
+        edit "10.200.255.2"
+            set description "dc2-fgt1 bgp-lo"
+            set remote-as 64001
+            set interface "sdwan-lo"
+            set update-source "sdwan-lo"
+            set connect-timer 1
+            set advertisement-interval 1
+            set soft-reconfiguration enable
+            set capability-graceful-restart enable
+            set next-hop-self enable
+        next
+        edit "169.33.0.2"
+            set description "sw46 via port2"
+            set remote-as 65033
+            set capability-default-originate enable
+            set soft-reconfiguration enable
+        next
+        edit "169.33.0.6"
+            set description "sw47 via port4"
+            set remote-as 65033
+            set capability-default-originate enable
+            set soft-reconfiguration enable
+        next
+    end
+    config network
+        edit 1
+            set prefix 10.200.0.71 255.255.255.255
+        next
+    end
+end
+
+#### firewall policies
+config firewall policy
+    edit 0
+        set name "LOCAL-PEERING-HUB1"
+        set srcintf "sdwan-lo"
+        set dstintf "HUB1"
+        set srcaddr "all"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "PING" "BGP"
+        set comments "BGP + SLA probes sourced from sdwan-lo"
+        set logtraffic all
+    next
+    edit 0
+        set name "LOCAL-PEERING-HUB2"
+        set srcintf "sdwan-lo"
+        set dstintf "HUB2"
+        set srcaddr "all"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "PING" "BGP"
+        set comments "BGP + SLA probes sourced from sdwan-lo"
+        set logtraffic all
+    next
+    edit 0
+        set name "LAN-to-HUB1"
+        set srcintf "LAN"
+        set dstintf "HUB1"
+        set srcaddr "all"
+        set dstaddr "DC-NETS" "CORP-NETS"
+        set action accept
+        set schedule "always"
+        set service "ALL"
+        set logtraffic all
+    next
+    edit 0
+        set name "LAN-to-HUB2"
+        set srcintf "LAN"
+        set dstintf "HUB2"
+        set srcaddr "all"
+        set dstaddr "DC-NETS" "CORP-NETS"
+        set action accept
+        set schedule "always"
+        set service "ALL"
+        set logtraffic all
+    next
+    edit 0
+        set name "HUB1-to-LAN"
+        set srcintf "HUB1"
+        set dstintf "LAN"
+        set srcaddr "DC-NETS" "CORP-NETS"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "ALL"
+        set logtraffic all
+    next
+    edit 0
+        set name "HUB2-to-LAN"
+        set srcintf "HUB2"
+        set dstintf "LAN"
+        set srcaddr "DC-NETS" "CORP-NETS"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "ALL"
+        set logtraffic all
+    next
+    edit 0
+        set name "LAN-to-INTERNET"
+        set srcintf "LAN"
+        set dstintf "underlay"
+        set srcaddr "all"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "ALL"
+        set utm-status enable
+        set ssl-ssh-profile "certificate-inspection"
+        set av-profile "default"
+        set webfilter-profile "default"
+        set nat enable
+        set logtraffic all
+    next
+end
+
+#### verify
+# get router info bgp summary
+# diagnose sys sdwan health-check
+# diagnose sys sdwan service4
+# diagnose sys sdwan advpn-session
+# diagnose vpn tunnel list

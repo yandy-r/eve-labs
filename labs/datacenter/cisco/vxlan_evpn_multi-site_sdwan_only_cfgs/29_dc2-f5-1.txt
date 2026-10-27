@@ -1,0 +1,31 @@
+# dc2-f5-1 — DC load balancer (BIG-IP 21.1.0.4) — run from the BIG-IP bash prompt (or drop the "tmsh " prefix inside tmsh)
+#
+# 1.1 = external/client side in VRF TENANT1 (dc2-bgw2 E1/14), 1.2 = server side in VRF TENANT2 (dc2-bgw2 E1/15).
+# dc2-bgw2 has a static route for the VIP subnet 169.1.252.0/24 -> 169.28.29.2 (redistributed into BGP/EVPN), so the VIP is
+# reachable from both DCs, the branches and the campus. Pool members are the TENANT2 servers dc1-srv33/36.
+# SNAT automap keeps return traffic symmetric through the BIG-IP.
+# Mgmt: EVE-MGMT-203 (VLAN 2) arrives untagged from the site mgmt switch access port.
+#
+#### system / management
+tmsh modify sys global-settings hostname dc2-f5-1.netlab.local gui-setup disabled mgmt-dhcp disabled
+tmsh create sys management-ip 10.100.203.29/24
+tmsh create sys management-route default gateway 10.100.203.1
+tmsh modify sys dns name-servers replace-all-with { 1.1.1.1 1.0.0.1 } search replace-all-with { netlab.local }
+tmsh modify sys ntp servers replace-all-with { pool.ntp.org }
+#   (if the management-ip / management-route already exist, use "modify" instead of "create")
+#
+#### network
+tmsh create net vlan EXT-TENANT1 interfaces replace-all-with { 1.1 { untagged } } description "to dc2-bgw2 E1/14"
+tmsh create net vlan INT-TENANT2 interfaces replace-all-with { 1.2 { untagged } } description "to dc2-bgw2 E1/15"
+tmsh create net self EXT-TENANT1-self address 169.28.29.2/30 vlan EXT-TENANT1 allow-service none
+tmsh create net self INT-TENANT2-self address 169.28.29.6/30 vlan INT-TENANT2 allow-service none
+tmsh create net route default gw 169.28.29.1 network default
+tmsh create net route TENANT2-SERVERS gw 169.28.29.5 network 169.1.200.0/24
+#
+#### example application
+tmsh create ltm pool POOL-WEB-T2 members replace-all-with { 169.1.200.33:80 169.1.200.36:80 } monitor gateway_icmp
+tmsh create ltm virtual VS-WEB destination 169.1.252.10:80 ip-protocol tcp profiles replace-all-with { tcp http } pool POOL-WEB-T2 source-address-translation { type automap }
+tmsh save sys config
+#
+#### verify
+# tmsh show net route ; tmsh show ltm virtual VS-WEB ; tmsh show ltm pool POOL-WEB-T2 members

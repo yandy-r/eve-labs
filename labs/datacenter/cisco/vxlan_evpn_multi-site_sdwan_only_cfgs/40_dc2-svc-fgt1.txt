@@ -1,0 +1,119 @@
+# dc2-svc-fgt1 — DC services firewall
+# FortiOS 7.6.8 CLI. Paste section by section, in order (each section only references objects created
+# above it). Lines starting with # are comments.
+#
+# Role: inter-tenant (east-west) firewall hanging off dc2-bgw2. port1 = TENANT1 leg, port2 = TENANT2 leg.
+# eBGP AS 65220 to the BGW in both VRFs: it re-advertises each tenant's routes into the other, so
+# TENANT1 <-> TENANT2 traffic is forced through this firewall (the BGW uses allowas-in 1 for these peers).
+# dc1-svc-fgt1 is preferred fabric-wide (BGW local-pref 200 vs 50 in DC2) so both directions of a flow
+# use the same firewall; dc2-svc-fgt1 takes over if dc1-svc-fgt1 / dc1-bgw2 fail.
+# port8 reaches EVE-MGMT-204 through the site mgmt switch (802.1Q trunk, VLAN 3).
+#
+
+#### system / management
+config system global
+    set hostname "dc2-svc-fgt1"
+    set admintimeout 30
+    set admin-lockout-threshold 5
+    set admin-lockout-duration 300
+    set strong-crypto enable
+    set admin-https-redirect enable
+end
+config system dns
+    set primary 1.1.1.1
+    set secondary 1.0.0.1
+end
+config system interface
+    edit "port8"
+        set mode static
+        set alias "pnet0-trunk"
+        set description "EVE-MGMT-204 arrives tagged (VLAN 3)"
+    next
+    edit "oob-mgmt"
+        set vdom "root"
+        set interface "port8"
+        set vlanid 3
+        set ip 10.100.204.40 255.255.255.0
+        set allowaccess ping https ssh
+        set role lan
+        set alias "EVE-MGMT-204"
+    next
+end
+
+#### interfaces
+config system interface
+    edit "port1"
+        set mode static
+        set ip 169.28.40.2 255.255.255.252
+        set allowaccess ping
+        set role lan
+        set alias "TENANT1"
+        set description "to dc2-bgw2: E1/11 (VRF TENANT1)"
+    next
+    edit "port2"
+        set mode static
+        set ip 169.28.40.6 255.255.255.252
+        set allowaccess ping
+        set role lan
+        set alias "TENANT2"
+        set description "to dc2-bgw2: E1/12 (VRF TENANT2)"
+    next
+end
+
+#### routing
+config router static
+    edit 1
+        set dst 10.100.0.0 255.255.0.0
+        set gateway 10.100.204.1
+        set device "oob-mgmt"
+        set comment "home-lab / OOB management networks"
+    next
+end
+config router bgp
+    set as 65220
+    set router-id 10.100.204.40
+    set ebgp-multipath enable
+    set graceful-restart enable
+    config neighbor
+        edit "169.28.40.1"
+            set description "dc2-bgw2 VRF TENANT1"
+            set remote-as 65002
+            set soft-reconfiguration enable
+        next
+        edit "169.28.40.5"
+            set description "dc2-bgw2 VRF TENANT2"
+            set remote-as 65002
+            set soft-reconfiguration enable
+        next
+    end
+end
+
+#### firewall policies (tighten services to taste)
+config firewall policy
+    edit 0
+        set name "TENANT1-to-TENANT2"
+        set srcintf "port1"
+        set dstintf "port2"
+        set srcaddr "all"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "ALL_ICMP" "HTTP" "HTTPS" "SSH" "DNS"
+        set logtraffic all
+    next
+    edit 0
+        set name "TENANT2-to-TENANT1"
+        set srcintf "port2"
+        set dstintf "port1"
+        set srcaddr "all"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "ALL_ICMP" "HTTP" "HTTPS" "DNS"
+        set logtraffic all
+    next
+end
+
+#### verify
+# get router info bgp summary
+# get router info routing-table all
