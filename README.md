@@ -4,7 +4,7 @@ EVE-NG Pro lab files (`/opt/unetlab/labs` on host `eve`, EVE-NG Pro 7.2).
 
 ## Layout
 
-- `labs/CCIE/`, `labs/Datacenter/`, `labs/Cloud/` – personal labs
+- `labs/ccie/`, `labs/datacenter/`, `labs/cloud/` – personal labs
 - `Shared/`, `Users/` – EVE default folders
 
 ## Conventions (this host)
