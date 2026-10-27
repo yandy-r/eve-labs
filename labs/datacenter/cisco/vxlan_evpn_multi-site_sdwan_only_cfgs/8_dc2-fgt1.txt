@@ -5,10 +5,12 @@
 # Role: DC2 SD-WAN hub — dial-up IKEv2 overlays per ISP, ADVPN sender, BGP on loopback, iBGP AS 64001
 # route reflector for the spokes. Loopbacks: "bgp-lo" (BGP peering) and "hc-lo" (spoke SLA target, same IP on both hubs;
 # Fortinet: never share one loopback for BGP and health checks).
-# port1/port2 = 802.1Q trunks to dc2-bgw1/dc2-bgw2 E1/3: the BGWs bridge EVE-INET-201 (VLAN 201) and
-# EVE-INET-202 (VLAN 202) through to the hub and hand off TENANT1 on VLAN 3101 (eBGP AS 65002).
+# Edge order: Internet -> c8kv-77 (internet edge router) -> this hub -> dc2-bgw1/dc2-bgw2 -> fabric.
+# port1/port2 = 802.1Q trunks to dc2-bgw1/dc2-bgw2 E1/3: VLAN 3001 = wan side in the BGWs' VRF OUTSIDE
+# (where c8kv-77 peers with the BGWs), VLAN 3101 = TENANT1 hand-off (eBGP AS 65002).
 # Spoke->DC sessions are source-NATed to the hub's TENANT1 address so replies always return through the same hub.
-# INET VLANs on RFAMILY-GW: static addressing; reserve .41 on EVE-INET-202 (it has a DHCP pool). PSK is a lab placeholder.
+# c8kv-77 static-NATs wan1/wan2 to 10.100.201.41/10.100.202.41, so spokes still dial those addresses (IKE runs
+# NAT-T). Reserve .41 on EVE-INET-202 (it has a DHCP pool). PSK is a lab placeholder.
 #
 
 #### system / management
@@ -54,11 +56,11 @@ config system interface
     edit "wan1"
         set vdom "root"
         set interface "port1"
-        set vlanid 201
-        set ip 10.100.201.41 255.255.255.0
+        set vlanid 3001
+        set ip 169.26.8.6 255.255.255.252
         set allowaccess ping
         set role wan
-        set alias "EVE-INET-201"
+        set alias "OUTSIDE via dc2-bgw1"
     next
     edit "t1-bgw1"
         set vdom "root"
@@ -77,11 +79,11 @@ config system interface
     edit "wan2"
         set vdom "root"
         set interface "port2"
-        set vlanid 202
-        set ip 10.100.202.41 255.255.255.0
+        set vlanid 3001
+        set ip 169.28.8.6 255.255.255.252
         set allowaccess ping
         set role wan
-        set alias "EVE-INET-202"
+        set alias "OUTSIDE via dc2-bgw2"
     next
     edit "t1-bgw2"
         set vdom "root"
@@ -125,7 +127,7 @@ config vpn ipsec phase1-interface
         set auto-discovery-sender enable
         set network-id 21
         set psksecret CHANGE-ME-sdwan-lab-psk
-        set comments "spokes via EVE-INET-201"
+        set comments "spokes via EVE-INET-201 (NAT on c8kv-77)"
     next
     edit "H2_INET2"
         set type dynamic
@@ -144,7 +146,7 @@ config vpn ipsec phase1-interface
         set auto-discovery-sender enable
         set network-id 22
         set psksecret CHANGE-ME-sdwan-lab-psk
-        set comments "spokes via EVE-INET-202"
+        set comments "spokes via EVE-INET-202 (NAT on c8kv-77)"
     next
 end
 config vpn ipsec phase2-interface
@@ -172,7 +174,7 @@ config system interface
     next
 end
 
-#### SD-WAN (underlay = ISP VLANs, overlay = dial-up tunnels)
+#### SD-WAN (underlay = VRF OUTSIDE toward c8kv-77, overlay = dial-up tunnels)
 config system sdwan
     set status enable
     config zone
@@ -185,12 +187,12 @@ config system sdwan
         edit 1
             set interface "wan1"
             set zone "underlay"
-            set gateway 10.100.201.1
+            set gateway 169.26.8.5
         next
         edit 2
             set interface "wan2"
             set zone "underlay"
-            set gateway 10.100.202.1
+            set gateway 169.28.8.5
         next
         edit 11
             set interface "H2_INET1"
@@ -240,7 +242,7 @@ end
 config router static
     edit 1
         set sdwan-zone "underlay"
-        set comment "internet via ISP VLANs"
+        set comment "internet via c8kv-77 (VRF OUTSIDE on the BGWs)"
     next
     edit 2
         set dst 10.200.0.0 255.255.0.0
