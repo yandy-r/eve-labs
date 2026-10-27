@@ -1,0 +1,403 @@
+# dc2-fgt1 — DC SD-WAN hub
+# FortiOS 7.6.8 CLI. Paste section by section, in order (each section only references objects created
+# above it). Lines starting with # are comments.
+#
+# Role: DC2 SD-WAN hub — dial-up IKEv2 overlays per ISP, ADVPN sender, BGP on loopback, iBGP AS 64001
+# route reflector for the spokes. Loopbacks: "bgp-lo" (BGP peering) and "hc-lo" (spoke SLA target, same IP on both hubs;
+# Fortinet: never share one loopback for BGP and health checks).
+# port1/port2 = 802.1Q trunks to dc2-bgw1/dc2-bgw2 E1/3: the BGWs bridge EVE-INET-201 (VLAN 201) and
+# EVE-INET-202 (VLAN 202) through to the hub and hand off TENANT1 on VLAN 3101 (eBGP AS 65002).
+# Spoke->DC sessions are source-NATed to the hub's TENANT1 address so replies always return through the same hub.
+# INET VLANs on RFAMILY-GW: static addressing; reserve .41 on EVE-INET-202 (it has a DHCP pool). PSK is a lab placeholder.
+#
+
+#### system / management
+config system global
+    set hostname "dc2-fgt1"
+    set admintimeout 30
+    set admin-lockout-threshold 5
+    set admin-lockout-duration 300
+    set strong-crypto enable
+    set admin-https-redirect enable
+end
+config system settings
+    set location-id 10.200.255.2
+end
+config system dns
+    set primary 1.1.1.1
+    set secondary 1.0.0.1
+end
+config system interface
+    edit "port8"
+        set mode static
+        set alias "pnet0-trunk"
+        set description "EVE-MGMT-204 arrives tagged (VLAN 3)"
+    next
+    edit "oob-mgmt"
+        set vdom "root"
+        set interface "port8"
+        set vlanid 3
+        set ip 10.100.204.41 255.255.255.0
+        set allowaccess ping https ssh
+        set role lan
+        set alias "EVE-MGMT-204"
+    next
+end
+
+#### interfaces
+config system interface
+    edit "port1"
+        set mode static
+        set alias "trunk-dc2-bgw1"
+        set description "802.1Q trunk to dc2-bgw1: E1/3"
+    next
+    edit "wan1"
+        set vdom "root"
+        set interface "port1"
+        set vlanid 201
+        set ip 10.100.201.41 255.255.255.0
+        set allowaccess ping
+        set role wan
+        set alias "EVE-INET-201"
+    next
+    edit "t1-bgw1"
+        set vdom "root"
+        set interface "port1"
+        set vlanid 3101
+        set ip 169.26.8.2 255.255.255.252
+        set allowaccess ping
+        set role lan
+        set alias "TENANT1 via dc2-bgw1"
+    next
+    edit "port2"
+        set mode static
+        set alias "trunk-dc2-bgw2"
+        set description "802.1Q trunk to dc2-bgw2: E1/3"
+    next
+    edit "wan2"
+        set vdom "root"
+        set interface "port2"
+        set vlanid 202
+        set ip 10.100.202.41 255.255.255.0
+        set allowaccess ping
+        set role wan
+        set alias "EVE-INET-202"
+    next
+    edit "t1-bgw2"
+        set vdom "root"
+        set interface "port2"
+        set vlanid 3101
+        set ip 169.28.8.2 255.255.255.252
+        set allowaccess ping
+        set role lan
+        set alias "TENANT1 via dc2-bgw2"
+    next
+    edit "bgp-lo"
+        set vdom "root"
+        set type loopback
+        set ip 10.200.255.2 255.255.255.255
+        set allowaccess ping
+    next
+    edit "hc-lo"
+        set vdom "root"
+        set type loopback
+        set ip 10.200.255.251 255.255.255.255
+        set allowaccess ping
+    next
+end
+
+#### IPsec overlays (dial-up, IKEv2, ADVPN sender, IKE route injection of bgp-lo)
+config vpn ipsec phase1-interface
+    edit "H2_INET1"
+        set type dynamic
+        set interface "wan1"
+        set ike-version 2
+        set peertype any
+        set proposal aes256gcm-prfsha384 aes256-sha256
+        set dhgrp 20 21
+        set add-route disable
+        set dpd on-idle
+        set network-overlay enable
+        set net-device disable
+        set exchange-interface-ip enable
+        set exchange-ip-addr4 10.200.255.2
+        set dpd-retryinterval 5
+        set auto-discovery-sender enable
+        set network-id 21
+        set psksecret CHANGE-ME-sdwan-lab-psk
+        set comments "spokes via EVE-INET-201"
+    next
+    edit "H2_INET2"
+        set type dynamic
+        set interface "wan2"
+        set ike-version 2
+        set peertype any
+        set proposal aes256gcm-prfsha384 aes256-sha256
+        set dhgrp 20 21
+        set add-route disable
+        set dpd on-idle
+        set network-overlay enable
+        set net-device disable
+        set exchange-interface-ip enable
+        set exchange-ip-addr4 10.200.255.2
+        set dpd-retryinterval 5
+        set auto-discovery-sender enable
+        set network-id 22
+        set psksecret CHANGE-ME-sdwan-lab-psk
+        set comments "spokes via EVE-INET-202"
+    next
+end
+config vpn ipsec phase2-interface
+    edit "H2_INET1"
+        set phase1name "H2_INET1"
+        set proposal aes256gcm aes256-sha256
+        set dhgrp 20 21
+        set keepalive enable
+    next
+    edit "H2_INET2"
+        set phase1name "H2_INET2"
+        set proposal aes256gcm aes256-sha256
+        set dhgrp 20 21
+        set keepalive enable
+    next
+end
+config system interface
+    edit "H2_INET1"
+        set tcp-mss 1350
+        set allowaccess ping
+    next
+    edit "H2_INET2"
+        set tcp-mss 1350
+        set allowaccess ping
+    next
+end
+
+#### SD-WAN (underlay = ISP VLANs, overlay = dial-up tunnels)
+config system sdwan
+    set status enable
+    config zone
+        edit "underlay"
+        next
+        edit "overlay"
+        next
+    end
+    config members
+        edit 1
+            set interface "wan1"
+            set zone "underlay"
+            set gateway 10.100.201.1
+        next
+        edit 2
+            set interface "wan2"
+            set zone "underlay"
+            set gateway 10.100.202.1
+        next
+        edit 11
+            set interface "H2_INET1"
+            set zone "overlay"
+        next
+        edit 12
+            set interface "H2_INET2"
+            set zone "overlay"
+        next
+    end
+end
+
+#### zones
+config system zone
+    edit "DC-TENANT1"
+        set interface "t1-bgw1" "t1-bgw2"
+    next
+end
+
+config firewall address
+    edit "DC-NET-1"
+        set subnet 169.1.0.0 255.255.0.0
+    next
+    edit "CORP-NET-1"
+        set subnet 169.26.100.0 255.255.255.0
+    next
+    edit "CORP-NET-2"
+        set subnet 169.27.100.0 255.255.255.0
+    next
+    edit "CORP-NET-3"
+        set subnet 169.44.0.0 255.255.0.0
+    next
+    edit "SDWAN-LOOPBACKS"
+        set subnet 10.200.0.0 255.255.0.0
+    next
+end
+config firewall addrgrp
+    edit "DC-NETS"
+        set member "DC-NET-1"
+    next
+    edit "CORP-NETS"
+        set member "CORP-NET-1" "CORP-NET-2" "CORP-NET-3"
+    next
+end
+
+#### routing
+config router static
+    edit 1
+        set sdwan-zone "underlay"
+        set comment "internet via ISP VLANs"
+    next
+    edit 2
+        set dst 10.200.0.0 255.255.0.0
+        set blackhole enable
+        set comment "anchor for the SD-WAN loopback summary"
+    next
+    edit 3
+        set dst 10.100.0.0 255.255.0.0
+        set gateway 10.100.204.1
+        set device "oob-mgmt"
+        set comment "home-lab server/mgmt VLANs via EVE-MGMT-204"
+    next
+    edit 4
+        set dst 10.25.0.0 255.255.248.0
+        set gateway 10.100.204.1
+        set device "oob-mgmt"
+        set comment "LAN-WIFI via EVE-MGMT-204"
+    next
+    edit 5
+        set dst 192.168.0.0 255.255.255.0
+        set gateway 10.100.204.1
+        set device "oob-mgmt"
+        set comment "Default LAN via EVE-MGMT-204"
+    next
+end
+config router bgp
+    set as 64001
+    set router-id 10.200.255.2
+    set keepalive-timer 10
+    set holdtime-timer 30
+    set ibgp-multipath enable
+    set ebgp-multipath enable
+    set recursive-next-hop enable
+    set graceful-restart enable
+    config neighbor
+        edit "169.26.8.1"
+            set description "dc2-bgw1 TENANT1 (VLAN 3101)"
+            set remote-as 65002
+            set capability-default-originate enable
+            set soft-reconfiguration enable
+        next
+        edit "169.28.8.1"
+            set description "dc2-bgw2 TENANT1 (VLAN 3101)"
+            set remote-as 65002
+            set capability-default-originate enable
+            set soft-reconfiguration enable
+        next
+    end
+    config neighbor-group
+        edit "SPOKES"
+            set remote-as 64001
+            set interface "bgp-lo"
+            set update-source "bgp-lo"
+            set route-reflector-client enable
+            set next-hop-self enable
+            set soft-reconfiguration enable
+            set capability-graceful-restart enable
+            set advertisement-interval 1
+        next
+    end
+    config neighbor-range
+        edit 1
+            set prefix 10.200.0.0 255.255.0.0
+            set neighbor-group "SPOKES"
+        next
+    end
+    config network
+        edit 1
+            set prefix 10.200.0.0 255.255.0.0
+        next
+    end
+end
+# next-hop-self rewrites only routes the hub learns via eBGP (the DC prefixes); routes reflected between spokes
+# keep the originating spoke loopback as next hop (next-hop-self-rr stays disabled) so ADVPN shortcuts are used.
+
+#### firewall policies
+config firewall policy
+    edit 0
+        set name "SPOKE-HEALTH-CHECK"
+        set srcintf "overlay"
+        set dstintf "hc-lo"
+        set srcaddr "all"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "PING"
+        set comments "spoke SD-WAN SLA probes"
+        set logtraffic all
+    next
+    edit 0
+        set name "SPOKE-PEERING"
+        set srcintf "overlay"
+        set dstintf "bgp-lo"
+        set srcaddr "SDWAN-LOOPBACKS"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "PING" "BGP"
+        set comments "BGP on loopback"
+        set logtraffic all
+    next
+    edit 0
+        set name "OVERLAY-to-DC"
+        set srcintf "overlay"
+        set dstintf "DC-TENANT1"
+        set srcaddr "CORP-NETS"
+        set dstaddr "DC-NETS"
+        set action accept
+        set schedule "always"
+        set service "ALL"
+        set nat enable
+        set comments "SNAT keeps hub selection symmetric for stretched DC subnets"
+        set logtraffic all
+    next
+    edit 0
+        set name "DC-to-OVERLAY"
+        set srcintf "DC-TENANT1"
+        set dstintf "overlay"
+        set srcaddr "DC-NETS"
+        set dstaddr "CORP-NETS"
+        set action accept
+        set schedule "always"
+        set service "ALL"
+        set logtraffic all
+    next
+    edit 0
+        set name "SPOKE-to-SPOKE"
+        set srcintf "overlay"
+        set dstintf "overlay"
+        set srcaddr "CORP-NETS"
+        set dstaddr "CORP-NETS"
+        set action accept
+        set schedule "always"
+        set service "ALL"
+        set comments "hairpin until the ADVPN shortcut is up"
+        set logtraffic all
+    next
+    edit 0
+        set name "DC-to-INTERNET"
+        set srcintf "DC-TENANT1"
+        set dstintf "underlay"
+        set srcaddr "DC-NETS"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "ALL"
+        set utm-status enable
+        set ssl-ssh-profile "certificate-inspection"
+        set av-profile "default"
+        set webfilter-profile "default"
+        set nat enable
+        set logtraffic all
+    next
+end
+
+#### verify
+# get router info bgp summary
+# get router info bgp neighbors | grep -i "BGP neighbor"
+# diagnose vpn tunnel list
+# diagnose sys sdwan member
