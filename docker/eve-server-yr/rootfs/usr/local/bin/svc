@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+# Start/stop/list the lightweight test services (no systemd in containers).
+# Usage: svc start|stop|restart|status <name>   |   svc list
+set -uo pipefail
+
+ECHO_PORT="${ECHO_PORT:-7}"
+APP_PORT="${APP_PORT:-8080}"
+SYSLOG_PORT="${SYSLOG_PORT:-514}"
+
+declare -A CMD=(
+  [ssh]="/usr/sbin/sshd"
+  [nginx]="/usr/sbin/nginx"
+  [iperf3]="iperf3 --server --daemon"
+  [lldpd]="/usr/sbin/lldpd -c"
+  [snmpd]="/usr/sbin/snmpd -LS0-4d"
+  [tftp]="/usr/sbin/in.tftpd --listen --secure --create --address :69 /srv/tftp"
+  [ftp]="/usr/sbin/vsftpd /etc/eve-server/vsftpd.conf"
+  [echo]="socat-echo"
+  [app]="http-app"
+  [syslog]="syslog-sink"
+)
+
+declare -A MATCH=(
+  [ssh]="^(/usr/sbin/sshd|sshd: .*listener)"
+  [nginx]="^nginx: master"
+  [iperf3]="^iperf3 --server"
+  [lldpd]="^(/usr/sbin/)?lldpd"
+  [snmpd]="^/usr/sbin/snmpd"
+  [tftp]="^/usr/sbin/in.tftpd"
+  [ftp]="^/usr/sbin/vsftpd"
+  [echo]="^socat .*LISTEN:${ECHO_PORT},"
+  [app]="^python3 -m http.server ${APP_PORT}"
+  [syslog]="^socat -u UDP4-RECVFROM:${SYSLOG_PORT}"
+)
+
+running() { pgrep -f "${MATCH[$1]}" >/dev/null; }
+
+start() {
+  local name="$1"
+  running "$name" && return 0
+  case "${CMD[$name]}" in
+    socat-echo)
+      setsid socat TCP-LISTEN:"$ECHO_PORT",fork,reuseaddr EXEC:cat >/dev/null 2>&1 &
+      setsid socat UDP4-LISTEN:"$ECHO_PORT",fork,reuseaddr EXEC:cat >/dev/null 2>&1 &
+      ;;
+    http-app)
+      mkdir -p /srv/app
+      (cd /srv/app && setsid python3 -m http.server "$APP_PORT" >/var/log/app.log 2>&1 &)
+      ;;
+    syslog-sink)
+      setsid socat -u UDP4-RECVFROM:"$SYSLOG_PORT",fork OPEN:/var/log/remote-syslog.log,creat,append \
+        >/dev/null 2>&1 &
+      ;;
+    *)
+      # shellcheck disable=SC2086
+      setsid ${CMD[$name]} >/dev/null 2>&1 &
+      ;;
+  esac
+}
+
+stop() { pkill -f "${MATCH[$1]}" || true; }
+
+status() {
+  if running "$1"; then echo "$1: running"; else echo "$1: stopped"; fi
+}
+
+action="${1:-list}"
+name="${2:-}"
+
+if [[ "$action" == list ]]; then
+  for n in $(printf '%s\n' "${!CMD[@]}" | sort); do status "$n"; done
+  exit 0
+fi
+
+if [[ -z "$name" || -z "${CMD[$name]:-}" ]]; then
+  echo "usage: svc start|stop|restart|status <$(printf '%s\n' "${!CMD[@]}" | sort | xargs | tr ' ' '|')> | svc list" >&2
+  exit 2
+fi
+
+case "$action" in
+  start) start "$name" ;;
+  stop) stop "$name" ;;
+  restart) stop "$name"; sleep 0.5; start "$name" ;;
+  status) status "$name" ;;
+  *) echo "unknown action: $action" >&2; exit 2 ;;
+esac

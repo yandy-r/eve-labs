@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# Container init: start the enabled test services, then idle until stopped.
+# Services come from $SERVICES if set, else /etc/eve-server/services, else defaults.
+set -uo pipefail
+
+if [[ -z "${SERVICES:-}" && -s /etc/eve-server/services ]]; then
+  SERVICES="$(grep -v '^\s*#' /etc/eve-server/services | xargs)"
+fi
+SERVICES="${SERVICES:-ssh nginx iperf3 lldpd snmpd tftp echo}"
+
+prepare() {
+  mkdir -p /run/sshd /var/run/vsftpd/empty /srv/www/files /srv/tftp
+  ssh-keygen -A >/dev/null
+  if [[ ! -s /etc/ssl/private/eve-server.key ]]; then
+    openssl req -x509 -nodes -newkey rsa:2048 -days 3650 \
+      -subj "/CN=$(hostname)" -addext "subjectAltName=DNS:$(hostname)" \
+      -keyout /etc/ssl/private/eve-server.key -out /etc/ssl/certs/eve-server.crt 2>/dev/null
+  fi
+  # Sparse files for HTTP/FTP/TFTP throughput tests (no real disk use).
+  for size in 1M 10M 100M 1G; do
+    [[ -e "/srv/www/files/$size.bin" ]] || truncate -s "$size" "/srv/www/files/$size.bin"
+  done
+  # tftpd runs chrooted (--secure), so its files must live inside /srv/tftp.
+  for size in 1M 10M; do
+    [[ -e "/srv/tftp/$size.bin" ]] || truncate -s "$size" "/srv/tftp/$size.bin"
+  done
+}
+
+prepare
+
+for svc in $SERVICES; do
+  /usr/local/bin/svc start "$svc" || echo "eve-server-init: failed to start $svc" >&2
+done
+
+echo "eve-server-init: started [$SERVICES]"
+trap 'exit 0' TERM INT
+while :; do sleep 3600 & wait $!; done

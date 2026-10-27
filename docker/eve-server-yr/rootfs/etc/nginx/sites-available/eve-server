@@ -1,0 +1,28 @@
+# Prod-like web endpoint: identity, health, and throughput-test files.
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    listen 443 ssl default_server;
+    listen [::]:443 ssl default_server;
+    server_name _;
+
+    ssl_certificate     /etc/ssl/certs/eve-server.crt;
+    ssl_certificate_key /etc/ssl/private/eve-server.key;
+
+    root /srv/www;
+    access_log /var/log/nginx/access.log;
+
+    location = /health { default_type text/plain; return 200 "ok\n"; }
+
+    location = /whoami {
+        default_type text/plain;
+        return 200 "host=$hostname server=$server_addr:$server_port client=$remote_addr:$remote_port proto=$scheme\n";
+    }
+
+    location /files/ { autoindex on; sendfile on; tcp_nopush on; }
+
+    location / {
+        default_type text/plain;
+        return 200 "eve-server-yr $hostname ($server_addr)\nendpoints: /health /whoami /files/\n";
+    }
+}

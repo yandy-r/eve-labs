@@ -1,0 +1,4 @@
+# Services started at boot by eve-server-init (one or more per line).
+# Available: ssh nginx iperf3 lldpd snmpd tftp ftp echo app syslog
+# Manage at runtime with: svc list | svc start|stop|restart <name>
+ssh nginx iperf3 lldpd snmpd tftp echo
