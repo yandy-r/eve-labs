@@ -1,0 +1,297 @@
+{
+  "node": {
+    "template": "fortinet",
+    "image": "fortinet-FGT-v7-build3744"
+  },
+  "min_score": 70,
+  "iface_keys": {
+    "port8": "port8",
+    "oob-mgmt": "oob-mgmt"
+  },
+  "eve_to_config": {
+    "port8": [
+      "port8"
+    ]
+  },
+  "facts": [
+    {
+      "kind": "label_ref",
+      "value": "trunk-dc1-bgw1",
+      "line": 4,
+      "rule": "fortios.text_label",
+      "iface": "port1",
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "dc1-bgw1",
+      "line": 5,
+      "rule": "fortios.text_label",
+      "iface": "port1",
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "201",
+      "line": 10,
+      "rule": "fortios.vlanid",
+      "iface": "wan1",
+      "parent": "port1",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.201.31",
+      "line": 11,
+      "rule": "fortios.ip",
+      "iface": "wan1",
+      "parent": "port1",
+      "mask": "255.255.255.0",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-INET-201",
+      "line": 14,
+      "rule": "fortios.text_label",
+      "iface": "wan1",
+      "parent": "port1",
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "3101",
+      "line": 19,
+      "rule": "fortios.vlanid",
+      "iface": "t1-bgw1",
+      "parent": "port1",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.13.7.2",
+      "line": 20,
+      "rule": "fortios.ip",
+      "iface": "t1-bgw1",
+      "parent": "port1",
+      "mask": "255.255.255.252",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "TENANT1",
+      "line": 23,
+      "rule": "fortios.text_label",
+      "iface": "t1-bgw1",
+      "parent": "port1",
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "dc1-bgw1",
+      "line": 23,
+      "rule": "fortios.text_label",
+      "iface": "t1-bgw1",
+      "parent": "port1",
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "10.200.0.0",
+      "line": 32,
+      "rule": "fortios.route_dst",
+      "iface": null,
+      "mask": "255.255.0.0",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "SD-WAN",
+      "line": 34,
+      "rule": "fortios.text_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "asn",
+      "value": "64001",
+      "line": 39,
+      "rule": "fortios.bgp_as",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "router_id",
+      "value": "10.200.255.1",
+      "line": 40,
+      "rule": "fortios.router_id",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.13.7.1",
+      "line": 48,
+      "rule": "fortios.bgp_peer",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "dc1-bgw1",
+      "line": 49,
+      "rule": "fortios.text_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "TENANT1",
+      "line": 49,
+      "rule": "fortios.text_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_mention",
+      "value": "3101",
+      "line": 49,
+      "rule": "fortios.text_vlan",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "asn",
+      "value": "65001",
+      "line": 50,
+      "rule": "fortios.bgp_remote_as",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.15.7.1",
+      "line": 54,
+      "rule": "fortios.bgp_peer",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "dc1-bgw2",
+      "line": 55,
+      "rule": "fortios.text_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "TENANT1",
+      "line": 55,
+      "rule": "fortios.text_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_mention",
+      "value": "3101",
+      "line": 55,
+      "rule": "fortios.text_vlan",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "asn",
+      "value": "65001",
+      "line": 56,
+      "rule": "fortios.bgp_remote_as",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    }
+  ],
+  "ifaces": {
+    "port1": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "wan1": {
+      "parent": "port1",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 201,
+      "dhcp": false,
+      "orphan": false
+    },
+    "t1-bgw1": {
+      "parent": "port1",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 3101,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false,
+  "secrets": []
+}

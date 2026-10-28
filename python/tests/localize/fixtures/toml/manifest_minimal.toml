@@ -1,0 +1,10 @@
+schema = 1
+lab = "ccie_enterprise_infrastructure_practice_lab.unl"
+lab_id = "0ca56f43-8e11-44ca-a007-a6dce53df987"
+generic_labels = ["Net"]
+
+[[segment]]
+key = "SDWAN-CTRL"
+site_key = "site.sdwan_ctrl"
+status = "LABEL_ONLY"
+networks = ["22"]

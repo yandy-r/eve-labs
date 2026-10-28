@@ -1,0 +1,49 @@
+{
+  "node": {
+    "template": "docker",
+    "image": "eve-gui-server:latest"
+  },
+  "min_score": 70,
+  "facts": [
+    {
+      "kind": "ip_host",
+      "value": "10.3.70.100",
+      "line": 2,
+      "rule": "linuxsh.ip_addr",
+      "iface": "eth0",
+      "mask": "/24",
+      "mask_form": "prefix",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.3.70.1",
+      "line": 3,
+      "rule": "linuxsh.ip_route_gw",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "10.3.70.1",
+      "line": 7,
+      "rule": "linuxsh.nameserver",
+      "iface": null,
+      "confidence": "PROVEN"
+    }
+  ],
+  "ifaces": {
+    "eth0": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false
+}

@@ -1,0 +1,19 @@
+schema = 1
+
+[roles]
+inet = "pnet4"
+
+[segments."site.mgmt_a"]
+vlan = 21
+
+[map.dns]
+"1.1.1.1" = "8.8.8.8"
+
+[site_routes]
+"site.mgmt_a" = []
+
+[policy]
+include_heuristic = false
+
+[labs."0ca56f43-8e11-44ca-a007-a6dce53df987".segments."INET-105"]
+vlan = 305

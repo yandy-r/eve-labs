@@ -1,0 +1,157 @@
+hostname dc1-bgw2
+evpn multisite border-gateway 65001
+  delay-restore time 300
+no password strength-check
+username admin password admin123  role network-admin
+username cisco password admin123  role network-admin
+username cisco passphrase  lifetime 99999 warntime 14 gracetime 3
+no ip domain-lookup
+ip domain-name netlab.local
+rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
+snmp-server community NETBRAIN group network-operator
+ip pim rp-address 169.254.255.100 group-list 224.0.0.0/4
+ip pim ssm range 232.0.0.0/8
+vlan 1,100-101,202,501-502,3101
+vlan 100
+  vn-segment 100100
+vlan 101
+  vn-segment 100101
+vlan 202
+  name EVE-INET-202
+vlan 501
+  vn-segment 50001
+vlan 502
+  vn-segment 50002
+vlan 3101
+  name TENANT1-to-dc1-fgt1
+
+ip prefix-list SITE-BGW-LOOPBACKS seq 10 permit 169.254.255.10/32
+ip prefix-list SITE-BGW-LOOPBACKS seq 20 permit 169.254.255.110/32
+ip prefix-list SITE-BGW-LOOPBACKS seq 30 permit 169.254.255.11/32
+ip prefix-list SITE-BGW-LOOPBACKS seq 40 permit 169.254.255.111/32
+vrf context TENANT1
+  vni 50001
+  rd auto
+  ip route 169.1.251.0/24 169.15.38.2 tag 100
+  address-family ipv4 unicast
+    route-target both auto
+    route-target both auto evpn
+vrf context TENANT2
+  vni 50002
+  rd auto
+  address-family ipv4 unicast
+    route-target both auto
+    route-target both auto evpn
+vrf context management
+  ip route 0.0.0.0/0 10.100.203.1
+interface Vlan1
+
+interface Vlan501
+  no shutdown
+  vrf member TENANT1
+  ip forward
+
+interface Vlan502
+  no shutdown
+  vrf member TENANT2
+  ip forward
+
+interface Vlan3101
+  description TENANT1 VRF-lite to dc1-fgt1
+  no shutdown
+  vrf member TENANT1
+  no ip redirects
+  ip address 169.15.7.1/30 tag 100
+  no ipv6 redirects
+interface nve1
+  no shutdown
+  host-reachability protocol bgp
+  source-interface loopback1
+  global ingress-replication protocol bgp
+  multisite border-gateway interface loopback100
+  member vni 50001 associate-vrf
+  member vni 50002 associate-vrf
+  member vni 100100
+interface Ethernet1/1
+  description to dc1-spine1: E1/6
+  no switchport
+  mtu 9216
+  medium p2p
+  ip unnumbered loopback0
+  ip ospf network point-to-point
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+  no shutdown
+  evpn multisite fabric-tracking
+interface Ethernet1/3
+  description to dc1-fgt1: port2
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 202,3101
+  spanning-tree port type edge trunk
+  no shutdown
+
+interface Ethernet1/4
+  shutdown
+
+interface Ethernet1/5
+  shutdown
+
+interface Ethernet1/6
+  description to pnet0: EVE-INET-202
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 202
+  spanning-tree port type edge trunk
+  spanning-tree bpdufilter enable
+  no shutdown
+interface Ethernet1/8
+  description to dc2-bgw2: E1/8
+  no switchport
+  mtu 9216
+  no ip redirects
+  ip address 169.15.28.1/30
+  no ipv6 redirects
+  evpn multisite dci-tracking
+  no shutdown
+interface mgmt0
+  description to mgmt-80: e0/3
+  vrf member management
+  ip address 10.100.203.17/24
+  no cdp enable
+  no shutdown
+
+interface loopback0
+  ip address 169.254.255.11/32 tag 12
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+
+interface loopback1
+  description VTEP loopback interface (PIP)
+  ip address 169.254.255.111/32 tag 54321
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+
+interface loopback100
+  description Multi-Site VIP (shared by both BGWs in the site)
+  ip address 169.168.12.1/32 tag 12
+  ip router ospf UNDERLAY area 0.0.0.0
+  ip pim sparse-mode
+icam monitor scale
+router ospf UNDERLAY
+  router-id 169.254.255.11
+router bgp 65001
+  router-id 169.254.255.11
+  address-family ipv4 unicast
+    redistribute direct route-map DIRECT-TO-BGP
+    redistribute ospf UNDERLAY route-map SITE-BGW-LOOPBACKS-TO-BGP
+    maximum-paths 4
+  address-family l2vpn evpn
+  neighbor 169.15.28.2
+    description dc2-bgw2 DCI underlay
+    remote-as 65002
+    bfd
+    update-source Ethernet1/8
+    address-family ipv4 unicast
+      send-community
+      send-community extended

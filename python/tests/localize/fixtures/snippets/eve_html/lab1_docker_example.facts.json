@@ -1,0 +1,41 @@
+{
+  "facts": [
+    {
+      "kind": "label_ref",
+      "value": "Docker110",
+      "line": 3,
+      "rule": "eve_html.text_label",
+      "iface": null,
+      "confidence": "HEURISTIC"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.20.60.110",
+      "line": 6,
+      "rule": "eve_html.ipv4",
+      "iface": null,
+      "mask": "/24",
+      "mask_form": "prefix",
+      "confidence": "HEURISTIC"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.20.60.1",
+      "line": 7,
+      "rule": "eve_html.ipv4",
+      "iface": null,
+      "confidence": "HEURISTIC"
+    },
+    {
+      "kind": "ip_host",
+      "value": "27.27.27.27",
+      "line": 11,
+      "rule": "eve_html.ipv4",
+      "iface": null,
+      "confidence": "HEURISTIC"
+    }
+  ],
+  "ifaces": {},
+  "vlan_db": [],
+  "is_switch": false
+}

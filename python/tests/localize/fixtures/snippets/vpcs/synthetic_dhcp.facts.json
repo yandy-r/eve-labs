@@ -1,0 +1,26 @@
+{
+  "facts": [
+    {
+      "kind": "dhcp",
+      "value": "dhcp",
+      "line": 1,
+      "rule": "vpcs.dhcp",
+      "iface": "eth0",
+      "confidence": "PROVEN"
+    }
+  ],
+  "ifaces": {
+    "eth0": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": true,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false
+}

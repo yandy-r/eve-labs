@@ -1,0 +1,252 @@
+{
+  "node": {
+    "template": "toy-router"
+  },
+  "min_score": 70,
+  "facts": [
+    {
+      "kind": "secret",
+      "value": "$9$abcdef",
+      "line": 3,
+      "rule": "toyios.secret",
+      "iface": null
+    },
+    {
+      "kind": "domain",
+      "value": "netlab.local",
+      "line": 4,
+      "rule": "toy.domain",
+      "iface": null
+    },
+    {
+      "kind": "dns_server",
+      "value": "10.100.51.11",
+      "line": 5,
+      "rule": "toy.dns",
+      "iface": null
+    },
+    {
+      "kind": "dns_server",
+      "value": "10.100.51.12",
+      "line": 5,
+      "rule": "toy.dns",
+      "iface": null
+    },
+    {
+      "kind": "vlan_def",
+      "value": "1,100-101,203",
+      "line": 7,
+      "rule": "toy.vlan_def",
+      "iface": null
+    },
+    {
+      "kind": "vlan_def",
+      "value": "203",
+      "line": 8,
+      "rule": "toy.vlan_def",
+      "iface": null
+    },
+    {
+      "kind": "vlan_name",
+      "value": "servers",
+      "line": 9,
+      "rule": "toy.vlan_name",
+      "iface": null
+    },
+    {
+      "kind": "label_ref",
+      "value": "c8kv-75",
+      "line": 12,
+      "rule": "toy.desc_label",
+      "iface": "gi0/0"
+    },
+    {
+      "kind": "vlan_list",
+      "value": "203,3101",
+      "line": 15,
+      "rule": "toy.allowed",
+      "iface": "gi0/0"
+    },
+    {
+      "kind": "vlan_list",
+      "value": "100",
+      "line": 16,
+      "rule": "toy.allowed",
+      "iface": "gi0/0"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "7",
+      "line": 17,
+      "rule": "toy.native",
+      "iface": "gi0/0"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "203",
+      "line": 21,
+      "rule": "toy.access",
+      "iface": "gi0/1"
+    },
+    {
+      "kind": "subif_name",
+      "value": "GigabitEthernet16.2",
+      "line": 23,
+      "rule": "toy.subif_name",
+      "iface": "gi16.2",
+      "parent": "gi16",
+      "group": "subif:gi16.2"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "2",
+      "line": 24,
+      "rule": "toy.encap",
+      "iface": "gi16.2",
+      "parent": "gi16",
+      "group": "subif:gi16.2"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.2.14",
+      "line": 25,
+      "rule": "toy.ip",
+      "iface": "gi16.2",
+      "parent": "gi16",
+      "mask": "255.255.255.0",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "svi_name",
+      "value": "Vlan203",
+      "line": 27,
+      "rule": "toy.svi_name",
+      "iface": "vl203",
+      "group": "subif:vl203"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.203.5",
+      "line": 28,
+      "rule": "toy.ip",
+      "iface": "vl203",
+      "mask": "255.255.252.0",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "dhcp",
+      "value": "dhcp",
+      "line": 29,
+      "rule": "toy.dhcp",
+      "iface": "vl203"
+    },
+    {
+      "kind": "vlan_list",
+      "value": "203",
+      "line": 39,
+      "rule": "toy.allowed",
+      "iface": null,
+      "orphan": true
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.1.1.1",
+      "line": 40,
+      "rule": "toy.ip",
+      "iface": null,
+      "mask": "255.255.255.0",
+      "mask_form": "dotted",
+      "orphan": true
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.203.1",
+      "line": 43,
+      "rule": "toy.vrf_default",
+      "iface": null
+    }
+  ],
+  "ifaces": {
+    "gi0/0": {
+      "parent": null,
+      "mode": "trunk",
+      "access_vlan": null,
+      "trunk_vlans": "100,203,3101",
+      "native_vlan": 7,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi0/1": {
+      "parent": null,
+      "mode": "access",
+      "access_vlan": 203,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi16.2": {
+      "parent": "gi16",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 2,
+      "dhcp": false,
+      "orphan": false
+    },
+    "vl203": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": true,
+      "orphan": false
+    },
+    "gi3/2": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "orphan:35": {
+      "parent": null,
+      "mode": "trunk",
+      "access_vlan": null,
+      "trunk_vlans": "203",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": true
+    }
+  },
+  "vlan_db": [
+    1,
+    100,
+    101,
+    203,
+    3101
+  ],
+  "is_switch": true,
+  "secrets": [
+    "$9$abcdef"
+  ],
+  "iface_keys": {
+    "Gi16.2": "gi16.2",
+    "GigabitEthernet16.2": "gi16.2",
+    "Vlan 203": "vl203"
+  },
+  "eve_to_config": {
+    "Gi16": [
+      "GigabitEthernet16"
+    ]
+  }
+}

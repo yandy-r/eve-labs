@@ -1,0 +1,4 @@
+<div data-v-ef6805da="" id="customText10" class="customShape customText context-menu jtk-managed jtk-draggable editable cke_focus jtk-drag-selected ui-selectee dragstopped resizable-content ck ck-content" name="" style="position: absolute; left: 622px; top: 1334px; z-index: 1001; cursor: move; height: auto; width: auto;" data-jtk-managed="customText10"><p><span style="color:#e74c3c;">VLAN 101&nbsp;- VNI&nbsp;100101</span></p>
+
+<p><span style="color:#e74c3c;">169.1.101.0/24</span></p>
+</div>

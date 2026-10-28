@@ -1,0 +1,118 @@
+{
+  "node": {
+    "template": "asav",
+    "image": "asav-918-2"
+  },
+  "min_score": 70,
+  "iface_keys": {
+    "GigabitEthernet0/1.203": "gi0/1.203",
+    "Gi0/1.203": "gi0/1.203",
+    "Management0/0": "mgmt0/0",
+    "Tunnel1": "tu1"
+  },
+  "eve_to_config": {
+    "Gi0/6": [
+      "GigabitEthernet0/6"
+    ],
+    "Mgmt0/0": [
+      "Management0/0"
+    ]
+  },
+  "facts": [
+    {
+      "kind": "ip_host",
+      "value": "10.20.10.1",
+      "line": 4,
+      "rule": "asa.ip",
+      "iface": "gi0/1",
+      "mask": "255.255.255.0",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.20.10.2",
+      "line": 4,
+      "rule": "asa.ip_standby",
+      "iface": "gi0/1",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.20.20.1",
+      "line": 9,
+      "rule": "asa.ip",
+      "iface": "gi0/2",
+      "mask": "255.255.255.0",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.20.20.2",
+      "line": 9,
+      "rule": "asa.ip_standby",
+      "iface": "gi0/2",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "20.20.20.1",
+      "line": 15,
+      "rule": "asa.ip",
+      "iface": "gi0/3",
+      "mask": "255.255.255.0",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "20.20.20.2",
+      "line": 15,
+      "rule": "asa.ip_standby",
+      "iface": "gi0/3",
+      "flags": [],
+      "confidence": "PROVEN"
+    }
+  ],
+  "ifaces": {
+    "gi0/1": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi0/2": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi0/3": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false,
+  "secrets": []
+}

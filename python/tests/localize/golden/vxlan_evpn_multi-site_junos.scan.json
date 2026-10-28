@@ -1,0 +1,791 @@
+{
+  "lab": "labs/datacenter/junos/vxlan_evpn_multi-site_junos.unl",
+  "lab_id": "66a315e7-90d2-492f-bb7c-9d6b395e5f8d",
+  "pinned": true,
+  "manifest": true,
+  "nothing_to_localize": false,
+  "segments": [
+    {
+      "key": "MGMT",
+      "site_key": "junos.mgmt",
+      "role": "mgmt",
+      "status": "CONFIGURABLE",
+      "networks": [
+        "5",
+        "13",
+        "24",
+        "58",
+        "76"
+      ],
+      "bridge": "pnet0",
+      "labels": {
+        "5": "mgmt",
+        "13": "mgmt",
+        "24": "mgmt",
+        "58": "mgmt58",
+        "76": "mgmt"
+      },
+      "carries": [],
+      "schemes": [
+        {
+          "tag": "untagged",
+          "subnet": "10.100.240.0/20",
+          "gateway": "10.100.255.254",
+          "scopes": [
+            "startup"
+          ],
+          "members": 32,
+          "outliers": 0
+        }
+      ]
+    },
+    {
+      "key": "INET-1240",
+      "site_key": "junos.inet_a",
+      "role": "inet",
+      "status": "CONFIGURABLE",
+      "networks": [
+        "72"
+      ],
+      "bridge": "pnet2",
+      "labels": {
+        "72": "INET-1240"
+      },
+      "carries": [],
+      "schemes": [
+        {
+          "tag": 1240,
+          "subnet": "172.31.240.0/24",
+          "gateway": null,
+          "scopes": [
+            "startup"
+          ],
+          "members": 6,
+          "outliers": 0
+        }
+      ]
+    },
+    {
+      "key": "INET-1242",
+      "site_key": "junos.inet_b",
+      "role": "inet",
+      "status": "CONFIGURABLE",
+      "networks": [
+        "62"
+      ],
+      "bridge": "pnet2",
+      "labels": {
+        "62": "INET-1242"
+      },
+      "carries": [],
+      "schemes": [
+        {
+          "tag": 1242,
+          "subnet": "172.31.242.0/24",
+          "gateway": null,
+          "scopes": [
+            "startup"
+          ],
+          "members": 6,
+          "outliers": 0
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "junos.mgmt/bridge",
+      "group": "A Clouds",
+      "kind": "bridge",
+      "prompt": "MGMT bridge",
+      "current": "pnet0",
+      "default": "pnet0",
+      "default_source": "keep",
+      "choices": [
+        "pnet0"
+      ],
+      "depends_on": [],
+      "affects": 0,
+      "segment": "MGMT",
+      "scenario": "bridge",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "junos.inet_a/bridge",
+      "group": "A Clouds",
+      "kind": "bridge",
+      "prompt": "INET-1240 bridge",
+      "current": "pnet2",
+      "default": "pnet2",
+      "default_source": "keep",
+      "choices": [
+        "pnet2"
+      ],
+      "depends_on": [],
+      "affects": 0,
+      "segment": "INET-1240",
+      "scenario": "bridge",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "junos.inet_b/bridge",
+      "group": "A Clouds",
+      "kind": "bridge",
+      "prompt": "INET-1242 bridge",
+      "current": "pnet2",
+      "default": "pnet2",
+      "default_source": "keep",
+      "choices": [
+        "pnet2"
+      ],
+      "depends_on": [],
+      "affects": 0,
+      "segment": "INET-1242",
+      "scenario": "bridge",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "junos.inet_a/vlan",
+      "group": "B VLAN tags",
+      "kind": "vlan",
+      "prompt": "INET-1240 tag 1240",
+      "current": "1240",
+      "default": "1240",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [],
+      "affects": 2,
+      "segment": "INET-1240",
+      "scenario": "segment_l2",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "junos.inet_b/vlan",
+      "group": "B VLAN tags",
+      "kind": "vlan",
+      "prompt": "INET-1242 tag 1242",
+      "current": "1242",
+      "default": "1242",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [],
+      "affects": 2,
+      "segment": "INET-1242",
+      "scenario": "segment_l2",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "junos.mgmt/subnet",
+      "group": "C Addressing",
+      "kind": "cidr",
+      "prompt": "MGMT subnet 10.100.240.0/20",
+      "current": "10.100.240.0/20",
+      "default": "10.100.240.0/20",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [],
+      "affects": 32,
+      "segment": "MGMT",
+      "scenario": "segment_l3",
+      "notes": [
+        "17 baseline host(s)"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "junos.mgmt/gateway",
+      "group": "C Addressing",
+      "kind": "ip",
+      "prompt": "MGMT gateway 10.100.255.254",
+      "current": "10.100.255.254",
+      "default": "10.100.255.254",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "junos.mgmt/subnet"
+      ],
+      "affects": 16,
+      "segment": "MGMT",
+      "scenario": "segment_l3",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "junos.inet_a/subnet",
+      "group": "C Addressing",
+      "kind": "cidr",
+      "prompt": "INET-1240 subnet 172.31.240.0/24",
+      "current": "172.31.240.0/24",
+      "default": "172.31.240.0/24",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [],
+      "affects": 4,
+      "segment": "INET-1240",
+      "scenario": "segment_l3",
+      "notes": [
+        "2 baseline host(s)"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "junos.inet_b/subnet",
+      "group": "C Addressing",
+      "kind": "cidr",
+      "prompt": "INET-1242 subnet 172.31.242.0/24",
+      "current": "172.31.242.0/24",
+      "default": "172.31.242.0/24",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [],
+      "affects": 4,
+      "segment": "INET-1242",
+      "scenario": "segment_l3",
+      "notes": [
+        "2 baseline host(s)"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "junos.mgmt/label",
+      "group": "D Labels",
+      "kind": "label",
+      "prompt": "mgmt (5 networks)",
+      "current": "mgmt",
+      "default": "mgmt",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "junos.mgmt/vlan",
+        "junos.mgmt/subnet"
+      ],
+      "affects": 5,
+      "segment": "MGMT",
+      "scenario": "labels",
+      "notes": [
+        "generic label: only the network name changes"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "junos.inet_a/label",
+      "group": "D Labels",
+      "kind": "label",
+      "prompt": "INET-1240 (1 network)",
+      "current": "INET-1240",
+      "default": "INET-1240",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "junos.inet_a/vlan",
+        "junos.inet_a/subnet"
+      ],
+      "affects": 1,
+      "segment": "INET-1240",
+      "scenario": "labels",
+      "notes": [
+        "0 text reference(s) follow the label"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "junos.inet_b/label",
+      "group": "D Labels",
+      "kind": "label",
+      "prompt": "INET-1242 (1 network)",
+      "current": "INET-1242",
+      "default": "INET-1242",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "junos.inet_b/vlan",
+        "junos.inet_b/subnet"
+      ],
+      "affects": 1,
+      "segment": "INET-1242",
+      "scenario": "labels",
+      "notes": [
+        "0 text reference(s) follow the label"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "services/dns:1.0.0.1",
+      "group": "E Services",
+      "kind": "host",
+      "prompt": "DNS 1.0.0.1 (linuxsh startup x16)",
+      "current": "1.0.0.1",
+      "default": "1.0.0.1",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [],
+      "affects": 0,
+      "segment": null,
+      "scenario": "services",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "services/dns:1.1.1.1",
+      "group": "E Services",
+      "kind": "host",
+      "prompt": "DNS 1.1.1.1 (linuxsh startup x16)",
+      "current": "1.1.1.1",
+      "default": "1.1.1.1",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [],
+      "affects": 0,
+      "segment": null,
+      "scenario": "services",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "services/dns:10.100.51.11",
+      "group": "E Services",
+      "kind": "host",
+      "prompt": "DNS 10.100.51.11 (junos startup x16)",
+      "current": "10.100.51.11",
+      "default": "10.100.51.11",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [],
+      "affects": 0,
+      "segment": null,
+      "scenario": "services",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "services/domain:netlab.local",
+      "group": "E Services",
+      "kind": "domain",
+      "prompt": "domain netlab.local (iosxe startup x2)",
+      "current": "netlab.local",
+      "default": "netlab.local",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [],
+      "affects": 0,
+      "segment": null,
+      "scenario": "services",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "services/domain:plsnetlab.local",
+      "group": "E Services",
+      "kind": "domain",
+      "prompt": "domain plsnetlab.local (ios startup x2, junos startup x32, linuxsh startup x16)",
+      "current": "plsnetlab.local",
+      "default": "plsnetlab.local",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [],
+      "affects": 0,
+      "segment": null,
+      "scenario": "services",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "bgp_upstream/enabled",
+      "group": "G Scenarios",
+      "kind": "bool",
+      "prompt": "Upstream eBGP on ISP-RTR18, ISP-RTR9 (peer 172.31.240.1, 172.31.242.1 AS 65299, via INET-1240, INET-1242): localize it?",
+      "current": null,
+      "default": "no",
+      "default_source": "gate (default no)",
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "depends_on": [],
+      "affects": 0,
+      "segment": null,
+      "scenario": "bgp_upstream",
+      "notes": [
+        "replaces a default route toward the home network"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "bgp_upstream/peer:172.31.240.1",
+      "group": "G Scenarios",
+      "kind": "ip",
+      "prompt": "home BGP peer 172.31.240.1 (in INET-1240)",
+      "current": "172.31.240.1",
+      "default": "172.31.240.1",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "bgp_upstream/enabled"
+      ],
+      "affects": 0,
+      "segment": null,
+      "scenario": "bgp_upstream",
+      "notes": [
+        "keeping the current value follows the segment subnet map"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "bgp_upstream/peer:172.31.242.1",
+      "group": "G Scenarios",
+      "kind": "ip",
+      "prompt": "home BGP peer 172.31.242.1 (in INET-1242)",
+      "current": "172.31.242.1",
+      "default": "172.31.242.1",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "bgp_upstream/enabled"
+      ],
+      "affects": 0,
+      "segment": null,
+      "scenario": "bgp_upstream",
+      "notes": [
+        "keeping the current value follows the segment subnet map"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "bgp_upstream/peer_as",
+      "group": "G Scenarios",
+      "kind": "asn",
+      "prompt": "home (peer) AS",
+      "current": "65299",
+      "default": "65299",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "bgp_upstream/enabled"
+      ],
+      "affects": 0,
+      "segment": null,
+      "scenario": "bgp_upstream",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "bgp_upstream/local_as",
+      "group": "G Scenarios",
+      "kind": "asn",
+      "prompt": "lab (local) AS",
+      "current": "65300",
+      "default": "65300",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "bgp_upstream/enabled"
+      ],
+      "affects": 0,
+      "segment": null,
+      "scenario": "bgp_upstream",
+      "notes": [
+        "changed lab-wide; route-map communities follow"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "bgp_upstream/prefixes",
+      "group": "G Scenarios",
+      "kind": "site_routes",
+      "prompt": "advertised prefixes [k]eep / list",
+      "current": "172.31.255.0/24, 192.168.64.0/18, 192.168.128.0/17",
+      "default": "keep",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "bgp_upstream/enabled"
+      ],
+      "affects": 0,
+      "segment": null,
+      "scenario": "bgp_upstream",
+      "notes": [
+        "advanced: prefixes advertised to the home router",
+        "internal prefix(es) exported upstream: 172.31.255.0/24"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "secrets/placeholders",
+      "group": "H Secrets",
+      "kind": "choice",
+      "prompt": "committed cleartext secrets (enable x4, user x8): replace with CHANGE-ME-<name>?",
+      "current": null,
+      "default": "none",
+      "default_source": "keep",
+      "choices": [
+        "none",
+        "all"
+      ],
+      "depends_on": [],
+      "affects": 0,
+      "segment": null,
+      "scenario": "secrets",
+      "notes": [
+        "the old value remains in git history; rotate it wherever it is used",
+        "32 hashed/encrypted value(s) are never replaced"
+      ],
+      "answered": false,
+      "answer": null
+    }
+  ],
+  "findings": [
+    {
+      "code": "UNCONFIGURED",
+      "severity": "info",
+      "msg": "segment MGMT: no config on dc1-fw32 port8, dc1-fw33 port8, dc1-fw34 port8, dc1-fw35 port8, dc2-fw36 port8, dc2-fw37 port8, dc2-fw38 port8, dc2-fw39 port8, b1-fw42 port8, b2-fw43 port8 (bridge/label only)",
+      "refs": [
+        "segment:MGMT",
+        "node:32",
+        "node:33",
+        "node:34",
+        "node:35",
+        "node:36",
+        "node:37",
+        "node:38",
+        "node:39",
+        "node:42",
+        "node:43"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 1: 2 committed secret(s)",
+      "refs": [
+        "node:1"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 2: 2 committed secret(s)",
+      "refs": [
+        "node:2"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 3: 2 committed secret(s)",
+      "refs": [
+        "node:3"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 4: 2 committed secret(s)",
+      "refs": [
+        "node:4"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 5: 2 committed secret(s)",
+      "refs": [
+        "node:5"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 6: 2 committed secret(s)",
+      "refs": [
+        "node:6"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 7: 2 committed secret(s)",
+      "refs": [
+        "node:7"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 8: 2 committed secret(s)",
+      "refs": [
+        "node:8"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 10: 2 committed secret(s)",
+      "refs": [
+        "node:10"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 11: 2 committed secret(s)",
+      "refs": [
+        "node:11"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 12: 2 committed secret(s)",
+      "refs": [
+        "node:12"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 13: 2 committed secret(s)",
+      "refs": [
+        "node:13"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 14: 2 committed secret(s)",
+      "refs": [
+        "node:14"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 15: 2 committed secret(s)",
+      "refs": [
+        "node:15"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 16: 2 committed secret(s)",
+      "refs": [
+        "node:16"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 17: 2 committed secret(s)",
+      "refs": [
+        "node:17"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 44: 2 committed secret(s)",
+      "refs": [
+        "node:44"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 45: 2 committed secret(s)",
+      "refs": [
+        "node:45"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 9: 4 committed secret(s)",
+      "refs": [
+        "node:9"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 18: 4 committed secret(s)",
+      "refs": [
+        "node:18"
+      ]
+    }
+  ],
+  "protected": {
+    "vlans": {
+      "startup": "101-102,1240-1243"
+    },
+    "prefixes": [
+      "10.0.0.0/30",
+      "10.0.0.1/32",
+      "10.0.0.2/32",
+      "10.0.1.0/30",
+      "169.0.0.0/8",
+      "169.101.101.0/24",
+      "169.101.102.0/24",
+      "169.102.101.0/24",
+      "169.102.102.0/24",
+      "169.11.101.0/24",
+      "169.12.101.0/24",
+      "169.12.102.0/24",
+      "169.13.101.0/24",
+      "172.31.255.0/24",
+      "172.31.255.0/30",
+      "172.31.255.12/30",
+      "172.31.255.16/30",
+      "172.31.255.20/30",
+      "172.31.255.24/30",
+      "172.31.255.28/30",
+      "172.31.255.4/30",
+      "172.31.255.8/30"
+    ],
+    "lookalikes": {
+      "INET-1240": {
+        "count": 4,
+        "values": [
+          "subif_name GigabitEthernet3.1240",
+          "subif_name GigabitEthernet5.1240",
+          "vlan_tag 1240"
+        ]
+      },
+      "INET-1242": {
+        "count": 4,
+        "values": [
+          "subif_name GigabitEthernet4.1242",
+          "subif_name GigabitEthernet5.1242",
+          "vlan_tag 1242"
+        ]
+      }
+    }
+  }
+}

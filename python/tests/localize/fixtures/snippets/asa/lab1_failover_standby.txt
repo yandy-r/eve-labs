@@ -1,0 +1,24 @@
+interface GigabitEthernet0/1
+ nameif MPLS
+ security-level 0
+ ip address 10.20.10.1 255.255.255.0 standby 10.20.10.2 
+!
+interface GigabitEthernet0/2
+ nameif INSIDE
+ security-level 100
+ ip address 10.20.20.1 255.255.255.0 standby 10.20.20.2 
+ policy-route route-map PBR-N60
+!
+interface GigabitEthernet0/3
+ nameif OUTSIDE
+ security-level 0
+ ip address 20.20.20.1 255.255.255.0 standby 20.20.20.2 
+!
+mtu OUTSIDE 1500
+failover
+failover lan unit primary
+failover lan interface FO GigabitEthernet0/0
+failover polltime unit 3 holdtime 9
+failover link FO GigabitEthernet0/0
+failover interface ip FO 192.168.1.1 255.255.255.252 standby 192.168.1.2
+no failover wait-disable

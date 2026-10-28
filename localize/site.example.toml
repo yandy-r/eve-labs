@@ -1,0 +1,127 @@
+# eve-localize site answers (generated; edit freely)
+
+schema = 1
+site = "example"
+
+[segments."site.sdwan_ctrl"]
+bridge = "pnet0"
+label = "Net"
+
+[segments."nexus_vpc.internet"]
+bridge = "pnet0"
+label = "Internet"
+
+[segments."site.nat"]
+bridge = "nat0"
+label = "Internet"
+
+[segments."azure.inet"]
+bridge = "pnet0"
+subnet = "10.100.105.0/24"
+gateway = "10.100.105.1"
+label = "Internet-105"
+
+[segments."azure.mgmt"]
+bridge = "pnet0"
+subnet = "10.100.104.0/24"
+gateway = "10.100.104.1"
+label = "mgmt-104"
+
+[segments."site.trunk"]
+bridge = "pnet0"
+label = "EVE-TRUNK"
+
+[segments."site.mgmt_b"]
+bridge = "pnet0"
+vlan = 3
+subnet = "10.100.204.0/24"
+gateway = "10.100.204.1"
+label = "EVE-MGMT-204"
+
+[segments."site.mgmt_a"]
+bridge = "pnet0"
+vlan = 2
+subnet = "10.100.203.0/24"
+gateway = "10.100.203.1"
+label = "EVE-MGMT-203"
+
+[segments."site.inet_a"]
+bridge = "pnet0"
+vlan = 201
+subnet = "10.100.201.0/24"
+gateway = "10.100.201.1"
+label = "EVE-INET-201"
+
+[segments."site.inet_b"]
+bridge = "pnet0"
+vlan = 202
+subnet = "10.100.202.0/24"
+gateway = "10.100.202.1"
+label = "EVE-INET-202"
+
+[segments."backbone.trunk"]
+bridge = "pnet0"
+label = "trunk"
+
+[segments."backbone.fw_mgmt"]
+bridge = "pnet0"
+label = "204-31"
+
+[segments."backbone.mgmt"]
+bridge = "pnet0"
+vlan = 203
+subnet = "172.21.203.0/24"
+gateway = "172.21.203.254"
+label = "mgmt-203"
+
+[segments."backbone.inet_201"]
+bridge = "pnet0"
+label = "INET-201"
+
+[segments."backbone.inet_202"]
+bridge = "pnet0"
+label = "INET-202"
+
+[segments."backbone.out_255"]
+bridge = "pnet0"
+label = "out-255"
+
+[segments."junos.mgmt"]
+bridge = "pnet0"
+subnet = "10.100.240.0/20"
+gateway = "10.100.255.254"
+label = "mgmt"
+
+[segments."junos.inet_a"]
+bridge = "pnet2"
+vlan = 1240
+subnet = "172.31.240.0/24"
+label = "INET-1240"
+
+[segments."junos.inet_b"]
+bridge = "pnet2"
+vlan = 1242
+subnet = "172.31.242.0/24"
+label = "INET-1242"
+
+[map.ntp]
+"34.202.215.187" = "34.202.215.187"
+"pool.ntp.org" = "pool.ntp.org"
+
+[map.dns]
+"1.1.1.1" = "1.1.1.1"
+"1.0.0.1" = "1.0.0.1"
+"172.21.255.12" = "172.21.255.12"
+"172.21.255.13" = "172.21.255.13"
+"10.25.0.51" = "10.25.0.51"
+"10.25.0.52" = "10.25.0.52"
+"10.100.51.11" = "10.100.51.11"
+
+[map.probe]
+"1.1.1.1" = "1.1.1.1"
+"8.8.8.8" = "8.8.8.8"
+
+[map.domain]
+"netlab.local" = "netlab.local"
+"plsnetlab.local" = "plsnetlab.local"
+"yandy.dev" = "yandy.dev"

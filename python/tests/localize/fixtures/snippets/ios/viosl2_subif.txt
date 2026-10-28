@@ -1,0 +1,89 @@
+hostname sw-48
+vrf definition Mgmt-vrf
+ rd 2:2
+ !
+ address-family ipv4
+ exit-address-family
+!
+enable secret admin123
+!
+username cisco privilege 15 secret admin123
+username admin privilege 15 secret admin123
+no aaa new-model
+no ip domain-lookup
+ip domain-name plsnetlab.local
+interface Loopback0
+ no shutdown
+ ip address 169.254.48.48 255.255.255.255
+!
+interface GigabitEthernet0/0
+ description to c8kv-52: Gi1
+ no shutdown
+ no switchport
+ ip address 169.44.0.6 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
+ ip router isis UNDERLAY
+ negotiation auto
+ no ipv6 redirects
+ isis network point-to-point 
+!
+interface GigabitEthernet3/2
+ no shutdown
+ negotiation auto
+!
+interface GigabitEthernet3/3
+ description to pnet0: EVE-MGMT-203
+ no shutdown
+ no switchport
+ no ip address
+ no ip redirects
+ no ip proxy-arp
+ negotiation auto
+ no ipv6 redirects
+!
+interface GigabitEthernet3/3.2
+ no shutdown
+ encapsulation dot1Q 2
+ vrf forwarding Mgmt-vrf
+ ip address 10.100.203.48 255.255.255.0
+ no ip redirects
+ no ip proxy-arp
+ no ipv6 redirects
+!
+router isis UNDERLAY
+ net 49.0000.0000.0000.0048.00
+ is-type level-2-only
+ router-id Loopback0
+ metric-style wide
+ log-adjacency-changes
+ passive-interface Loopback0
+!
+ip forward-protocol nd
+!
+no ip http server
+ip http authentication local
+ip http secure-server
+!
+ip route vrf Mgmt-vrf 0.0.0.0 0.0.0.0 10.100.203.1
+ip ssh version 2
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+!
+!
+!
+!
+!
+snmp-server community NETBRAIN RO
+!
+control-plane
+!
+banner exec ^C
+IOSv - Cisco Systems Confidential -
+
+Supplemental End User License Restrictions
+
+This IOSv software is provided AS-IS without warranty of any kind. Under no circumstances may this software be used separate from the Cisco Modeling Labs Software that this software was provided with, or deployed or used as part of a production environment.
+
+By using the software, you agree to abide by the terms and conditions of the Cisco End User License Agreement at http://www.cisco.com/go/eula. Unauthorized use or distribution of this software is expressly prohibited.
+^C

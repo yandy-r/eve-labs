@@ -1,0 +1,7 @@
+#!/bin/sh
+ip addr add 10.100.51.31/24 dev eth0
+ip route add default via 10.100.51.1
+cat << EOF > /etc/resolv.conf
+search lab.example
+nameserver 10.100.51.2
+EOF

@@ -1,0 +1,17 @@
+set version 23.2R1.14
+set system host-name r2
+set system domain-name plsnetlab.local
+set system domain-search plsnetlab.local
+set system name-server 10.100.51.11
+set system ntp server 10.100.51.12
+set system root-authentication encrypted-password "$6$abc.def$ghi"
+set interfaces fxp0 unit 0 family inet address 10.100.241.12/20
+set interfaces ge-0/0/2 vlan-tagging
+set interfaces ge-0/0/2 unit 1242 vlan-id 1242
+set interfaces ge-0/0/2 unit 1242 family inet address 172.31.242.2/30
+set interfaces ge-0/0/3 unit 0 family inet dhcp
+set vlans V100 vlan-id 100
+set routing-instances mgmt_junos routing-options static route 0.0.0.0/0 next-hop 10.100.255.254
+set routing-options router-id 10.255.0.2
+set routing-options autonomous-system 65022
+set protocols bgp group HOME neighbor 172.31.242.1 peer-as 64001

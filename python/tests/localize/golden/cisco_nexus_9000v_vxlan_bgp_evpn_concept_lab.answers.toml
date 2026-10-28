@@ -1,0 +1,7 @@
+# Synthetic "site B" answers: this lab has no cloud network, so nothing applies
+# and the round-trip must leave it byte-identical.
+schema = 1
+site = "site-b"
+
+[map.dns]
+"1.1.1.1" = "9.9.9.9"

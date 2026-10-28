@@ -1,0 +1,525 @@
+{
+  "node": {
+    "template": "asav",
+    "image": "asav-918-2"
+  },
+  "min_score": 70,
+  "iface_keys": {
+    "GigabitEthernet0/1.203": "gi0/1.203",
+    "Gi0/1.203": "gi0/1.203",
+    "Management0/0": "mgmt0/0",
+    "Tunnel1": "tu1"
+  },
+  "eve_to_config": {
+    "Gi0/6": [
+      "GigabitEthernet0/6"
+    ],
+    "Mgmt0/0": [
+      "Management0/0"
+    ]
+  },
+  "facts": [
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 10,
+      "rule": "asa.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.105.21",
+      "line": 20,
+      "rule": "asa.ip",
+      "iface": "gi0/0",
+      "mask": "255.255.255.0",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.254.0.1",
+      "line": 25,
+      "rule": "asa.ip",
+      "iface": "gi0/1",
+      "mask": "255.255.255.252",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.254.21.1",
+      "line": 29,
+      "rule": "asa.ip",
+      "iface": "tu1",
+      "mask": "255.255.255.252",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "172.173.204.134",
+      "line": 31,
+      "rule": "asa.tunnel_dst",
+      "iface": "tu1",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.254.100.1",
+      "line": 37,
+      "rule": "asa.ip",
+      "iface": "tu2",
+      "mask": "255.255.255.252",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.254.0.2",
+      "line": 39,
+      "rule": "asa.tunnel_dst",
+      "iface": "tu2",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "asn",
+      "value": "65101",
+      "line": 45,
+      "rule": "asa.bgp_asn",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "router_id",
+      "value": "169.254.21.1",
+      "line": 48,
+      "rule": "asa.bgp_router_id",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.254.100.2",
+      "line": 50,
+      "rule": "asa.bgp_peer",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "asn",
+      "value": "65102",
+      "line": 50,
+      "rule": "asa.bgp_remote_as",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.254.100.2",
+      "line": 51,
+      "rule": "asa.bgp_peer",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.254.100.2",
+      "line": 52,
+      "rule": "asa.bgp_peer",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.200.100.254",
+      "line": 53,
+      "rule": "asa.bgp_peer",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "asn",
+      "value": "65100",
+      "line": 53,
+      "rule": "asa.bgp_remote_as",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.200.100.254",
+      "line": 54,
+      "rule": "asa.bgp_peer",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.200.100.254",
+      "line": 55,
+      "rule": "asa.bgp_peer",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.105.1",
+      "line": 62,
+      "rule": "asa.route_gw",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "10.25.0.0",
+      "line": 63,
+      "rule": "asa.route_dst",
+      "iface": null,
+      "mask": "255.255.0.0",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.104.1",
+      "line": 63,
+      "rule": "asa.route_gw",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "10.100.0.0",
+      "line": 64,
+      "rule": "asa.route_dst",
+      "iface": null,
+      "mask": "255.255.0.0",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.104.1",
+      "line": 64,
+      "rule": "asa.route_gw",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "10.200.100.254",
+      "line": 65,
+      "rule": "asa.route_dst",
+      "iface": null,
+      "mask": "255.255.255.255",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "169.254.21.2",
+      "line": 65,
+      "rule": "asa.route_gw",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "172.173.204.134",
+      "line": 66,
+      "rule": "asa.route_dst",
+      "iface": null,
+      "mask": "255.255.255.255",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.105.1",
+      "line": 66,
+      "rule": "asa.route_gw",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "172.173.204.134",
+      "line": 68,
+      "rule": "asa.group_policy",
+      "iface": null,
+      "flags": [
+        "object_name"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "172.173.204.134",
+      "line": 69,
+      "rule": "asa.group_policy",
+      "iface": null,
+      "flags": [
+        "object_name"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.254.0.2",
+      "line": 71,
+      "rule": "asa.group_policy",
+      "iface": null,
+      "flags": [
+        "object_name"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.254.0.2",
+      "line": 72,
+      "rule": "asa.group_policy",
+      "iface": null,
+      "flags": [
+        "object_name"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 75,
+      "rule": "asa.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.254.0.2",
+      "line": 76,
+      "rule": "asa.tunnel_group",
+      "iface": null,
+      "flags": [
+        "object_name"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.254.0.2",
+      "line": 77,
+      "rule": "asa.tunnel_group",
+      "iface": null,
+      "flags": [
+        "object_name"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.254.0.2",
+      "line": 78,
+      "rule": "asa.default_group_policy",
+      "iface": null,
+      "flags": [
+        "object_name"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.254.0.2",
+      "line": 79,
+      "rule": "asa.tunnel_group",
+      "iface": null,
+      "flags": [
+        "object_name"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "secret",
+      "value": "bUtV7fA4btYdA39Q",
+      "line": 80,
+      "rule": "asa.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "secret",
+      "value": "bUtV7fA4btYdA39Q",
+      "line": 81,
+      "rule": "asa.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "172.173.204.134",
+      "line": 82,
+      "rule": "asa.tunnel_group",
+      "iface": null,
+      "flags": [
+        "object_name"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "172.173.204.134",
+      "line": 83,
+      "rule": "asa.tunnel_group",
+      "iface": null,
+      "flags": [
+        "object_name"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "172.173.204.134",
+      "line": 84,
+      "rule": "asa.default_group_policy",
+      "iface": null,
+      "flags": [
+        "object_name"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "172.173.204.134",
+      "line": 85,
+      "rule": "asa.tunnel_group",
+      "iface": null,
+      "flags": [
+        "object_name"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "secret",
+      "value": "4wmzNmmufPMg277VCDpcsryPHt",
+      "line": 86,
+      "rule": "asa.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "secret",
+      "value": "4wmzNmmufPMg277VCDpcsryPHt",
+      "line": 87,
+      "rule": "asa.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "172.173.204.134",
+      "line": 89,
+      "rule": "asa.tunnel_group_map",
+      "iface": null,
+      "flags": [
+        "object_name"
+      ],
+      "confidence": "PROVEN"
+    }
+  ],
+  "ifaces": {
+    "gi0/0": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi0/1": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "tu1": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "tu2": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false,
+  "secrets": [
+    "admin123",
+    "admin123",
+    "bUtV7fA4btYdA39Q",
+    "bUtV7fA4btYdA39Q",
+    "4wmzNmmufPMg277VCDpcsryPHt",
+    "4wmzNmmufPMg277VCDpcsryPHt"
+  ]
+}

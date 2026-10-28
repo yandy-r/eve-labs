@@ -1,0 +1,13 @@
+# Synthetic "site B" answers (golden round-trip, design section 14 item 8).
+schema = 1
+site = "site-b"
+
+[segments."site.nat"]
+bridge = "nat1"
+label = "Uplink-B"
+
+[map.ntp]
+"34.202.215.187" = "192.0.2.123"
+
+# no [map.dns]: lab1's resolvers (10.x, 27.27.27.27) sit inside the manifest
+# `protect` ranges, so they are internal and never rewritten (SERVICE_INTERNAL).

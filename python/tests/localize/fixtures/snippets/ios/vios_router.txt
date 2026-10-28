@@ -1,0 +1,65 @@
+hostname rtr-54
+vrf definition Mgmt-vrf
+ rd 203:203
+ !
+ address-family ipv4
+ exit-address-family
+!
+enable secret admin123
+no ip domain lookup
+ip domain name netlab.local
+username cisco privilege 15 secret admin123
+username admin privilege 15 secret admin123
+interface GigabitEthernet0/1
+ no shutdown
+ description to campus-2 sw-56
+ ip address 169.55.0.5 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
+ ip ospf network point-to-point
+ ip ospf 1 area 0.0.0.0
+ duplex auto
+ speed auto
+ media-type rj45
+ no ipv6 redirects
+!
+interface GigabitEthernet0/15
+ no shutdown
+ description Management interface
+ no ip address
+ no ip redirects
+ no ip proxy-arp
+ duplex auto
+ speed auto
+ no ipv6 redirects
+!
+interface GigabitEthernet0/15.203
+ no shutdown
+ encapsulation dot1Q 203
+ vrf forwarding Mgmt-vrf
+ ip address 172.21.203.54 255.255.255.0
+ no ip redirects
+ no ip proxy-arp
+ no ipv6 redirects
+!
+router ospf 1
+ router-id 169.254.54.54
+ default-information originate metric-type 1
+!
+router bgp 65055
+ bgp router-id 169.254.54.54
+ bgp always-compare-med
+ bgp log-neighbor-changes
+ bgp deterministic-med
+ bgp graceful-restart
+ bgp bestpath med missing-as-worst
+ bgp bestpath compare-routerid
+ no bgp default ipv4-unicast
+ neighbor 169.42.54.1 remote-as 65033
+ !
+ address-family ipv4
+  redistribute connected route-map CONN-TO-BGP
+  redistribute ospf 1 route-map OSPF-TO-BGP
+  neighbor 169.42.54.1 activate
+ exit-address-family
+!

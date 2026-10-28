@@ -1,0 +1,427 @@
+{
+  "node": {
+    "template": "bigip",
+    "image": "bigip-17.5.0-0.0.15"
+  },
+  "min_score": 70,
+  "iface_keys": {
+    "1.1": "1.1",
+    "EXT-TENANT1": "ext-tenant1"
+  },
+  "eve_to_config": {
+    "E1.1": [
+      "1.1"
+    ],
+    "Mgmt": [
+      "mgmt"
+    ]
+  },
+  "facts": [
+    {
+      "kind": "label_ref",
+      "value": "dc1-f5-1",
+      "line": 1,
+      "rule": "f5.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "BIG-IP",
+      "line": 1,
+      "rule": "f5.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "BIG-IP",
+      "line": 1,
+      "rule": "f5.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "TENANT1",
+      "line": 3,
+      "rule": "f5.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "dc1-bgw2",
+      "line": 3,
+      "rule": "f5.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "TENANT2",
+      "line": 3,
+      "rule": "f5.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "dc1-bgw2",
+      "line": 3,
+      "rule": "f5.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "dc1-bgw2",
+      "line": 4,
+      "rule": "f5.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "TENANT2",
+      "line": 5,
+      "rule": "f5.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "dc1-srv33",
+      "line": 5,
+      "rule": "f5.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "BIG-IP",
+      "line": 6,
+      "rule": "f5.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-MGMT-203",
+      "line": 7,
+      "rule": "f5.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_mention",
+      "value": "2",
+      "line": 7,
+      "rule": "f5.comment_vlan",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "domain",
+      "value": "netlab.local",
+      "line": 10,
+      "rule": "f5.hostname_domain",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.203.38",
+      "line": 11,
+      "rule": "f5.mgmt_ip",
+      "iface": "mgmt",
+      "mask": "/24",
+      "mask_form": "prefix",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.203.1",
+      "line": 12,
+      "rule": "f5.mgmt_route_gw",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "1.1.1.1",
+      "line": 13,
+      "rule": "f5.dns",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "1.0.0.1",
+      "line": 13,
+      "rule": "f5.dns",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "search_list",
+      "value": "netlab.local",
+      "line": 13,
+      "rule": "f5.search",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ntp_server",
+      "value": "pool.ntp.org",
+      "line": 14,
+      "rule": "f5.ntp",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "management-ip",
+      "line": 15,
+      "rule": "f5.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "management-route",
+      "line": 15,
+      "rule": "f5.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_name",
+      "value": "EXT-TENANT1",
+      "line": 18,
+      "rule": "f5.vlan_name",
+      "iface": "ext-tenant1",
+      "parent": "1.1",
+      "group": "f5vlan:ext-tenant1",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "dc1-bgw2",
+      "line": 18,
+      "rule": "f5.desc_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_name",
+      "value": "INT-TENANT2",
+      "line": 19,
+      "rule": "f5.vlan_name",
+      "iface": "int-tenant2",
+      "parent": "1.2",
+      "group": "f5vlan:int-tenant2",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "dc1-bgw2",
+      "line": 19,
+      "rule": "f5.desc_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.15.38.2",
+      "line": 20,
+      "rule": "f5.self_ip",
+      "iface": "ext-tenant1",
+      "parent": "1.1",
+      "mask": "/30",
+      "mask_form": "prefix",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_name",
+      "value": "EXT-TENANT1",
+      "line": 20,
+      "rule": "f5.self_vlan",
+      "iface": "ext-tenant1",
+      "parent": "1.1",
+      "group": "f5vlan:ext-tenant1",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.15.38.6",
+      "line": 21,
+      "rule": "f5.self_ip",
+      "iface": "int-tenant2",
+      "parent": "1.2",
+      "mask": "/30",
+      "mask_form": "prefix",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_name",
+      "value": "INT-TENANT2",
+      "line": 21,
+      "rule": "f5.self_vlan",
+      "iface": "int-tenant2",
+      "parent": "1.2",
+      "group": "f5vlan:int-tenant2",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "169.15.38.1",
+      "line": 22,
+      "rule": "f5.route_gw",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "169.15.38.5",
+      "line": 23,
+      "rule": "f5.route_gw",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "169.1.200.0",
+      "line": 23,
+      "rule": "f5.route_dst",
+      "iface": null,
+      "mask": "/24",
+      "mask_form": "prefix",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "VS-WEB",
+      "line": 31,
+      "rule": "f5.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "POOL-WEB-T2",
+      "line": 31,
+      "rule": "f5.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    }
+  ],
+  "ifaces": {
+    "ext-tenant1": {
+      "parent": "1.1",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "int-tenant2": {
+      "parent": "1.2",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "mgmt": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false,
+  "secrets": []
+}

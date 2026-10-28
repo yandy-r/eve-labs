@@ -1,0 +1,167 @@
+{
+  "source": "vxlan_evpn_multi-site_sdwan_only startup node 75 (c8kv-75) lines [(1, 10000)]",
+  "node": {
+    "template": "c8000v",
+    "image": "c8000v-17.11.01a"
+  },
+  "min_score": 70,
+  "facts": [
+    {
+      "kind": "domain",
+      "value": "netlab.local",
+      "line": 4,
+      "rule": "iosxe.domain",
+      "iface": null
+    },
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 7,
+      "rule": "iosxe.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 12,
+      "rule": "iosxe.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 13,
+      "rule": "iosxe.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 14,
+      "rule": "iosxe.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "cloud_ref",
+      "value": "pnet0",
+      "line": 26,
+      "rule": "iosxe.desc_cloud",
+      "iface": "gi16",
+      "flags": [
+        "cosmetic"
+      ],
+      "alt": "pnet9"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-MGMT-203",
+      "line": 26,
+      "rule": "iosxe.desc_label",
+      "iface": "gi16",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "subif_name",
+      "value": "GigabitEthernet16.2",
+      "line": 35,
+      "rule": "iosxe.subif_name",
+      "iface": "gi16.2",
+      "parent": "gi16",
+      "group": "subif:gi16.2"
+    },
+    {
+      "kind": "label_ref",
+      "value": "Mgmt-vrf",
+      "line": 36,
+      "rule": "iosxe.desc_label",
+      "iface": "gi16.2",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "2",
+      "line": 37,
+      "rule": "iosxe.encap_dot1q",
+      "iface": "gi16.2",
+      "parent": "gi16",
+      "group": "subif:gi16.2"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.203.75",
+      "line": 39,
+      "rule": "iosxe.ip",
+      "iface": "gi16.2",
+      "parent": "gi16",
+      "mask": "255.255.255.0",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "label_ref",
+      "value": "dc1-bgw1",
+      "line": 46,
+      "rule": "iosxe.desc_label",
+      "iface": "gi1",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.203.1",
+      "line": 56,
+      "rule": "iosxe.route_default",
+      "iface": null
+    }
+  ],
+  "ifaces": {
+    "gi16": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi16.2": {
+      "parent": "gi16",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 2,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi1": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false
+}

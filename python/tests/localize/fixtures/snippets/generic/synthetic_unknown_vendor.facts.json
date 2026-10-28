@@ -1,0 +1,75 @@
+{
+  "facts": [
+    {
+      "kind": "ip_host",
+      "value": "10.100.51.40",
+      "line": 3,
+      "rule": "generic.ipv4",
+      "iface": null,
+      "mask": "/24",
+      "mask_form": "prefix",
+      "confidence": "HEURISTIC"
+    },
+    {
+      "kind": "label_ref",
+      "value": "ether1",
+      "line": 3,
+      "rule": "generic.label",
+      "iface": null,
+      "confidence": "HEURISTIC"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-MGMT-203",
+      "line": 3,
+      "rule": "generic.label",
+      "iface": null,
+      "confidence": "HEURISTIC"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.51.1",
+      "line": 5,
+      "rule": "generic.ipv4",
+      "iface": null,
+      "confidence": "HEURISTIC"
+    },
+    {
+      "kind": "ip_host",
+      "value": "1.1.1.1",
+      "line": 7,
+      "rule": "generic.ipv4",
+      "iface": null,
+      "confidence": "HEURISTIC"
+    },
+    {
+      "kind": "ip_host",
+      "value": "1.0.0.1",
+      "line": 7,
+      "rule": "generic.ipv4",
+      "iface": null,
+      "confidence": "HEURISTIC"
+    },
+    {
+      "kind": "cloud_ref",
+      "value": "pnet0",
+      "line": 8,
+      "rule": "generic.cloud_ref",
+      "iface": null,
+      "alt": "pnet9",
+      "confidence": "HEURISTIC"
+    },
+    {
+      "kind": "cloud_ref",
+      "value": "pnet0",
+      "line": 8,
+      "rule": "generic.cloud_ref",
+      "iface": null,
+      "alt": "pnet9",
+      "confidence": "HEURISTIC"
+    }
+  ],
+  "ifaces": {},
+  "vlan_db": [],
+  "is_switch": false
+}

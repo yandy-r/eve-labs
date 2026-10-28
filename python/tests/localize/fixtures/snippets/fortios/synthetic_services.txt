@@ -1,0 +1,61 @@
+# synthetic: FortiOS syntax that the real sidecars do not use (ntp, admin, dhcp, /len)
+config system admin
+    edit "admin"
+        set accprofile "super_admin"
+        set password ENC SH2nlSm9hhDgX0yWl3OAi1W1Qu1jOZ2zNOgl2Fb3dGM=
+    next
+end
+config system dns
+    set primary 10.100.51.11
+    set secondary 10.100.51.12
+    set domain "netlab.local"
+end
+config system ntp
+    set ntpsync enable
+    set type custom
+    config ntpserver
+        edit 1
+            set server "pool.ntp.org"
+        next
+        edit 2
+            set server "10.100.51.11"
+        next
+    end
+end
+config system interface
+    edit "port4"
+        set vdom "root"
+        set mode dhcp
+        set alias "EVE-INET-205"
+    next
+    edit "lan-205"
+        set vdom "root"
+        set ip 10.100.205.1/24
+        set interface "port4"
+        set vlanid 205
+        set description "(802.1Q trunk, VLAN 205) on cloud1"
+    next
+end
+config vpn ipsec phase1-interface
+    edit "H1_INET1"
+        set interface "wan1"
+        set ike-version 2
+        set network-id 11
+        set remote-gw 10.100.205.31
+    next
+end
+config router bgp
+    set as 64001
+    config neighbor
+        edit "10.200.255.1"
+            set remote-as 64001
+        next
+    end
+end
+config router static
+    edit 2
+        set dst 10.100.0.0/16
+        set gateway 10.100.205.254
+        set device "lan-205"
+    next
+end

@@ -1,0 +1,459 @@
+{
+  "source": "vxlan_evpn_multi-site_with_backbone cs:vxlan-dmvpn-backbone node 13 (dc1-bgw1) lines [(8, 8), (40, 54), (60, 60), (63, 73), (90, 121), (167, 192), (404, 416), (433, 452)]",
+  "node": {
+    "template": "nxosv9k",
+    "image": "nxosv9k-9300v-10.3.3.F"
+  },
+  "min_score": 70,
+  "facts": [
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 3,
+      "rule": "nxos.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 4,
+      "rule": "nxos.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 6,
+      "rule": "nxos.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 8,
+      "rule": "nxos.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "domain",
+      "value": "netlab.local",
+      "line": 11,
+      "rule": "nxos.domain",
+      "iface": null
+    },
+    {
+      "kind": "secret",
+      "value": "480A5A26098BEDAF95DECFA7DC6C08C6DDA2",
+      "line": 13,
+      "rule": "nxos.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "205B75023E94E498BAFBF9849932469688FA",
+      "line": 13,
+      "rule": "nxos.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "043EEC6B7052F60ED1A4747A8BC1CA96D2F2",
+      "line": 14,
+      "rule": "nxos.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "206FC6405B718D4581E1252E8993C9C381A4",
+      "line": 14,
+      "rule": "nxos.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "21659C0B117EE611D1FE2D7B81CBCC96D7AA",
+      "line": 15,
+      "rule": "nxos.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "0167C14B036AC523E3EF2C70939284DC8AAA",
+      "line": 15,
+      "rule": "nxos.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "0041DE762A87DA4D40A3685A8FAB9E73F942",
+      "line": 16,
+      "rule": "nxos.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "0172DB6A67D5841532BD73079DF58F66AA19",
+      "line": 16,
+      "rule": "nxos.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "NETBRAIN",
+      "line": 17,
+      "rule": "nxos.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "vlan_def",
+      "value": "1,100-101,501-502",
+      "line": 20,
+      "rule": "nxos.vlan_def",
+      "iface": null
+    },
+    {
+      "kind": "vlan_def",
+      "value": "100",
+      "line": 21,
+      "rule": "nxos.vlan_def",
+      "iface": null
+    },
+    {
+      "kind": "vlan_def",
+      "value": "101",
+      "line": 23,
+      "rule": "nxos.vlan_def",
+      "iface": null
+    },
+    {
+      "kind": "vlan_def",
+      "value": "501",
+      "line": 25,
+      "rule": "nxos.vlan_def",
+      "iface": null
+    },
+    {
+      "kind": "vlan_def",
+      "value": "502",
+      "line": 27,
+      "rule": "nxos.vlan_def",
+      "iface": null
+    },
+    {
+      "kind": "dns_server",
+      "value": "172.21.255.12",
+      "line": 45,
+      "rule": "nxos.name_server",
+      "iface": null
+    },
+    {
+      "kind": "dns_server",
+      "value": "172.21.255.13",
+      "line": 45,
+      "rule": "nxos.name_server",
+      "iface": null
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "172.21.203.254",
+      "line": 46,
+      "rule": "nxos.route_default",
+      "iface": null
+    },
+    {
+      "kind": "svi_name",
+      "value": "Vlan1",
+      "line": 49,
+      "rule": "nxos.svi_name",
+      "iface": "vl1",
+      "group": "subif:vl1"
+    },
+    {
+      "kind": "svi_name",
+      "value": "Vlan501",
+      "line": 51,
+      "rule": "nxos.svi_name",
+      "iface": "vl501",
+      "group": "subif:vl501"
+    },
+    {
+      "kind": "svi_name",
+      "value": "Vlan502",
+      "line": 56,
+      "rule": "nxos.svi_name",
+      "iface": "vl502",
+      "group": "subif:vl502"
+    },
+    {
+      "kind": "subif_name",
+      "value": "Ethernet1/5.100",
+      "line": 69,
+      "rule": "nxos.subif_name",
+      "iface": "eth1/5.100",
+      "parent": "eth1/5",
+      "group": "subif:eth1/5.100"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "100",
+      "line": 71,
+      "rule": "nxos.encap_dot1q",
+      "iface": "eth1/5.100",
+      "parent": "eth1/5",
+      "group": "subif:eth1/5.100"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.13.30.1",
+      "line": 74,
+      "rule": "nxos.ip",
+      "iface": "eth1/5.100",
+      "parent": "eth1/5",
+      "mask": "/30",
+      "mask_form": "prefix"
+    },
+    {
+      "kind": "subif_name",
+      "value": "Ethernet1/5.200",
+      "line": 78,
+      "rule": "nxos.subif_name",
+      "iface": "eth1/5.200",
+      "parent": "eth1/5",
+      "group": "subif:eth1/5.200"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "200",
+      "line": 80,
+      "rule": "nxos.encap_dot1q",
+      "iface": "eth1/5.200",
+      "parent": "eth1/5",
+      "group": "subif:eth1/5.200"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.13.30.1",
+      "line": 83,
+      "rule": "nxos.ip",
+      "iface": "eth1/5.200",
+      "parent": "eth1/5",
+      "mask": "/30",
+      "mask_form": "prefix"
+    },
+    {
+      "kind": "ip_host",
+      "value": "172.21.203.16",
+      "line": 90,
+      "rule": "nxos.ip",
+      "iface": "mgmt0",
+      "mask": "/24",
+      "mask_form": "prefix"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.254.255.10",
+      "line": 93,
+      "rule": "nxos.ip",
+      "iface": "lo0",
+      "mask": "/32",
+      "mask_form": "prefix"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.254.255.110",
+      "line": 99,
+      "rule": "nxos.ip",
+      "iface": "lo1",
+      "mask": "/32",
+      "mask_form": "prefix"
+    },
+    {
+      "kind": "router_id",
+      "value": "169.254.255.10",
+      "line": 101,
+      "rule": "nxos.router_id",
+      "iface": null
+    },
+    {
+      "kind": "asn",
+      "value": "65001",
+      "line": 102,
+      "rule": "nxos.bgp_asn",
+      "iface": null
+    },
+    {
+      "kind": "router_id",
+      "value": "169.254.255.10",
+      "line": 103,
+      "rule": "nxos.router_id",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.13.75.2",
+      "line": 108,
+      "rule": "nxos.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "asn",
+      "value": "65011",
+      "line": 109,
+      "rule": "nxos.bgp_remote_as",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.13.76.2",
+      "line": 115,
+      "rule": "nxos.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "asn",
+      "value": "65011",
+      "line": 116,
+      "rule": "nxos.bgp_remote_as",
+      "iface": null
+    }
+  ],
+  "ifaces": {
+    "vl1": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "vl501": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "vl502": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "eth1/5": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "eth1/5.100": {
+      "parent": "eth1/5",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 100,
+      "dhcp": false,
+      "orphan": false
+    },
+    "eth1/5.200": {
+      "parent": "eth1/5",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 200,
+      "dhcp": false,
+      "orphan": false
+    },
+    "mgmt0": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "lo0": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "lo1": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [
+    1,
+    100,
+    101,
+    501,
+    502
+  ],
+  "is_switch": false
+}

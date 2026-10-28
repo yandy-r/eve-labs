@@ -1,0 +1,8 @@
+# Set ip address and Default route 
+ip addr add 10.3.70.100/24 dev eth0 || true
+ip route add default via 10.3.70.1 || true
+
+# Set DNS server 
+cat > /etc/resolv.conf << EOF
+nameserver 10.3.70.1
+EOF

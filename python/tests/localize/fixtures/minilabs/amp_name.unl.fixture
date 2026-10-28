@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<lab name="A &amp; B &quot;lab&quot;" id="c9491dd7-1366-504a-a19f-a9c9430c1567" version="1" scripttimeout="300" countdown="0" linkwidth="2" lock="0" grid="1" author="eve-localize fixtures" sat="-1">
+  <topology>
+    <nodes>
+      <node id="1" name="rtr1" type="iol" template="iol" image="i86bi_linux_l3-adventerprisek9-ms.SPA.157-3.M3.bin" ethernet="1" nvram="1024" ram="1024" serial="0" delay="0" sat="-1" icon="Router.png" config="1" left="300" top="200">
+        <interface id="0" name="e0/0" type="ethernet" network_id="1" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+        <interface id="16" name="e0/1" type="ethernet" network_id="2" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+        <interface id="32" name="e0/2" type="ethernet" network_id="3" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+      </node>
+    </nodes>
+    <networks>
+      <network id="1" smart="-1" native_vlan="1" vlan8021ad="-1" type="pnet0" name="R&amp;D &quot;edge&quot; &lt;lab&gt;" left="800" top="300" style="Solid" linkstyle="Straight" color="" label="" visibility="1" icon="cloud_sm.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="2" smart="-1" native_vlan="1" vlan8021ad="-1" type='pnet2' name='it&apos;s "single" quoted' left='800' top='400' style="Solid" linkstyle="Straight" color="" label="" visibility="1" icon="cloud_sm.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="3" smart="-1" native_vlan="1" vlan8021ad="-1" type="pnet0" name="Caf&#233; — &#x41;ZURE" left="800" top="500" style="Solid" linkstyle="Straight" color="" label="" visibility="1" icon="cloud_sm.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+    </networks>
+  </topology>
+  <objects>
+    <configs>
+      <config id="1">IQpob3N0bmFtZSBydHIxCiEKaXAgZG9tYWluIG5hbWUgbGFiLmV4YW1wbGUKaXAgbmFtZS1zZXJ2ZXIgMTAuMTAwLjUxLjIKIQppbnRlcmZhY2UgRXRoZXJuZXQwLzAKIGRlc2NyaXB0aW9uIHRvIHN3MQogbm8gc2h1dGRvd24KIQppbnRlcmZhY2UgRXRoZXJuZXQwLzEKIGRlc2NyaXB0aW9uIHVwbGluayBJTkVULTEyNDAKIG5vIGlwIGFkZHJlc3MKIG5vIHNodXRkb3duCiEKaW50ZXJmYWNlIEV0aGVybmV0MC8xLjEyNDAKIGVuY2Fwc3VsYXRpb24gZG90MVEgMTI0MAogaXAgYWRkcmVzcyAxNzIuMzEuMjQwLjExIDI1NS4yNTUuMjU1LjAKIQppcCByb3V0ZSAwLjAuMC4wIDAuMC4wLjAgMTcyLjMxLjI0MC4xCiEKbnRwIHNlcnZlciAxMC4xMDAuNTEuMwohCmVuZAo=</config>
+    </configs>
+  </objects>
+</lab>

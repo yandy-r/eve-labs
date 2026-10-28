@@ -1,0 +1,58 @@
+schema = 1
+site = "alice-homelab"
+
+[bridges.pnet0]
+roles = ["mgmt"]
+mode = "untagged-only"
+native_vlan = 1
+
+[bridges.pnet1]
+roles = ["mgmt", "trunk"]
+mode = "trunk"
+
+[bridges.nat0]
+roles = ["nat"]
+mode = "untagged-only"
+
+[roles]
+mgmt = "pnet1"
+inet = "pnet3"
+trunk = "pnet1"
+nat = "nat0"
+
+[segments."site.mgmt_a"]
+bridge = "pnet1"
+vlan = 20
+subnet = "192.168.20.0/24"
+gateway = "192.168.20.254"
+label = "LAB-MGMT-20"
+reserved = ["192.168.20.1-192.168.20.10"]
+
+[segments."junos.mgmt"]
+subnet = "192.168.48.0/24"
+split = { "10.100.241.0/24" = "192.168.48.0/25", "10.100.243.0/24" = "192.168.48.128/25" }
+
+[map.dns]
+"1.1.1.1" = "9.9.9.9"
+"10.100.51.11" = "192.168.1.53"
+
+[map.domain]
+"netlab.local" = "lab.alice.net"
+"yandy.dev" = ""
+
+[site_routes]
+"site.mgmt_a" = ["192.168.0.0/16"]
+"site.mgmt_b" = []
+
+[scenarios.azure_s2s]
+enabled = false
+
+[secrets]
+"azure_s2s.psk" = { env = "EVELOCAL_TEST_PSK" }
+
+[policy]
+include_heuristic = true
+legacy_scopes = "ask"
+
+[labs."0ca56f43-8e11-44ca-a007-a6dce53df987".segments."INET-105"]
+bridge = "pnet3"

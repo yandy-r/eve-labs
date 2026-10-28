@@ -1,0 +1,25 @@
+{
+  "facts": [
+    {
+      "kind": "ip_host",
+      "value": "192.168.13.0",
+      "line": 1,
+      "rule": "eve_html.ipv4",
+      "iface": null,
+      "mask": "/24",
+      "mask_form": "prefix",
+      "confidence": "HEURISTIC"
+    },
+    {
+      "kind": "ip_host",
+      "value": "192.168.13.1",
+      "line": 1,
+      "rule": "eve_html.ipv4",
+      "iface": null,
+      "confidence": "HEURISTIC"
+    }
+  ],
+  "ifaces": {},
+  "vlan_db": [],
+  "is_switch": false
+}

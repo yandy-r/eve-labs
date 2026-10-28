@@ -1,0 +1,37 @@
+hostname dc1-leaf1
+vrf context management
+  ip route 0.0.0.0/0 10.100.203.1
+
+interface mgmt0
+  description to mgmt-79: e0/2
+  vrf member management
+  ip address 10.100.203.13/24
+  no cdp enable
+  no shutdown
+
+! synthetic lines below (syntax absent from the real labs; built on dc1-leaf1)
+ip name-server 10.100.51.11 use-vrf management
+ip domain-list netlab.local
+ntp server 10.100.51.13 use-vrf management
+logging server 10.100.51.20 6 use-vrf management
+ip route 10.0.0.0/8 10.100.203.254
+interface Ethernet1/20
+  switchport
+  switchport mode trunk
+  switchport trunk native vlan 99
+  switchport trunk allowed vlan 201-203,1240
+  switchport trunk allowed vlan add 1241
+interface Ethernet1/21
+  switchport access vlan 1242
+interface Vlan203
+  hsrp 203
+    ip 10.100.203.254
+interface Ethernet1/22
+  description uplink VLAN 1240 via pnet2
+  no switchport
+  ip address dhcp
+router bgp 65001
+  router-id 10.100.203.13
+  address-family ipv4 unicast
+    network 10.100.203.0/24
+  neighbor 10.100.203.1 remote-as 65000

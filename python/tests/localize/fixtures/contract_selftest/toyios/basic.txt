@@ -1,0 +1,47 @@
+hostname b1-sw1
+!
+username admin privilege 15 secret 9 $9$abcdef
+ip domain name netlab.local
+ip name-server 10.100.51.11 10.100.51.12
+!
+vlan 1,100-101,203
+vlan 203
+ name servers
+!
+interface GigabitEthernet0/0
+ description to c8kv-75: Gi16.2
+ no shutdown
+ switchport mode trunk
+ switchport trunk allowed vlan 203,3101
+ switchport trunk allowed vlan add 100
+ switchport trunk native vlan 7
+!
+interface GigabitEthernet0/1
+ switchport mode access
+ switchport access vlan 203
+!
+interface GigabitEthernet16.2
+ encapsulation dot1Q 2
+ ip address 10.100.2.14 255.255.255.0
+!
+interface Vlan203
+ ip address 10.100.203.5 255.255.252.0
+ ip address dhcp
+!
+interface GigabitEthernet3/2
+ negotiat
+*Dec 28 18:28:00.651: %SYS-5-CONFIG_I: Configured from console by consoleion auto
+!
+interface GigabitEthernet
+ no shutdown
+*Dec 29 01:11:44.205: %SYS-5-CONFIG_I: Configured from console by console3/3
+ description Management interface
+ switchport trunk allowed vlan 203
+ ip address 10.1.1.1 255.255.255.0
+!
+vrf context management
+  ip route 0.0.0.0 0.0.0.0 10.100.203.1
+  rd 2:2
+end
+interface GigabitEthernet9/9
+ switchport access vlan 77

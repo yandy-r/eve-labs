@@ -1,0 +1,85 @@
+{
+  "lab": "labs/ccie/ccie_enterprise_infrastructure_practice_lab.unl",
+  "lab_id": "4624925f-aca3-4b21-9c2e-519cb5e17ea3",
+  "pinned": true,
+  "manifest": true,
+  "nothing_to_localize": false,
+  "segments": [
+    {
+      "key": "SDWAN-CTRL",
+      "site_key": "site.sdwan_ctrl",
+      "role": null,
+      "status": "LABEL_ONLY",
+      "networks": [
+        "22"
+      ],
+      "bridge": "pnet0",
+      "labels": {
+        "22": "Net"
+      },
+      "carries": [],
+      "schemes": []
+    }
+  ],
+  "questions": [
+    {
+      "id": "site.sdwan_ctrl/bridge",
+      "group": "A Clouds",
+      "kind": "bridge",
+      "prompt": "SDWAN-CTRL bridge",
+      "current": "pnet0",
+      "default": "pnet0",
+      "default_source": "keep",
+      "choices": [
+        "pnet0"
+      ],
+      "depends_on": [],
+      "affects": 0,
+      "segment": "SDWAN-CTRL",
+      "scenario": "bridge",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "site.sdwan_ctrl/label",
+      "group": "D Labels",
+      "kind": "label",
+      "prompt": "Net (1 network)",
+      "current": "Net",
+      "default": "Net",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "site.sdwan_ctrl/vlan",
+        "site.sdwan_ctrl/subnet"
+      ],
+      "affects": 1,
+      "segment": "SDWAN-CTRL",
+      "scenario": "labels",
+      "notes": [
+        "generic label: only the network name changes"
+      ],
+      "answered": false,
+      "answer": null
+    }
+  ],
+  "findings": [
+    {
+      "code": "UNCONFIGURED",
+      "severity": "info",
+      "msg": "segment SDWAN-CTRL: no config on vManager eth0, vBond eth0, vSmart eth0 (bridge/label only)",
+      "refs": [
+        "segment:SDWAN-CTRL",
+        "node:45",
+        "node:46",
+        "node:47"
+      ]
+    }
+  ],
+  "protected": {
+    "vlans": {},
+    "prefixes": [],
+    "lookalikes": {}
+  }
+}

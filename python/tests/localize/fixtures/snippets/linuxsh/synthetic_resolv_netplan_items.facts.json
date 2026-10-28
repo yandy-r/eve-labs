@@ -1,0 +1,49 @@
+{
+  "facts": [
+    {
+      "kind": "dns_server",
+      "value": "10.3.70.1",
+      "line": 2,
+      "rule": "linuxsh.nameserver",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "domain",
+      "value": "plsnetlab.local",
+      "line": 3,
+      "rule": "linuxsh.resolv_domain",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.55.50",
+      "line": 10,
+      "rule": "linuxsh.netplan_addr_item",
+      "iface": null,
+      "mask": "/24",
+      "mask_form": "prefix",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.55.1",
+      "line": 11,
+      "rule": "linuxsh.netplan_gw",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "1.1.1.1",
+      "line": 14,
+      "rule": "linuxsh.netplan_dns_item",
+      "iface": null,
+      "confidence": "PROVEN"
+    }
+  ],
+  "ifaces": {},
+  "vlan_db": [],
+  "is_switch": false
+}

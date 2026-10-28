@@ -1,0 +1,41 @@
+{
+  "node": {
+    "template": "vpcs",
+    "image": ""
+  },
+  "min_score": 70,
+  "facts": [
+    {
+      "kind": "ip_host",
+      "value": "10.3.80.100",
+      "line": 1,
+      "rule": "vpcs.ip_prefix",
+      "iface": "eth0",
+      "mask": "/24",
+      "mask_form": "prefix",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.3.80.1",
+      "line": 1,
+      "rule": "vpcs.gateway",
+      "iface": "eth0",
+      "confidence": "PROVEN"
+    }
+  ],
+  "ifaces": {
+    "eth0": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false
+}

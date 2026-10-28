@@ -1,0 +1,8 @@
+# jan/02/1970 00:00:00 by RouterOS 7.11
+/ip address
+add address=10.100.51.40/24 interface=ether1 comment="EVE-MGMT-203 uplink"
+/ip route
+add gateway=10.100.51.1
+/ip dns
+set servers=1.1.1.1,1.0.0.1
+# cloud pnet0 mgmt, see pnet0-trunk

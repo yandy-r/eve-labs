@@ -1,0 +1,15 @@
+# Synthetic "site B" answers (golden round-trip, design section 14 item 8).
+schema = 1
+site = "site-b"
+
+[segments."azure.inet"]
+bridge = "pnet4"
+subnet = "198.51.100.0/24"
+gateway = "198.51.100.254"
+label = "Internet-B"
+
+[segments."azure.mgmt"]
+bridge = "pnet5"
+subnet = "192.168.104.0/23"
+gateway = "192.168.105.254"
+label = "mgmt-B"

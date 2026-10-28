@@ -1,0 +1,47 @@
+hostname SW38
+interface Ethernet0/0
+ no shutdown
+ switchport trunk allowed vlan 201-203
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast network
+interface Ethernet1/0
+ no shutdown
+! synthetic lines below (syntax absent from the real labs; built on SW38)
+interface Ethernet1/2
+ description to pnet2: INET-1240 (VLAN 1240 trunk)
+ switchport trunk allowed vlan 201,1240
+ switchport trunk allowed vlan add 1241-1243
+ switchport trunk native vlan 99
+ switchport mode trunk
+!
+interface Ethernet1/3
+ switchport trunk allowed vlan all
+ switchport mode trunk
+!
+interface Ethernet2/0
+ switchport trunk allowed vlan none
+ switchport mode trunk
+!
+interface Ethernet2/1
+ switchport voice vlan 20
+ switchport access vlan 1241
+!
+vlan 201-203,1240
+!
+ip default-gateway 10.100.51.1
+ip name-server 10.100.51.11 10.100.51.12
+ip domain list netlab.local
+logging host 10.100.51.20
+logging 10.100.51.21
+logging synchronous
+tacacs-server host 10.100.51.30 key 7 0822455D0A16
+interface Tunnel0
+ tunnel destination 172.173.204.134
+!
+ip route 10.0.0.0 255.0.0.0 10.100.51.254
+ip route vrf Mgmt-vrf 192.168.0.0 255.255.0.0 GigabitEthernet0/0 10.100.51.254 name HOME
+ip route 0.0.0.0 0.0.0.0 GigabitEthernet1 10.100.51.1
+line vty 0 4
+ password 7 060506324F41
+end

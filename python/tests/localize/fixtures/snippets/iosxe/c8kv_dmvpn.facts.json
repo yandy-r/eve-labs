@@ -1,0 +1,379 @@
+{
+  "source": "vxlan_evpn_multi-site_with_backbone cs:vxlan-dmvpn-backbone node 30 (c8kv-30) lines [(12, 12), (18, 28), (122, 125), (150, 150), (197, 201), (212, 213), (221, 228), (245, 251), (260, 309), (471, 490), (516, 519), (540, 552), (569, 575)]",
+  "node": {
+    "template": "c8000v",
+    "image": "c8000v-17.11.01a"
+  },
+  "min_score": 70,
+  "facts": [
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 18,
+      "rule": "iosxe.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 20,
+      "rule": "iosxe.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 21,
+      "rule": "iosxe.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 22,
+      "rule": "iosxe.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "C1sco123!",
+      "line": 24,
+      "rule": "iosxe.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.254.30.30",
+      "line": 34,
+      "rule": "iosxe.ip",
+      "iface": "lo0",
+      "mask": "255.255.255.255",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.30.30.30",
+      "line": 38,
+      "rule": "iosxe.ip",
+      "iface": "lo100",
+      "mask": "255.255.255.0",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.145.145.30",
+      "line": 41,
+      "rule": "iosxe.ip",
+      "iface": "tu1001",
+      "mask": "255.255.255.0",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "secret",
+      "value": "C1sco123",
+      "line": 45,
+      "rule": "iosxe.secret",
+      "iface": "tu1001",
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "label_ref",
+      "value": "DC1-BGW1",
+      "line": 62,
+      "rule": "iosxe.desc_label",
+      "iface": "gi1",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "subif_name",
+      "value": "GigabitEthernet1.100",
+      "line": 72,
+      "rule": "iosxe.subif_name",
+      "iface": "gi1.100",
+      "parent": "gi1",
+      "group": "subif:gi1.100"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "100",
+      "line": 73,
+      "rule": "iosxe.encap_dot1q",
+      "iface": "gi1.100",
+      "parent": "gi1",
+      "group": "subif:gi1.100"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.13.30.2",
+      "line": 75,
+      "rule": "iosxe.ip",
+      "iface": "gi1.100",
+      "parent": "gi1",
+      "mask": "255.255.255.252",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "subif_name",
+      "value": "GigabitEthernet1.200",
+      "line": 81,
+      "rule": "iosxe.subif_name",
+      "iface": "gi1.200",
+      "parent": "gi1",
+      "group": "subif:gi1.200"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "200",
+      "line": 82,
+      "rule": "iosxe.encap_dot1q",
+      "iface": "gi1.200",
+      "parent": "gi1",
+      "group": "subif:gi1.200"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.13.30.2",
+      "line": 84,
+      "rule": "iosxe.ip",
+      "iface": "gi1.200",
+      "parent": "gi1",
+      "mask": "255.255.255.252",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "label_ref",
+      "value": "Mgmt-intf",
+      "line": 91,
+      "rule": "iosxe.desc_label",
+      "iface": "gi16",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "subif_name",
+      "value": "GigabitEthernet16.203",
+      "line": 100,
+      "rule": "iosxe.subif_name",
+      "iface": "gi16.203",
+      "parent": "gi16",
+      "group": "subif:gi16.203"
+    },
+    {
+      "kind": "label_ref",
+      "value": "Mgmt-vrf",
+      "line": 101,
+      "rule": "iosxe.desc_label",
+      "iface": "gi16.203",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "203",
+      "line": 102,
+      "rule": "iosxe.encap_dot1q",
+      "iface": "gi16.203",
+      "parent": "gi16",
+      "group": "subif:gi16.203"
+    },
+    {
+      "kind": "ip_host",
+      "value": "172.21.203.30",
+      "line": 104,
+      "rule": "iosxe.ip",
+      "iface": "gi16.203",
+      "parent": "gi16",
+      "mask": "255.255.255.0",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "asn",
+      "value": "65011",
+      "line": 109,
+      "rule": "iosxe.bgp_asn",
+      "iface": null
+    },
+    {
+      "kind": "asn",
+      "value": "651001",
+      "line": 111,
+      "rule": "iosxe.bgp_template_as",
+      "iface": null
+    },
+    {
+      "kind": "router_id",
+      "value": "169.254.30.30",
+      "line": 114,
+      "rule": "iosxe.router_id",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.145.145.42",
+      "line": 122,
+      "rule": "iosxe.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "asn",
+      "value": "65033",
+      "line": 122,
+      "rule": "iosxe.bgp_remote_as",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.145.145.42",
+      "line": 123,
+      "rule": "iosxe.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.145.145.45",
+      "line": 124,
+      "rule": "iosxe.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "asn",
+      "value": "65033",
+      "line": 124,
+      "rule": "iosxe.bgp_remote_as",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.145.145.45",
+      "line": 125,
+      "rule": "iosxe.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.0.1.1",
+      "line": 130,
+      "rule": "iosxe.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.0.1.1",
+      "line": 131,
+      "rule": "iosxe.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.0.1.1",
+      "line": 132,
+      "rule": "iosxe.bgp_neighbor",
+      "iface": null
+    }
+  ],
+  "ifaces": {
+    "lo0": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "lo100": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "tu1001": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi1": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi1.100": {
+      "parent": "gi1",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 100,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi1.200": {
+      "parent": "gi1",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 200,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi16": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi16.203": {
+      "parent": "gi16",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 203,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false
+}

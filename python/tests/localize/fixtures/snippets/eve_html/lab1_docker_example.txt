@@ -1,0 +1,15 @@
+<div id="customText278" class="customShape customText context-menu jtk-managed jtk-draggable editable dragstopped ui-selectee" data-path="278" style="position: absolute; left: 42px; top: 1740px; z-index: 1001; cursor: move; height: auto; width: auto;" contenteditable="true"><p>Docker configuration example</p>
+
+<p>FilesDNA HQ Docker110</p>
+
+<p># Set ip address and Default route<br>
+ip addr add 10.20.60.110/24 dev eth0 || true<br>
+ip route add default via 10.20.60.1 || true</p>
+
+<p># Set DNS server<br>
+cat &gt; /etc/resolv.conf &lt;&lt; EOF<br>
+nameserver 27.27.27.27<br>
+EOF</p>
+
+<p>&nbsp;</p>
+</div>

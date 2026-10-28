@@ -1,0 +1,97 @@
+schema = 1
+lab = "vxlan_evpn_multi-site_with_backbone.unl"
+lab_id = "2fd99c11-2334-45b3-ac61-ee23ab5c9d38"
+generated = "eve-localize 1.0 discover --update"
+sidecar_dirs = ["vxlan_evpn_multi-site_with_backbone_cfgs"]
+canonical_scope = "vxlan-dmvpn-backbone"
+protect = ["10.200.0.0/16", "169.0.0.0/8"]
+generic_labels = ["mgmt"]
+subif_policy = "rename"
+
+[nodes."29"]
+dialect = "f5tmsh"
+
+[sidecar_map]
+"vxlan_evpn_multi-site_with_backbone_cfgs/01_bb-rr84.txt" = "84"
+
+[[segment]]
+key = "MGMT"
+site_key = "site.mgmt_a"
+role = "mgmt"
+networks = ["74", "76", "91"]
+label_template = "{octet3}-{host}"
+
+[segment.baseline]
+label = "EVE-MGMT-203"
+vlan = 203
+subnet = "172.21.203.0/24"
+gateway = "172.21.203.254"
+
+[segment.expect]
+vlan = 41
+subnet = 92
+gateway = 18
+label = 30
+
+[[segment]]
+key = "TRUNK"
+role = "trunk"
+status = "CARRIER"
+networks = ["132", "137", "140", "152"]
+carries = ["MGMT", "INET-201"]
+
+[[segment]]
+key = "INET-201"
+site_key = "site.inet_a"
+role = "inet"
+status = "LABEL_ONLY"
+networks = ["25", "78"]
+
+[[merge]]
+units = ["204-31", "trunk:204"]
+
+[[legacy]]
+segment = "MGMT"
+scopes = ["startup", "vxlan-no-vpc"]
+policy = "leave"
+baseline = { vlan = 1103, subnet = "10.100.103.0/24", gateway = "10.100.103.1" }
+
+[[outlier]]
+scope = "vxlan-vpc"
+node = "74"
+note = "10.100.105.74 (pre-existing)"
+
+[[label_value]]
+textobject = "21"
+segment = "INET-201"
+fields = { subnet = "192.168.13.0/24", gateway = "192.168.13.1" }
+
+[scenarios.azure_s2s]
+enabled = true
+node = "1"
+
+[scenarios.bgp_upstream]
+enabled = false
+nodes = ["9", "18"]
+peer_group = "HOME"
+baseline = { peer_as = 65299, prefixes = ["172.31.255.0/24"] }
+
+[[param]]
+key = "dns_public"
+kind = "ipv4_list"
+site_key = "site.dns_public"
+baseline = ["1.1.1.1", "1.0.0.1"]
+expect = 46
+
+[[param]]
+key = "ntp_upstream"
+kind = "ipv4"
+group = "advanced"
+baseline = "34.202.215.187"
+expect = 2
+
+[[rule]]
+id = "lab.forti_alias_pnet"
+dialects = ["fortios"]
+kind = "cloud_ref"
+pattern = 'set alias "(?P<v>pnet\d+)-trunk"'

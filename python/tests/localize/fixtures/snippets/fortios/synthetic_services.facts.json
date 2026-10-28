@@ -1,0 +1,224 @@
+{
+  "node": {
+    "template": "fortinet",
+    "image": "fortinet-FGT-v7-build3744"
+  },
+  "min_score": 70,
+  "iface_keys": {
+    "port8": "port8",
+    "oob-mgmt": "oob-mgmt"
+  },
+  "eve_to_config": {
+    "port8": [
+      "port8"
+    ]
+  },
+  "facts": [
+    {
+      "kind": "secret",
+      "value": "SH2nlSm9hhDgX0yWl3OAi1W1Qu1jOZ2zNOgl2Fb3dGM=",
+      "line": 5,
+      "rule": "fortios.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "10.100.51.11",
+      "line": 9,
+      "rule": "fortios.dns",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "10.100.51.12",
+      "line": 10,
+      "rule": "fortios.dns",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "domain",
+      "value": "netlab.local",
+      "line": 11,
+      "rule": "fortios.domain",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ntp_server",
+      "value": "pool.ntp.org",
+      "line": 18,
+      "rule": "fortios.ntp",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ntp_server",
+      "value": "10.100.51.11",
+      "line": 21,
+      "rule": "fortios.ntp",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dhcp",
+      "value": "dhcp",
+      "line": 28,
+      "rule": "fortios.dhcp",
+      "iface": "port4",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-INET-205",
+      "line": 29,
+      "rule": "fortios.text_label",
+      "iface": "port4",
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.205.1",
+      "line": 33,
+      "rule": "fortios.ip",
+      "iface": "lan-205",
+      "parent": "port4",
+      "mask": "/24",
+      "mask_form": "prefix",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "205",
+      "line": 35,
+      "rule": "fortios.vlanid",
+      "iface": "lan-205",
+      "parent": "port4",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_mention",
+      "value": "205",
+      "line": 36,
+      "rule": "fortios.text_vlan",
+      "iface": "lan-205",
+      "parent": "port4",
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "cloud_ref",
+      "value": "cloud1",
+      "line": 36,
+      "rule": "fortios.text_cloud",
+      "iface": "lan-205",
+      "parent": "port4",
+      "flags": [
+        "cosmetic"
+      ],
+      "alt": "cloud9",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.100.205.31",
+      "line": 44,
+      "rule": "fortios.remote_gw",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "asn",
+      "value": "64001",
+      "line": 48,
+      "rule": "fortios.bgp_as",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.200.255.1",
+      "line": 50,
+      "rule": "fortios.bgp_peer",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "asn",
+      "value": "64001",
+      "line": 51,
+      "rule": "fortios.bgp_remote_as",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "10.100.0.0",
+      "line": 57,
+      "rule": "fortios.route_dst",
+      "iface": null,
+      "mask": "/16",
+      "mask_form": "prefix",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.205.254",
+      "line": 58,
+      "rule": "fortios.gateway",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    }
+  ],
+  "ifaces": {
+    "port4": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": true,
+      "orphan": false
+    },
+    "lan-205": {
+      "parent": "port4",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 205,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false,
+  "secrets": [
+    "SH2nlSm9hhDgX0yWl3OAi1W1Qu1jOZ2zNOgl2Fb3dGM="
+  ]
+}

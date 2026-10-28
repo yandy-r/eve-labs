@@ -1,0 +1,76 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "evelab"
+version = "0.1.0"
+description = "Python tooling for the EVE-NG lab repository (eve-localize and friends)."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+eve-localize = "evelab.localize.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+evelab = ["py.typed"]
+"evelab.localize.dialects" = ["packs/*.toml", "packs/README.md"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+src = ["src", "."]
+extend-exclude = [
+    "node_modules",
+    "build",
+    "dist",
+    ".venv",
+    "venv",
+    "__pycache__",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".ruff_cache",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "SIM",  # flake8-simplify
+    "RUF",  # ruff-specific
+    "C4",   # flake8-comprehensions
+    "BLE",  # flake8-blind-except (intentional catch-alls carry a justified noqa)
+    "PIE",  # flake8-pie
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests catch broad exceptions to report them, and embed long golden strings.
+"tests/**" = ["BLE001", "E501", "RUF012"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["evelab", "tests"]
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+extend-exclude = '''
+/(
+    node_modules
+  | build
+  | dist
+  | \.venv
+  | venv
+  | __pycache__
+  | \.mypy_cache
+  | \.pytest_cache
+  | \.ruff_cache
+)/
+'''

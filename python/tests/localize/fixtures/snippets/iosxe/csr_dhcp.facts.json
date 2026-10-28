@@ -1,0 +1,61 @@
+{
+  "source": "cisco_nexus_9000v_vpc_concept_lab startup node 1 (ISP-CE) lines [(1, 10000)]",
+  "node": {
+    "template": "csr1000vng",
+    "image": "csr1000vng-universalk9.17.03.06.Amsterdam"
+  },
+  "min_score": 70,
+  "facts": [
+    {
+      "kind": "dhcp",
+      "value": "dhcp",
+      "line": 119,
+      "rule": "iosxe.dhcp",
+      "iface": "gi4"
+    }
+  ],
+  "ifaces": {
+    "gi1": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi2": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi3": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi4": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": true,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false
+}

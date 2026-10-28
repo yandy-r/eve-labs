@@ -1,0 +1,43 @@
+# Synthetic "site B" answers (golden round-trip, design section 14 item 8).
+schema = 1
+site = "site-b"
+
+[segments."backbone.trunk"]
+bridge = "pnet4"
+label = "b-trunk"
+
+[segments."backbone.fw_mgmt"]
+bridge = "pnet4"
+label = "b-fw-mgmt"
+
+[segments."backbone.mgmt"]
+bridge = "pnet4"
+vlan = 713
+subnet = "172.30.13.0/24"
+gateway = "172.30.13.1"
+label = "b-mgmt"
+
+[segments."backbone.inet_201"]
+bridge = "pnet5"
+label = "B-INET-A"
+
+[segments."backbone.inet_202"]
+bridge = "pnet5"
+label = "B-INET-B"
+
+[segments."backbone.out_255"]
+bridge = "pnet6"
+label = "b-out"
+
+[map.dns]
+"1.1.1.1" = "9.9.9.9"
+"1.0.0.1" = "149.112.112.112"
+"172.21.255.12" = "172.30.255.12"
+"172.21.255.13" = "172.30.255.13"
+"10.25.0.51" = "10.60.0.51"
+"10.25.0.52" = "10.60.0.52"
+
+[map.domain]
+"netlab.local" = "siteb.example"
+"plsnetlab.local" = "plssiteb.example"
+"yandy.dev" = "example.org"

@@ -1,0 +1,15 @@
+cat > /etc/resolv.conf << EOF
+nameserver 10.3.70.1
+domain plsnetlab.local
+EOF
+cat << EOF > /etc/netplan/02-eve.yaml
+network:
+  ethernets:
+    eth5:
+      addresses:
+        - 10.100.55.50/24
+      gateway4: 10.100.55.1
+      nameservers:
+        addresses:
+          - 1.1.1.1
+EOF

@@ -1,0 +1,22 @@
+{
+  "lab": "labs/ccie/ccie_sec_v6_practice_lab.unl",
+  "lab_id": "0fd6f778-930d-45f2-98bc-d9fbbab1a83d",
+  "pinned": false,
+  "manifest": false,
+  "nothing_to_localize": true,
+  "segments": [],
+  "questions": [],
+  "findings": [
+    {
+      "code": "NO_CLOUDS",
+      "severity": "info",
+      "msg": "lab has no cloud network: nothing to localize",
+      "refs": []
+    }
+  ],
+  "protected": {
+    "vlans": {},
+    "prefixes": [],
+    "lookalikes": {}
+  }
+}

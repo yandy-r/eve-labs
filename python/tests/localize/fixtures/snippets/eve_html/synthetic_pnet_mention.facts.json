@@ -1,0 +1,51 @@
+{
+  "facts": [
+    {
+      "kind": "label_ref",
+      "value": "EVE-MGMT-203",
+      "line": 1,
+      "rule": "eve_html.text_label",
+      "iface": null,
+      "confidence": "HEURISTIC"
+    },
+    {
+      "kind": "cloud_ref",
+      "value": "pnet0",
+      "line": 1,
+      "rule": "eve_html.text_cloud",
+      "iface": null,
+      "alt": "pnet9",
+      "confidence": "HEURISTIC"
+    },
+    {
+      "kind": "vlan_mention",
+      "value": "203",
+      "line": 1,
+      "rule": "eve_html.text_vlan",
+      "iface": null,
+      "confidence": "HEURISTIC"
+    },
+    {
+      "kind": "cloud_ref",
+      "value": "pnet0",
+      "line": 3,
+      "rule": "eve_html.text_cloud",
+      "iface": null,
+      "alt": "pnet9",
+      "confidence": "HEURISTIC"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.51.0",
+      "line": 3,
+      "rule": "eve_html.ipv4",
+      "iface": null,
+      "mask": "/24",
+      "mask_form": "prefix",
+      "confidence": "HEURISTIC"
+    }
+  ],
+  "ifaces": {},
+  "vlan_db": [],
+  "is_switch": false
+}
