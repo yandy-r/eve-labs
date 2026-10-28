@@ -9,8 +9,12 @@
     "EXT-TENANT1": "ext-tenant1"
   },
   "eve_to_config": {
-    "E1.1": ["1.1"],
-    "Mgmt": ["mgmt"]
+    "E1.1": [
+      "1.1"
+    ],
+    "Mgmt": [
+      "mgmt"
+    ]
   },
   "facts": [
     {
@@ -19,7 +23,9 @@
       "line": 2,
       "rule": "f5.comment_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -28,7 +34,9 @@
       "line": 2,
       "rule": "f5.comment_vlan",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -37,7 +45,9 @@
       "line": 2,
       "rule": "f5.comment_cloud",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "alt": "pnet9",
       "confidence": "PROVEN"
     },
@@ -142,7 +152,9 @@
       "line": 7,
       "rule": "f5.desc_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -194,7 +206,9 @@
       "line": 10,
       "rule": "f5tmsh.secret",
       "iface": null,
-      "flags": ["secret"],
+      "flags": [
+        "secret"
+      ],
       "confidence": "PROVEN"
     }
   ],
@@ -212,5 +226,7 @@
   },
   "vlan_db": [],
   "is_switch": false,
-  "secrets": ["S3cr3t-pw"]
+  "secrets": [
+    "S3cr3t-pw"
+  ]
 }

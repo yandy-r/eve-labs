@@ -43,3 +43,7 @@ yarn.lock
 pnpm-lock.yaml
 bun.lockb
 CHANGELOG.md
+
+# Generated test data (eve-localize goldens and dialect fixtures)
+python/tests/localize/golden/
+python/tests/localize/fixtures/**/*.json

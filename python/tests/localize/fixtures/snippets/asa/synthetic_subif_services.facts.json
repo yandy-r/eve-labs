@@ -11,8 +11,12 @@
     "Tunnel1": "tu1"
   },
   "eve_to_config": {
-    "Gi0/6": ["GigabitEthernet0/6"],
-    "Mgmt0/0": ["Management0/0"]
+    "Gi0/6": [
+      "GigabitEthernet0/6"
+    ],
+    "Mgmt0/0": [
+      "Management0/0"
+    ]
   },
   "facts": [
     {
@@ -30,7 +34,9 @@
       "line": 6,
       "rule": "asa.secret",
       "iface": null,
-      "flags": ["secret"],
+      "flags": [
+        "secret"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -51,7 +57,9 @@
       "rule": "asa.desc_label",
       "iface": "gi0/1.203",
       "parent": "gi0/1",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -61,7 +69,9 @@
       "rule": "asa.desc_vlan",
       "iface": "gi0/1.203",
       "parent": "gi0/1",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -71,7 +81,9 @@
       "rule": "asa.desc_cloud",
       "iface": "gi0/1.203",
       "parent": "gi0/1",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "alt": "pnet9",
       "confidence": "PROVEN"
     },
@@ -169,7 +181,9 @@
       "line": 30,
       "rule": "asa.secret",
       "iface": null,
-      "flags": ["secret"],
+      "flags": [
+        "secret"
+      ],
       "confidence": "PROVEN"
     }
   ],
@@ -207,5 +221,8 @@
   },
   "vlan_db": [],
   "is_switch": false,
-  "secrets": ["8Ry2YjIyt7RRXU24", "Cisco123"]
+  "secrets": [
+    "8Ry2YjIyt7RRXU24",
+    "Cisco123"
+  ]
 }

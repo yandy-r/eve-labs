@@ -11,8 +11,12 @@
     "Tunnel1": "tu1"
   },
   "eve_to_config": {
-    "Gi0/6": ["GigabitEthernet0/6"],
-    "Mgmt0/0": ["Management0/0"]
+    "Gi0/6": [
+      "GigabitEthernet0/6"
+    ],
+    "Mgmt0/0": [
+      "Management0/0"
+    ]
   },
   "facts": [
     {

@@ -179,7 +179,8 @@ current directory, or absolute) is refused with `LAB_OUTSIDE_ROOT`, so the lab w
 
 - `revert` targets the baselines recorded in each manifest (and in `state.json`), including legacy
   schemes and each segment's cloud bridge (`[segment.baseline] bridge`), so bridges revert even
-  without `.localize/state.json`. Localize then revert is expected to give byte-identical files (the test suite checks it).
+  without `.localize/state.json`. Localize then revert is expected to give byte-identical files (the test suite checks
+  it).
 - `undo` restores backups only if each file is still exactly what the run wrote. If EVE saved the
   lab in the meantime, it refuses; use `revert` or `git restore` instead.
 - `apply` re-checks each file right before writing it. If EVE saved the lab while the tool was
@@ -207,7 +208,8 @@ git pull --ff-only
 answers reports `0 edits`. Copy mode (`--out DIR`) avoids the dance entirely because the tracked
 files never change. `DIR` must not be the lab's own folder (`OUT_IS_SOURCE`), copies land at
 `DIR/<file name>` (two labs with the same file name in one run are refused with
-`DEST_COLLISION`), and a lab already at the destination must not be running. New copies get the source lab's owner, group and mode when the tool runs as root (so EVE can
+`DEST_COLLISION`), and a lab already at the destination must not be running. New copies get the source lab's owner,
+group and mode when the tool runs as root (so EVE can
 save copies under `Users/<name>/`); `--fix-perms` in copy mode runs `fix-lab-permissions.sh` on
 the `--out` directory only. Always `revert` before contributing a lab change back.
 
@@ -331,7 +333,8 @@ disappearing. It implements:
 If the scenario needs a new kind of fact, add the kind to `model.CORE_FACT_KINDS` and `PatternRule`s
 producing it to the relevant dialects. If it needs a new answer type, register a `ParamKind` with
 `register_param_kind()` (`parse` / `validate` only: its `render` field is reserved and never called,
-because edits always come from `Dialect.render` via `render_fact()` in the scenario's `plan()`). Per-lab options live in the manifest (`[scenarios.<id>]`) and in answers
+because edits always come from `Dialect.render` via `render_fact()` in the scenario's `plan()`). Per-lab options live in
+the manifest (`[scenarios.<id>]`) and in answers
 (`[labs."<id>".scenarios.<id>]`). Add tests under `python/tests/localize/`.
 
 The design document (`docs/internal/lab-localize-design.md`) has the full contract.

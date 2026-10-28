@@ -12,7 +12,9 @@
       "line": 8,
       "rule": "ios.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "secret",
@@ -20,7 +22,9 @@
       "line": 10,
       "rule": "ios.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "secret",
@@ -28,7 +32,9 @@
       "line": 11,
       "rule": "ios.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "domain",
@@ -52,7 +58,9 @@
       "line": 20,
       "rule": "ios.desc_label",
       "iface": "gi0/0",
-      "flags": ["cosmetic"]
+      "flags": [
+        "cosmetic"
+      ]
     },
     {
       "kind": "ip_host",
@@ -69,7 +77,9 @@
       "line": 36,
       "rule": "ios.desc_cloud",
       "iface": "gi3/3",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "alt": "pnet9"
     },
     {
@@ -78,7 +88,9 @@
       "line": 36,
       "rule": "ios.desc_label",
       "iface": "gi3/3",
-      "flags": ["cosmetic"]
+      "flags": [
+        "cosmetic"
+      ]
     },
     {
       "kind": "subif_name",
@@ -121,7 +133,9 @@
       "line": 77,
       "rule": "ios.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     }
   ],
   "ifaces": {

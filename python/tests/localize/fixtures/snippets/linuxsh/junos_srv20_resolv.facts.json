@@ -63,6 +63,8 @@
   "vlan_db": [],
   "is_switch": false,
   "eve_to_config": {
-    "eth0": ["eth0"]
+    "eth0": [
+      "eth0"
+    ]
   }
 }

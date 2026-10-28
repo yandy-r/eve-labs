@@ -12,7 +12,9 @@
       "line": 3,
       "rule": "nxos.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "secret",
@@ -20,7 +22,9 @@
       "line": 4,
       "rule": "nxos.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "secret",
@@ -28,7 +32,9 @@
       "line": 6,
       "rule": "nxos.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "secret",
@@ -36,7 +42,9 @@
       "line": 8,
       "rule": "nxos.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "domain",
@@ -51,7 +59,9 @@
       "line": 13,
       "rule": "nxos.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "secret",
@@ -59,7 +69,9 @@
       "line": 13,
       "rule": "nxos.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "secret",
@@ -67,7 +79,9 @@
       "line": 14,
       "rule": "nxos.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "secret",
@@ -75,7 +89,9 @@
       "line": 14,
       "rule": "nxos.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "secret",
@@ -83,7 +99,9 @@
       "line": 15,
       "rule": "nxos.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "secret",
@@ -91,7 +109,9 @@
       "line": 15,
       "rule": "nxos.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "secret",
@@ -99,7 +119,9 @@
       "line": 16,
       "rule": "nxos.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "secret",
@@ -107,7 +129,9 @@
       "line": 16,
       "rule": "nxos.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "secret",
@@ -115,7 +139,9 @@
       "line": 17,
       "rule": "nxos.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "vlan_def",
@@ -422,6 +448,12 @@
       "orphan": false
     }
   },
-  "vlan_db": [1, 100, 101, 501, 502],
+  "vlan_db": [
+    1,
+    100,
+    101,
+    501,
+    502
+  ],
   "is_switch": false
 }

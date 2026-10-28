@@ -66,7 +66,9 @@
       "line": 17,
       "rule": "nxos.route_nexthop",
       "iface": null,
-      "flags": ["nexthop"]
+      "flags": [
+        "nexthop"
+      ]
     },
     {
       "kind": "vlan_tag",
@@ -117,7 +119,9 @@
       "line": 30,
       "rule": "nxos.desc_vlan",
       "iface": "eth1/22",
-      "flags": ["cosmetic"]
+      "flags": [
+        "cosmetic"
+      ]
     },
     {
       "kind": "cloud_ref",
@@ -125,7 +129,9 @@
       "line": 30,
       "rule": "nxos.desc_cloud",
       "iface": "eth1/22",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "alt": "pnet9"
     },
     {
@@ -225,6 +231,13 @@
       "orphan": false
     }
   },
-  "vlan_db": [201, 202, 203, 1240, 1241, 1242],
+  "vlan_db": [
+    201,
+    202,
+    203,
+    1240,
+    1241,
+    1242
+  ],
   "is_switch": true
 }

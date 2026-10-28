@@ -104,8 +104,12 @@
     "ge-0/0/1": "ge-0/0/1"
   },
   "eve_to_config": {
-    "fxp0": ["fxp0"],
-    "ge-0/0/1": ["ge-0/0/1"]
+    "fxp0": [
+      "fxp0"
+    ],
+    "ge-0/0/1": [
+      "ge-0/0/1"
+    ]
   },
   "secrets": [
     "$6$Wpsv.I/oMsVSz6Gu$.gDWDvZKFJZkqA3ESLm2q5t/X9JfO7Fdkpq8nLxgXsdGNLdNrtkLgcaSbt64yVIcjoAFwaQo3GB.wrZyH4TwG.",

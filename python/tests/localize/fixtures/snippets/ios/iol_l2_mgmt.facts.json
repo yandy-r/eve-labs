@@ -12,7 +12,9 @@
       "line": 2,
       "rule": "ios.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "secret",
@@ -20,7 +22,9 @@
       "line": 4,
       "rule": "ios.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "domain",
@@ -63,7 +67,9 @@
       "line": 18,
       "rule": "ios.desc_cloud",
       "iface": "et0/0",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "alt": "pnet9"
     },
     {
@@ -72,7 +78,9 @@
       "line": 18,
       "rule": "ios.desc_label",
       "iface": "et0/0",
-      "flags": ["cosmetic"]
+      "flags": [
+        "cosmetic"
+      ]
     },
     {
       "kind": "label_ref",
@@ -80,7 +88,9 @@
       "line": 26,
       "rule": "ios.desc_label",
       "iface": "et0/1",
-      "flags": ["cosmetic"]
+      "flags": [
+        "cosmetic"
+      ]
     },
     {
       "kind": "label_ref",
@@ -88,7 +98,9 @@
       "line": 26,
       "rule": "ios.desc_label",
       "iface": "et0/1",
-      "flags": ["cosmetic"]
+      "flags": [
+        "cosmetic"
+      ]
     },
     {
       "kind": "vlan_tag",
@@ -103,7 +115,9 @@
       "line": 33,
       "rule": "ios.desc_label",
       "iface": "et1/0",
-      "flags": ["cosmetic"]
+      "flags": [
+        "cosmetic"
+      ]
     },
     {
       "kind": "label_ref",
@@ -111,7 +125,9 @@
       "line": 33,
       "rule": "ios.desc_label",
       "iface": "et1/0",
-      "flags": ["cosmetic"]
+      "flags": [
+        "cosmetic"
+      ]
     },
     {
       "kind": "vlan_list",
@@ -163,6 +179,9 @@
       "orphan": false
     }
   },
-  "vlan_db": [2, 3],
+  "vlan_db": [
+    2,
+    3
+  ],
   "is_switch": true
 }

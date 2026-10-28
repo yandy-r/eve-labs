@@ -19,7 +19,9 @@
       "line": 12,
       "rule": "ios.desc_cloud",
       "iface": "et1/2",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "alt": "pnet9"
     },
     {
@@ -28,7 +30,9 @@
       "line": 12,
       "rule": "ios.desc_label",
       "iface": "et1/2",
-      "flags": ["cosmetic"]
+      "flags": [
+        "cosmetic"
+      ]
     },
     {
       "kind": "vlan_mention",
@@ -36,7 +40,9 @@
       "line": 12,
       "rule": "ios.desc_vlan",
       "iface": "et1/2",
-      "flags": ["cosmetic"]
+      "flags": [
+        "cosmetic"
+      ]
     },
     {
       "kind": "vlan_list",
@@ -123,7 +129,9 @@
       "line": 38,
       "rule": "ios.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "peer_ip",
@@ -147,7 +155,9 @@
       "line": 42,
       "rule": "ios.route_nexthop",
       "iface": null,
-      "flags": ["nexthop"]
+      "flags": [
+        "nexthop"
+      ]
     },
     {
       "kind": "ip_route_dst",
@@ -164,7 +174,9 @@
       "line": 43,
       "rule": "ios.route_nexthop",
       "iface": null,
-      "flags": ["nexthop"]
+      "flags": [
+        "nexthop"
+      ]
     },
     {
       "kind": "ip_gateway",
@@ -179,7 +191,9 @@
       "line": 46,
       "rule": "ios.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     }
   ],
   "ifaces": {
@@ -254,6 +268,14 @@
       "orphan": false
     }
   },
-  "vlan_db": [201, 202, 203, 1240, 1241, 1242, 1243],
+  "vlan_db": [
+    201,
+    202,
+    203,
+    1240,
+    1241,
+    1242,
+    1243
+  ],
   "is_switch": true
 }

@@ -44,7 +44,8 @@ Hand-editing is error-prone. The same digits appear everywhere as lab-internal v
    - asks **only the questions that are relevant and feasible for that lab**;
    - rewrites every copy of each value consistently;
    - shows a reviewable plan before writing anything.
-2. **Surgical edits.** Bytes outside the edited value spans stay identical. EVE quirks are preserved: stray `<objects/>`,
+2. **Surgical edits.** Bytes outside the edited value spans stay identical. EVE quirks are preserved: stray
+   `<objects/>`,
    attribute order, `smart="-1"`, `vlan8021ad`, `native_vlan`, `vid="1"`, single-line base64, trailing spaces, missing
    trailing newlines, UTF-8 em dashes in sidecars.
 3. **Adapts to new labs with no code.** A new lab works through live discovery. A generated manifest pins it for CI.
@@ -94,7 +95,7 @@ Hand-editing is error-prone. The same digits appear everywhere as lab-internal v
 
 ## 3. Architecture
 
-```
+```text
  .unl ──► unl.RawLab (raw bytes + span index, ET read-only cross-check)
  sidecars ─► stores (embedded / sidecar, id+name guard, mirror detection) ─► ConfigText[]
                                                      │ dialects.pick(node, text)
@@ -118,7 +119,7 @@ for.
 
 ### 3.1 File layout (exact)
 
-```
+```text
 scripts/
   eve-localize                       # shim: sys.path.insert(0, <repo>/python/src); from evelab.localize.cli import main
 python/
@@ -425,10 +426,11 @@ class Plan:
     def blocked(self) -> bool: return any(f.severity in ("conflict", "blocker", "error") for f in self.findings)
 ```
 
-**Resolutions applied when `model.py` was written (T1)**
+### Resolutions applied when `model.py` was written (T1)
 
 - `Span` is defined only in `model.py` (section 3.1 listed it under `textutil.py` too). `textutil.py` re-exports it.
-- `NameToken` was referenced by `Segment.name_hints` but never defined; it is defined above (frozen dataclass, section 7.4
+- `NameToken` was referenced by `Segment.name_hints` but never defined; it is defined above (frozen dataclass, section
+  7.4
   classes).
 - `DecodedBlob` (`codec.py`), `VlanList` (`textutil.py`) and `RawLab` (`unl.py`) are imported only under
   `TYPE_CHECKING` (no runtime import cycle); `model.py` uses `from __future__ import annotations` and `from pathlib
@@ -662,7 +664,7 @@ Each match is validated with `ipaddress`. The pattern never matches `172.31.240.
 `netmask M`. `domain_re(d)` is `(?<![\w-])` + escaped d + `(?![\w-])`. A preceding `.` is allowed so FQDN suffixes
 match, so `plsnetlab.local` never matches `netlab.local`.
 
-**Resolutions applied when `textutil.py` and `dialects/` were written (T2, T5)**
+#### Resolutions applied when `textutil.py` and `dialects/` were written (T2, T5)
 
 - `IPV4_RE` guard is `(?!\w|\.\w)`: a sentence-final period still matches; `1.2.3.4.5`, `10.1.1.1.example.com` and
   `.10` vs `.1` do not. `domain_re` uses `(?![\w-]|\.[\w-])` and is case-insensitive, so `netlab.local.example` is a
@@ -734,7 +736,7 @@ additive, no contract change
   tokens; all HEURISTIC (discovery correlates). `score` is 95 for HTML fragments, so stores may also just `pick`.
 - generic: HEURISTIC `ip_host` + cosmetic `label_ref`/`cloud_ref`; no `vlan_mention`, never tags; `score` is 0.
 
-**Resolutions applied when `ios.py`, `iosxe.py` and `nxos.py` were written (T9)**
+#### Resolutions applied when `ios.py`, `iosxe.py` and `nxos.py` were written (T9)
 
 - **New fact kind `log_server`** (syslog targets: IOS `logging host A` / `logging A`, NX-OS `logging server A`) added to
   `model.CORE_FACT_KINDS` (one additive entry); `test_model` now checks a lower bound (packs may register kinds).
@@ -795,7 +797,8 @@ State: `(node, iface_key, incoming: untagged | tag N, cloud_net_ids)`, kept in a
   - access `v` → carrier untagged maps to switch VLAN `v`.
   - trunk with an allowed list → those VLANs.
   - trunk with **no allowed list → ALL VLANs in `vlan_db`**. `vlan_db` includes VLANs created _implicitly_ by
-    `switchport access vlan`, allowed lists and SVIs. This fixes the backbone dmvpn-backbone case, where mgmt-79..82 have
+    `switchport access vlan`, allowed lists and SVIs. This fixes the backbone dmvpn-backbone case, where mgmt-79..82
+    have
     `access vlan 203` but no `vlan 203` line.
   - Propagation to every other port carrying `v`: an access port → its bridge peer receives untagged; a trunk port → its
     peer receives tagged `v`; an SVI `Vlan v` with addresses → attachment on the switch itself.
@@ -825,12 +828,14 @@ State: `(node, iface_key, incoming: untagged | tag N, cloud_net_ids)`, kept in a
    the manifest confirms it.
 
 3. **Schemes per scope**:
-   - **Tag** comes from a subif on the attached parent, Forti `vlanid` on the attached port, or the switch access/allowed
+   - **Tag** comes from a subif on the attached parent, Forti `vlanid` on the attached port, or the switch
+     access/allowed
      VLAN toward the endpoint. If none → `untagged`. If the cloud-facing iface has no config → `unknown`.
    - **Subnet** is the consensus of `ip_network(ip/len, strict=False)` over member hosts. The broadest consistent prefix
      wins, so junos `10.100.240.0/20` stays one subnet and is not split into two /24s.
    - **Gateway** is the consensus of default-route next-hops inside the subnet: Cisco VRF defaults, NX-OS
-     `vrf context management`, Junos `next-hop`, F5 `management-route`, Forti `set gateway` under the segment device, and
+     `vrf context management`, Junos `next-hop`, F5 `management-route`, Forti `set gateway` under the segment device,
+     and
      ASA `route <nameif> 0 0 GW`.
    - Scopes with identical tuples merge into one scheme. Minority facts become **outliers**, excluded by default:
      c8kv-74 10.100.105.74 in vxlan-vpc, bb-rr84 duplicating .83, bb-rtr66 .66/.26.
@@ -911,7 +916,8 @@ have fenced off every `10.100.x` answer and service value.
 - **Carrier** = every network of the `(type, name)` group is a switch trunk port and the group carries **two or more**
   VLANs in some scope (a trunk carrying one VLAN, e.g. sdwan `b1-sw1 Gi3/3`, is a tagged segment). Carrier sub-units are
   keyed by `(cloud type, wire tag)` across all carrier groups (one `pnet0` bridge = one VLAN space) and named
-  `<label>:<tag>` (aliases `trunk:204`, `203-19:204`); sub-units ending at the same node interface in different scopes are
+  `<label>:<tag>` (aliases `trunk:204`, `203-19:204`); sub-units ending at the same node interface in different scopes
+  are
   one unit (backbone `1102` in startup = `204` in the dmvpn configset). A sub-unit that merges with nothing becomes a
   segment with no networks, keyed `<carrier key>-<tags>` (`TRUNK-204-1102`); carrier groups carrying a common segment
   merge into one CARRIER segment (backbone `trunk` + `203-19`).
@@ -920,7 +926,8 @@ have fenced off every `10.100.x` answer and service value.
   the later node's endpoint an outlier (bb-rr84). Scheme order: canonical scope (option, manifest, else the scope most
   nodes boot from) first, then member count. Outlier facts get `segment` + flag `outlier`, CORRELATED at most.
 - Status: CONFIGURABLE if an endpoint is addressed or a scheme has an int tag / subnet; DHCP if every configured
-  endpoint is DHCP; LABEL_ONLY if attached but unconfigured; UNKNOWN otherwise (e.g. a VLAN reaching only uncabled ports).
+  endpoint is DHCP; LABEL_ONLY if attached but unconfigured; UNKNOWN otherwise (e.g. a VLAN reaching only uncabled
+  ports).
 - Correlation pass kinds: `ip_host`, `ip_gateway`, `peer_ip`, `router_id` (service kinds are left to `services`,
   `ip_route_dst` to `site_routes`). An SVI address in a segment attributes the SVI name and, on a switch, the
   VLAN-domain facts of that VLAN (handles backbone `b2-sw1` truncated `interface GigabitEthernet3` block) plus orphan
@@ -1074,9 +1081,10 @@ baseline = { peer_as = 65299, local_as = 65300, prefixes = ["172.31.255.0/24", "
 key = "dns_mgmt"; kind = "ipv4_list"; site_key = "site.dns_mgmt"; baseline = ["10.100.51.11"]; expect = 16
 ```
 
-**Resolutions applied when `tomlw.py`, `manifest.py` and `profile.py` were written (T4)**
+#### Resolutions applied when `tomlw.py`, `manifest.py` and `profile.py` were written (T4)
 
-- The examples above use `;` for brevity; real files use one key per line (valid TOML). `Manifest`, `Profile` and `Answers`
+- The examples above use `;` for brevity; real files use one key per line (valid TOML). `Manifest`, `Profile` and
+  `Answers`
   are not in `model.py`: `Manifest` and its row types live in `manifest.py`; `Profile` lives in `profile.py` and
   `Answers` is an alias of `Profile` (one file format for profile and answers).
 - New helper module `tomlschema.py` (`TableReader`): strict typed reads, unknown key -> error with a "did you mean"
@@ -1089,14 +1097,16 @@ key = "dns_mgmt"; kind = "ipv4_list"; site_key = "site.dns_mgmt"; baseline = ["1
   segment keys or `[[param]]` keys or `[[rule]]` ids, a network id in two segments, `lab_id` not a UUID, a gateway
   outside its subnet. Param kinds, scenario ids and fact kinds are not checked against registries (T16/T5); they only
   need to be identifiers.
-- `find_for()` returns `None` when no `<stem>.localize.toml` exists or its `lab_id` differs from the lab's (read from the
+- `find_for()` returns `None` when no `<stem>.localize.toml` exists or its `lab_id` differs from the lab's (read from
+  the
   root `<lab id=...>` element; `check` detects the mismatch by calling `load()` itself). A manifest whose `lab` does not
   name that lab file, or an invalid manifest, raises `ManifestError`. `.localize.toml.draft` is never loaded.
 - Profile keys beyond the 9 sketch: segment answers also take `hosts` (old ip -> new ip) and `skip`; `[labs."<id>"]`
   holds `segments` (keyed by segment **key**) and `scenarios`. `[map.<kind>]` accepts any identifier kind. Bridge names
   must be built-in (`pnetN|natN|cloudN`) or declared in `[bridges]`, checked after merging.
 - `load_profile(paths)`: files merge in order, later wins; tables merge key by key, scalars and arrays replace (so
-  `site_routes."k" = []` clears). `[]` yields an empty profile; a missing path is an error (the CLI filters the default).
+  `site_routes."k" = []` clears). `[]` yields an empty profile; a missing path is an error (the CLI filters the
+  default).
 - Secrets: `SecretRef(env, value)`; `save_answers` writes `{ env = ... }` references only. Inline values are written
   only with `include_secrets=True`, and then the file is created with mode 0600.
 
@@ -1116,7 +1126,8 @@ localized_params=None, leaks=True)`. `m=None` returns `UNPINNED` (warn) when the
   to it; `label` = segment networks named exactly the label + all `label_ref` facts with that value. A `[[param]]`
   counts facts of `param_fact_kinds(p)` (its kind if that is a fact kind; else words of its key: `dns*` -> dns_server,
   `ntp*`, `sla`/`probe` -> probe_target, `log`/`syslog`, `domain`/`search` -> domain+search_list, `route*` ->
-  ip_route_dst, `peer*`, `asn`; else by param kind `ipv4_list|host_list|domain|domain_list|prefix_list`) whose value is a
+  ip_route_dst, `peer*`, `asn`; else by param kind `ipv4_list|host_list|domain|domain_list|prefix_list`) whose value is
+  a
   baseline value (CIDR compare for routes, case-insensitive domains).
 - Draft (`previous=None`): every discovered segment that has cloud networks (carried-only segments such as
   `TRUNK-204-1102` cannot be manifest segments; they and `MERGE_HINT` / `OUTLIER` findings are listed as header
@@ -1169,7 +1180,7 @@ extra_rules)` parses with `topology.with_rules(dialect, rules)`, an unregistered
   `__pycache__/`. The lint bundle covers `python/` (`ruff check .` /
   `black --check .` from the repo root pick up `python/pyproject.toml`; no excludes apply).
 
-**Resolutions applied during review fixes (bridges)**
+#### Resolutions applied during review fixes (bridges)
 
 - `[segment.baseline]` has an optional `bridge` (the cloud `type` of the segment's networks; written by
   `discover --write/--update` only when every network has the same type, so CARRIER trunks get one too). `revert`
@@ -1281,7 +1292,7 @@ class Question:
 | scenario groups            | `applies()`: manifest-enabled or signature detected. A yes/no gate, default no.                                                                                                                                                                                                                                         |
 | secrets                    | a `SECRET_COMMITTED` finding exists (optional placeholder replacement)                                                                                                                                                                                                                                                  |
 
-**Validators:**
+#### Validators
 
 - **bridge**: matches `^(pnet\d+|nat\d+|cloud\d+)$`, extendable through profile `[bridges]`. A tagged segment on `nat*`
   is a blocker.
@@ -1294,7 +1305,7 @@ class Question:
 - **domain**: RFC 1123.
 - **asn**: 1-4294967295.
 
-**Resolutions applied during review fixes (bridges)**
+#### Resolutions applied during review fixes (bridges)
 
 - **Carrier vs carried bridges** (`CARRIER_SPLIT`): after the bridges are resolved, every CARRIER is compared with the
   final bridge of each carried segment that has cloud networks (carried-only segments without networks are ignored,
@@ -1311,11 +1322,12 @@ class Question:
   sysfs) the plan warns `BRIDGE_NOT_ON_HOST` / `BRIDGE_NO_CARRIER` for target bridges that are missing or have no
   link; elsewhere (a laptop preparing a profile) any name is accepted silently.
 
-**Resolutions applied during review fixes (services-maps)**
+#### Resolutions applied during review fixes (services-maps)
 
 - **dns / domain / ntp / probe** questions skip IPv4 values inside the protected inventory (`protected_prefixes`:
   unattributed interface/loopback networks plus the manifest `protect` list), e.g. the sdwan hub loopback
-  `10.200.255.251` used as the HUB_HC probe, or lab1's internal `10.x` resolvers. A `[map.<kind>]` entry for such a value
+  `10.200.255.251` used as the HUB_HC probe, or lab1's internal `10.x` resolvers. A `[map.<kind>]` entry for such a
+  value
   (answers file or profile) is not rendered: `SERVICE_INTERNAL` warning, left unchanged. It is a warning, not a blocker,
   because profile maps are shared by every lab.
 - **domain** (RFC 1123 2.1): a value whose last label is all digits (`9.9.9.9`) is refused at the prompt, and a
@@ -1324,13 +1336,15 @@ class Question:
   names (`HostnameServiceMixin`: FortiOS, F5); otherwise the prompt requires IPv4 (no more silent `BAD_VALUE` drop
   after the questions).
 - **azure_s2s**: `local_asn` must differ from the answered-or-discovered `azure_asn` and vice versa (prompt validator,
-  plus an `AZURE_ASN_EQUAL` blocker in `plan()`); `azure_asn` also refuses Azure-reserved ASNs except Azure's default 65515. A non-public `peer_ip` is accepted (in-lab simulated gateway) with an `AZURE_PEER_PRIVATE` warning.
+  plus an `AZURE_ASN_EQUAL` blocker in `plan()`); `azure_asn` also refuses Azure-reserved ASNs (except the
+  Azure default, ASN 65515). A non-public `peer_ip` is accepted (in-lab simulated gateway) with an
+  `AZURE_PEER_PRIVATE` warning.
 - **secrets**: `psk` is offered only when cleartext PSKs exist; the history note names the Azure VPN gateway only when
   the `azure_s2s` scenario applies, otherwise "rotate it wherever it is used".
 - Lab picker: a range (`2-4`) skips non-selectable labs; a single explicit number still errors. After `a` the review
   prints that the plan is queued and written after the last lab (`q` still writes nothing).
 
-**Resolutions applied during review fixes (l3-validation)**
+#### Resolutions applied during review fixes (l3-validation)
 
 - **Answered values are validated**: a question the profile, `.localize/site.toml` or a TOML `--answers` file already
   decides is not prompted in non-interactive / `--yes` mode, but its value (the question default) still runs through
@@ -1370,7 +1384,7 @@ Old labels are propagated into device text only when **all** of these hold:
 Otherwise only the XML `name` changes. This protects `INTERNET-ONLY`, `fd-to-internet`, `Internet Cloud` and the
 `Net-*` bridges.
 
-**Resolutions applied during review fixes (labels)**
+#### Resolutions applied during review fixes (labels)
 
 - _Label validation._ `labels.label_error()` is the hard rule for every segment label (question validator, so the
   answers-file and profile paths too, and again in the plan as `BAD_LABEL` error): non-empty, no surrounding blanks,
@@ -1396,7 +1410,7 @@ Otherwise only the XML `name` changes. This protects `INTERNET-ONLY`, `fd-to-int
 
 ### 10.5 Example transcript: sdwan lab
 
-```
+```text
 $ ./scripts/eve-localize --lab sdwan
 Profile: .localize/site.toml (3 segment answers, 6 value maps) · host: EVE (bridges: pnet0 up, pnet1 up, nat0 up)
 
@@ -1469,7 +1483,7 @@ Suggested commit (if you keep it local): chore(labs): localize sdwan lab for ali
 
 ### 10.6 Example transcript: lab with no externals
 
-```
+```text
 $ ./scripts/eve-localize --lab ccie_sec
 Lab: labs/ccie/ccie_sec_v6_practice_lab.unl
 Nothing to localize: all 45 networks are internal bridges (no pnet/nat/cloud). No changes.
@@ -1577,7 +1591,7 @@ Forti `pnet0-trunk`.
 **Services**: only the anchored spans. List-aware removal (`"" = drop`) applies inside search lists, never inside
 `domain-name`.
 
-**Per-dialect specifics:**
+#### Per-dialect specifics
 
 | dialect           | specifics                                                                                                                                                                                                        |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -1591,7 +1605,7 @@ Forti `pnet0-trunk`.
 | eve_html          | text-node tokens only                                                                                                                                                                                            |
 | generic           | proven-subnet IPv4 + distinctive label tokens, CORRELATED; never tags                                                                                                                                            |
 
-**Resolutions applied when the core scenarios and the planner were written (T16, T18)**
+#### Resolutions applied when the core scenarios and the planner were written (T16, T18)
 
 - `ValueMaps` and `SubnetMap` live in `scenarios/base.py` (re-exported by `planner.py`) so scenario modules can import
   them without an import cycle. Additive fields: `gateways` / `seg_exact` (per-segment gateway and host-override maps),
@@ -1607,16 +1621,19 @@ Forti `pnet0-trunk`.
   `apply_answer(ans, q, raw)` validates (ParamKind + question validator), parses and stores. Segment answers go to
   `[segments."<site_key>"]`; the legacy choice goes to `[scenarios.scopes]` options keyed by site key.
 - Optional scenario extras honoured by the planner: `gated` (G-group yes/no: runs only when
-  `ans.scenario_enabled(id)` is true or `PlanOptions.enable_scenarios` names it) and `contribute(a, ans, maps)` (adds map
+  `ans.scenario_enabled(id)` is true or `PlanOptions.enable_scenarios` names it) and `contribute(a, ans, maps)` (adds
+  map
   entries before any scenario plans). `scenarios.load_builtin()` imports the nine built-in modules (missing ones are
   skipped); `ordered()` sorts by `order` (bridge 10, segment_l2 20, segment_l3 30, labels 40).
 - Answers are taken literally: unanswered = keep. Question defaults (role bridge, carrier follow, same-offset gateway,
   templated label) are what the CLI stores with `--yes`. _Review fix (labels):_ the templated label is derived by
-  the planner itself when the label is unanswered (10.4 resolutions), so it no longer depends on `--yes`. Exception: when no bridge answer exists the planner applies
+  the planner itself when the label is unanswered (10.4 resolutions), so it no longer depends on `--yes`. Exception:
+  when no bridge answer exists the planner applies
   the role default and the carrier-follow rule itself (section 9 steps 4-5).
 - A VLAN answer for an untagged segment is a `TAG_NOT_APPLICABLE` warning (ignored), not a blocker, so one shared
   `site_key` can be bound in labs that tag it and labs that do not.
-- Edit groups: `<segment>/<cloud|vlan|ip|gateway|derived|textobject|label>`, `cosmetic/<pnet-text|label-text|vlan-text>`,
+- Edit groups: `<segment>/<cloud|vlan|ip|gateway|derived|textobject|label>`,
+  `cosmetic/<pnet-text|label-text|vlan-text>`,
   HEURISTIC claims get the suffix `:heuristic` (off unless `include_heuristic`), `outliers/*` are never enabled by
   default. `Edit.provenance` = `[question id, comma-joined fact ids, rule, evidence, "scenario:<id>"]`.
 - Plan findings = planner/scenario findings + analysis findings of severity conflict/blocker/error. Codes:
@@ -1668,7 +1685,7 @@ after_sha, mode, uid, gid}}, answers_digest, plan_digest}}}`. Update `.localize/
 6. With `--all`, each lab is its own transaction. The summary lists exactly which labs were localized, skipped, failed
    (rolled back) or untouched. `--continue-on-error` controls whether a failure stops the run.
 
-**Resolutions applied during review fixes (apply-safety)**
+#### Resolutions applied during review fixes (apply-safety)
 
 - After validation, and again right before each `os.replace`, every target is re-hashed against the bytes the changes
   were built from (a created copy must still not exist). A mismatch (an EVE save during the seconds validation takes)
@@ -1723,7 +1740,7 @@ value the write left behind. Segment swaps were never affected (keyed by site_ke
 
 ### 12.5 Upstream sync workflow (gap closure)
 
-```
+```text
 ./scripts/eve-localize revert --all --yes      # back to repo baseline (state.json cleared)
 git pull --ff-only
 ./scripts/eve-localize apply --all --answers .localize/site.toml --yes
@@ -1740,7 +1757,7 @@ Writes localized copies (`.unl` plus sidecar dir) under `DIR`, for example `User
 `uuid4` lab id. The repo working tree stays clean, `git pull` never conflicts, and the EVE save race on the original is
 irrelevant. It needs a re-run after upstream changes, which is idempotent.
 
-**Resolutions applied during review fixes (apply-safety)**
+#### Resolutions applied during review fixes (apply-safety)
 
 - `OUT_IS_SOURCE` (blocker): `DIR` is the lab's own directory, or a copy would land on one of its source files.
 - An existing lab at the destination gets the in-place running-node check for _its_ id (`RUNNING_NODES`, unless
@@ -1751,7 +1768,7 @@ irrelevant. It needs a re-run after upstream changes, which is idempotent.
 - Copies are still flattened to `DIR/<basename>`; two labs of one run that map to the same destination file refuse the
   whole run with `DEST_COLLISION` (exit 4, nothing written). Apply them with different `--out` directories.
 
-**Resolutions applied during review fixes (bridges)**
+#### Resolutions applied during review fixes (bridges)
 
 - New copies take the source file's mode **and owner/group** (chown only when running as root, as for in-place
   writes); directories created under `DIR` (including `DIR` itself) get the source file's owner too, so EVE
@@ -1798,7 +1815,8 @@ skipped (preflight) | failed (nothing replaced or rolled back) | untouched`.
 - Copy mode reuses the id of an existing destination lab (idempotent re-runs), else `uuid4`; copies the lab's
   sidecar dirs whole; is journaled (`mode: "out"`, undo deletes created files) but never touches `state.json`.
 - Journal `{schema, runs: [{run_id, ts, user, host, mode, labs: {lab_id: {lab, source, mode, files: {abs path:
-{before_sha, after_sha, mode, uid, gid, backup, created}}, answers_digest, plan_digest, edits, prev_state}}, undone?}]}`;
+{before_sha, after_sha, mode, uid, gid, backup, created}}, answers_digest, plan_digest, edits, prev_state}},
+undone?}]}`;
   undo restores `prev_state`. `state.json` entries also carry `files: {abs path: after_sha}` (used by the git-dirty
   check) and `run_id`. Preflight adds `EVE_SAVE_RACE` (warn, in place only) and `OWNER_DIFFERS` (warn, non-root).
 
@@ -1810,16 +1828,20 @@ skipped (preflight) | failed (nothing replaced or rolled back) | untouched`.
 - `services`: question ids `services/<kind>:<old>` with kinds `dns|ntp|domain|probe` = the `[map.<kind>]` keys (search
   entries share `map.domain`). `""` drops only from search lists (token + one blank run); refused with
   `SERVICE_DROP_REFUSED` for `domain-name`, servers, probes and the last entry of a list. Claims use `PRIO_EXACT`.
-- `site_routes`: new param kind `site_routes` (`keep` -> None, `delete` -> `[]`, else a list). Site route = `ip_route_dst`
+- `site_routes`: new param kind `site_routes` (`keep` -> None, `delete` -> `[]`, else a list). Site route =
+  `ip_route_dst`
   with a mask whose next hop on the same line / deletable stanza is a segment gateway; default routes, routes inside a
   segment subnet and `/32` routes to a `peer_ip` are excluded. Routes in both lists stay; the rest are paired in address
   order and rewritten (dst + mask in its own form), surplus old routes are deleted (stanza deletion, else blocker
   `ROUTE_DELETE_UNSUPPORTED`), surplus new ones give `ROUTES_NOT_ADDED` (warn; no stanza synthesis). Claims are
   `exact` (route dsts are protected facts).
 - `bgp_upstream` (gated, IOS-family syntax only): options `peers = {old = new}` (per peer, also added to
-  `ValueMaps.seg_exact` through `contribute`), `peer_as`, `local_as` (lab-wide; `set community` of the outbound route-map
-  recomputed for `L:NN` and `L*65536+NN`), `prefixes` (prefix-list entries of the outbound route-map; same keep/pair/delete
-  rule, whole-line deletion; `PREFIX_INTERNAL` warning on overlap with the protected inventory). `l2lab` minilab matches.
+  `ValueMaps.seg_exact` through `contribute`), `peer_as`, `local_as` (lab-wide; `set community` of the outbound
+  route-map
+  recomputed for `L:NN` and `L*65536+NN`), `prefixes` (prefix-list entries of the outbound route-map; same
+  keep/pair/delete
+  rule, whole-line deletion; `PREFIX_INTERNAL` warning on overlap with the protected inventory). `l2lab` minilab
+  matches.
 - `azure_s2s` (gated): options `peer_ip`, `tunnel_ip` (APIPA 169.254.21.0-169.254.22.255, rest of the /30 by offset),
   `azure_bgp_ip`, `local_asn` (Azure-reserved ASNs refused; lab-wide), `azure_asn`; PSK in `[secrets."azure_s2s.psk"]`
   (claims flagged secret; only the PSKs inside `tunnel-group <peer> ipsec-attributes`). Answers are targets (equal =
@@ -1835,7 +1857,7 @@ skipped (preflight) | failed (nothing replaced or rolled back) | untouched`.
 
 ### 13.1 Commands
 
-```
+```text
 scripts/eve-localize [COMMAND] [LAB ...] [options]
 
 Commands (default: run = interactive picker -> questions -> review -> apply)
@@ -1947,7 +1969,7 @@ test: check-labs localize-test localize-check
 
 ### 13.3 Extension guide
 
-**Onboard a new lab (no code)**
+#### Onboard a new lab (no code)
 
 1. Build the lab in EVE and commit the `.unl` (plus `<stem>_cfgs/NN_<nodename>.txt` sidecars, named exactly like the
    node).
@@ -1965,7 +1987,7 @@ test: check-labs localize-test localize-check
 
 After later edits in EVE: `discover --lab new --update`, review the diff, commit.
 
-**Add a vendor dialect**
+#### Add a vendor dialect
 
 The usual case is a `RuleDialect` with data only, about 20 lines:
 
@@ -1993,7 +2015,8 @@ class EOS(RuleDialect):
 
 - The module is imported automatically: `load_builtin()` imports every non-private module of `dialects/` except the
   helpers in `HELPER_MODULES` (`base`, `blocks`); `BUILTIN_MODULES` is computed, not hand-kept.
-- **Zero-Python alternative**: `python/src/evelab/localize/dialects/packs/eos.toml` with `dialect`, `templates`, `block_style`,
+- **Zero-Python alternative**: `python/src/evelab/localize/dialects/packs/eos.toml` with `dialect`, `templates`,
+  `block_style`,
   `mask_form` and `[[rule]]` tables carrying the same fields. Packs are loaded automatically. Out-of-tree packs and
   Python files load with `--plugins DIR` or `$EVE_LOCALIZE_PLUGINS` (`os.pathsep`-separated).
 - Add `fixtures/snippets/eos/*.txt` plus `*.facts.json`. `test_dialect_contract.py` automatically runs every registered
@@ -2004,13 +2027,15 @@ class EOS(RuleDialect):
   - none of the `negative` lines match.
 - Subclass and override `parse()`/`render()` only for unusual syntax, the way `junos.py` does for braces.
 
-**Add a scenario**
+#### Add a scenario
 
-`python/src/evelab/localize/scenarios/syslog.py` with `@register_scenario` implementing `applies` / `questions` / `plan` (the
-module is auto-imported like dialects; helpers: `scenarios.HELPER_MODULES`). Add `PatternRule`s with the new fact kind to
+`python/src/evelab/localize/scenarios/syslog.py` with `@register_scenario` implementing `applies` / `questions` / `plan`
+(the
+module is auto-imported like dialects; helpers: `scenarios.HELPER_MODULES`). Add `PatternRule`s with the new fact kind
+to
 the relevant dialects.
 
-**Add a parameter kind**
+#### Add a parameter kind
 
 Register it in `scenarios/base.py`:
 
@@ -2027,7 +2052,7 @@ Then add the fact kind to the dialect rules that produce it, and a question in a
 scenario's `plan()` produces the edits through `render_fact()` / `Dialect.render` (a `ParamKind` never renders). The
 profile, answers, plan JSON and review pick the kind up automatically (the kind name is the serialisation key).
 
-**Add a structural transform (later)**
+#### Add a structural transform (later)
 
 `transforms/<name>.py`, for example `ios_dhcp_to_static` (T22):
 
@@ -2040,7 +2065,7 @@ review section.
 
 **Add a cloud kind**: extend profile `[bridges]`, or `hostenv.BRIDGE_PATTERNS`.
 
-**Resolutions applied during review fixes (cli-extensibility)**
+#### Resolutions applied during review fixes (cli-extensibility)
 
 - Built-in dialect and scenario modules are auto-discovered (`pkgutil.iter_modules` over the package directory, minus
   private `_x` modules and `HELPER_MODULES`); the hand-kept `BUILTIN_MODULES` tuples are gone (#29).
@@ -2158,7 +2183,7 @@ review section.
     `LEAK`; an unpinned lab gives a warning (error under `--strict`); a stale `site.example.toml` fails.
 12. **Lint**: ruff + black through `make lint` on `python/` (config in `python/pyproject.toml`).
 
-**Resolutions applied when the goldens were written (T21)**
+### Resolutions applied when the goldens were written (T21)
 
 - Goldens live in `python/tests/localize/golden/`: `<stem>.scan.json` = the `scan --json` lab entry plus
   `protected` (`vlans` per scope as a VLAN-list string, `prefixes`, per-segment `lookalikes`), computed on a temp tree
@@ -2300,7 +2325,7 @@ Rules for implementors:
 | **T22**                     | Repo wiring                            | `Makefile` (non-managed section), `.gitignore`, README/AGENTS mention                                                              | T19                                  | `make test` includes localize-test + localize-check                                                                                                         |
 | **T23** _(optional, later)_ | First structural transform             | `transforms/__init__.py`, `transforms/ios_dhcp_to_static.py`                                                                       | T18                                  | proves the extension point (nexus ISP-CE, lab1 R27)                                                                                                         |
 
-**Parallel waves**
+### Parallel waves
 
 | Wave | Tasks                                                                                                    |
 | ---- | -------------------------------------------------------------------------------------------------------- |
@@ -2314,8 +2339,10 @@ Rules for implementors:
 | 7    | T23 (optional)                                                                                           |
 
 **Shared fixtures**: `fixtures/minilabs/` (from T3) is used by T8, T12, T13 and T14. Minilabs are stored as
-`<stem>.unl.fixture` (never `*.unl`, because this repo is EVE's live labs tree and the web UI would list them); tests load
-them through `tests/localize/labfiles.py` (`minilab_path()` / `minilab()`), which copies them and their `*_cfgs` sidecars into
+`<stem>.unl.fixture` (never `*.unl`, because this repo is EVE's live labs tree and the web UI would list them); tests
+load
+them through `tests/localize/labfiles.py` (`minilab_path()` / `minilab()`), which copies them and their `*_cfgs`
+sidecars into
 a temp dir as `<stem>.unl`. Each dialect task owns its
 `fixtures/snippets/<dialect>/` directory. Golden files are written only by T21.
 

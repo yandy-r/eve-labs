@@ -11,8 +11,12 @@
     "Tunnel1": "tu1"
   },
   "eve_to_config": {
-    "Gi0/6": ["GigabitEthernet0/6"],
-    "Mgmt0/0": ["Management0/0"]
+    "Gi0/6": [
+      "GigabitEthernet0/6"
+    ],
+    "Mgmt0/0": [
+      "Management0/0"
+    ]
   },
   "facts": [
     {
@@ -21,7 +25,9 @@
       "line": 10,
       "rule": "asa.secret",
       "iface": null,
-      "flags": ["secret"],
+      "flags": [
+        "secret"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -271,7 +277,9 @@
       "line": 68,
       "rule": "asa.group_policy",
       "iface": null,
-      "flags": ["object_name"],
+      "flags": [
+        "object_name"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -280,7 +288,9 @@
       "line": 69,
       "rule": "asa.group_policy",
       "iface": null,
-      "flags": ["object_name"],
+      "flags": [
+        "object_name"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -289,7 +299,9 @@
       "line": 71,
       "rule": "asa.group_policy",
       "iface": null,
-      "flags": ["object_name"],
+      "flags": [
+        "object_name"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -298,7 +310,9 @@
       "line": 72,
       "rule": "asa.group_policy",
       "iface": null,
-      "flags": ["object_name"],
+      "flags": [
+        "object_name"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -307,7 +321,9 @@
       "line": 75,
       "rule": "asa.secret",
       "iface": null,
-      "flags": ["secret"],
+      "flags": [
+        "secret"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -316,7 +332,9 @@
       "line": 76,
       "rule": "asa.tunnel_group",
       "iface": null,
-      "flags": ["object_name"],
+      "flags": [
+        "object_name"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -325,7 +343,9 @@
       "line": 77,
       "rule": "asa.tunnel_group",
       "iface": null,
-      "flags": ["object_name"],
+      "flags": [
+        "object_name"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -334,7 +354,9 @@
       "line": 78,
       "rule": "asa.default_group_policy",
       "iface": null,
-      "flags": ["object_name"],
+      "flags": [
+        "object_name"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -343,7 +365,9 @@
       "line": 79,
       "rule": "asa.tunnel_group",
       "iface": null,
-      "flags": ["object_name"],
+      "flags": [
+        "object_name"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -352,7 +376,9 @@
       "line": 80,
       "rule": "asa.secret",
       "iface": null,
-      "flags": ["secret"],
+      "flags": [
+        "secret"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -361,7 +387,9 @@
       "line": 81,
       "rule": "asa.secret",
       "iface": null,
-      "flags": ["secret"],
+      "flags": [
+        "secret"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -370,7 +398,9 @@
       "line": 82,
       "rule": "asa.tunnel_group",
       "iface": null,
-      "flags": ["object_name"],
+      "flags": [
+        "object_name"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -379,7 +409,9 @@
       "line": 83,
       "rule": "asa.tunnel_group",
       "iface": null,
-      "flags": ["object_name"],
+      "flags": [
+        "object_name"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -388,7 +420,9 @@
       "line": 84,
       "rule": "asa.default_group_policy",
       "iface": null,
-      "flags": ["object_name"],
+      "flags": [
+        "object_name"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -397,7 +431,9 @@
       "line": 85,
       "rule": "asa.tunnel_group",
       "iface": null,
-      "flags": ["object_name"],
+      "flags": [
+        "object_name"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -406,7 +442,9 @@
       "line": 86,
       "rule": "asa.secret",
       "iface": null,
-      "flags": ["secret"],
+      "flags": [
+        "secret"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -415,7 +453,9 @@
       "line": 87,
       "rule": "asa.secret",
       "iface": null,
-      "flags": ["secret"],
+      "flags": [
+        "secret"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -424,7 +464,9 @@
       "line": 89,
       "rule": "asa.tunnel_group_map",
       "iface": null,
-      "flags": ["object_name"],
+      "flags": [
+        "object_name"
+      ],
       "confidence": "PROVEN"
     }
   ],

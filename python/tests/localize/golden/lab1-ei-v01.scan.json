@@ -10,7 +10,9 @@
       "site_key": "site.nat",
       "role": "nat",
       "status": "DHCP",
-      "networks": ["58"],
+      "networks": [
+        "58"
+      ],
       "bridge": "nat0",
       "labels": {
         "58": "Internet"
@@ -21,7 +23,9 @@
           "tag": "untagged",
           "subnet": null,
           "gateway": null,
-          "scopes": ["startup"],
+          "scopes": [
+            "startup"
+          ],
           "members": 1,
           "outliers": 0
         }
@@ -37,12 +41,16 @@
       "current": "nat0",
       "default": "nat0",
       "default_source": "keep",
-      "choices": ["nat0"],
+      "choices": [
+        "nat0"
+      ],
       "depends_on": [],
       "affects": 0,
       "segment": "INTERNET",
       "scenario": "bridge",
-      "notes": ["the target bridge must provide DHCP"],
+      "notes": [
+        "the target bridge must provide DHCP"
+      ],
       "answered": false,
       "answer": null
     },
@@ -55,11 +63,16 @@
       "default": "Internet",
       "default_source": "keep",
       "choices": null,
-      "depends_on": ["site.nat/vlan", "site.nat/subnet"],
+      "depends_on": [
+        "site.nat/vlan",
+        "site.nat/subnet"
+      ],
       "affects": 1,
       "segment": "INTERNET",
       "scenario": "labels",
-      "notes": ["generic label: only the network name changes"],
+      "notes": [
+        "generic label: only the network name changes"
+      ],
       "answered": false,
       "answer": null
     },
@@ -88,12 +101,18 @@
       "current": null,
       "default": "none",
       "default_source": "keep",
-      "choices": ["none", "psk", "all"],
+      "choices": [
+        "none",
+        "psk",
+        "all"
+      ],
       "depends_on": [],
       "affects": 0,
       "segment": null,
       "scenario": "secrets",
-      "notes": ["the old value remains in git history; rotate it wherever it is used"],
+      "notes": [
+        "the old value remains in git history; rotate it wherever it is used"
+      ],
       "answered": false,
       "answer": null
     }
@@ -103,115 +122,154 @@
       "code": "OPAQUE_BLOB",
       "severity": "info",
       "msg": "startup:20: config is 'ff'; no facts are read from it",
-      "refs": ["startup:20"]
+      "refs": [
+        "startup:20"
+      ]
     },
     {
       "code": "MISSING_BLOB",
       "severity": "info",
       "msg": "node 57 (SRV1) has config=\"1\" but no startup config",
-      "refs": ["node:57"]
+      "refs": [
+        "node:57"
+      ]
     },
     {
       "code": "MISSING_BLOB",
       "severity": "info",
       "msg": "node 67 (SRV2) has config=\"1\" but no startup config",
-      "refs": ["node:67"]
+      "refs": [
+        "node:67"
+      ]
     },
     {
       "code": "MISSING_BLOB",
       "severity": "info",
       "msg": "node 58 (VPC58) has config=\"1\" but no startup config",
-      "refs": ["node:58"]
+      "refs": [
+        "node:58"
+      ]
     },
     {
       "code": "DHCP_UPLINK",
       "severity": "info",
       "msg": "segment INTERNET: DHCP uplink on R27; the target bridge must provide DHCP",
-      "refs": ["segment:INTERNET", "node:27"]
+      "refs": [
+        "segment:INTERNET",
+        "node:27"
+      ]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 13: 1 committed secret(s)",
-      "refs": ["node:13"]
+      "refs": [
+        "node:13"
+      ]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 14: 1 committed secret(s)",
-      "refs": ["node:14"]
+      "refs": [
+        "node:14"
+      ]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 15: 1 committed secret(s)",
-      "refs": ["node:15"]
+      "refs": [
+        "node:15"
+      ]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 16: 1 committed secret(s)",
-      "refs": ["node:16"]
+      "refs": [
+        "node:16"
+      ]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 17: 1 committed secret(s)",
-      "refs": ["node:17"]
+      "refs": [
+        "node:17"
+      ]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 18: 1 committed secret(s)",
-      "refs": ["node:18"]
+      "refs": [
+        "node:18"
+      ]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 26: 1 committed secret(s)",
-      "refs": ["node:26"]
+      "refs": [
+        "node:26"
+      ]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 70: 1 committed secret(s)",
-      "refs": ["node:70"]
+      "refs": [
+        "node:70"
+      ]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 73: 1 committed secret(s)",
-      "refs": ["node:73"]
+      "refs": [
+        "node:73"
+      ]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 72: 2 committed secret(s)",
-      "refs": ["node:72"]
+      "refs": [
+        "node:72"
+      ]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 74: 1 committed secret(s)",
-      "refs": ["node:74"]
+      "refs": [
+        "node:74"
+      ]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 49: 1 committed secret(s)",
-      "refs": ["node:49"]
+      "refs": [
+        "node:49"
+      ]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 50: 1 committed secret(s)",
-      "refs": ["node:50"]
+      "refs": [
+        "node:50"
+      ]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 19: 1 committed secret(s)",
-      "refs": ["node:19"]
+      "refs": [
+        "node:19"
+      ]
     }
   ],
   "protected": {

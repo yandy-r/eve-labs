@@ -12,7 +12,9 @@
       "line": 18,
       "rule": "iosxe.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "secret",
@@ -20,7 +22,9 @@
       "line": 20,
       "rule": "iosxe.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "secret",
@@ -28,7 +32,9 @@
       "line": 21,
       "rule": "iosxe.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "secret",
@@ -36,7 +42,9 @@
       "line": 22,
       "rule": "iosxe.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "secret",
@@ -44,7 +52,9 @@
       "line": 24,
       "rule": "iosxe.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "ip_host",
@@ -79,7 +89,9 @@
       "line": 45,
       "rule": "iosxe.secret",
       "iface": "tu1001",
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "label_ref",
@@ -87,7 +99,9 @@
       "line": 62,
       "rule": "iosxe.desc_label",
       "iface": "gi1",
-      "flags": ["cosmetic"]
+      "flags": [
+        "cosmetic"
+      ]
     },
     {
       "kind": "subif_name",
@@ -151,7 +165,9 @@
       "line": 91,
       "rule": "iosxe.desc_label",
       "iface": "gi16",
-      "flags": ["cosmetic"]
+      "flags": [
+        "cosmetic"
+      ]
     },
     {
       "kind": "subif_name",
@@ -168,7 +184,9 @@
       "line": 101,
       "rule": "iosxe.desc_label",
       "iface": "gi16.203",
-      "flags": ["cosmetic"]
+      "flags": [
+        "cosmetic"
+      ]
     },
     {
       "kind": "vlan_tag",

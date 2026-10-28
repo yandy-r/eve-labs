@@ -12,7 +12,9 @@
       "line": 22,
       "rule": "ios.secret",
       "iface": null,
-      "flags": ["secret"]
+      "flags": [
+        "secret"
+      ]
     },
     {
       "kind": "ip_host",

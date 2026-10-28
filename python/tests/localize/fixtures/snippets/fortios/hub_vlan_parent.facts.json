@@ -9,7 +9,9 @@
     "oob-mgmt": "oob-mgmt"
   },
   "eve_to_config": {
-    "port8": ["port8"]
+    "port8": [
+      "port8"
+    ]
   },
   "facts": [
     {
@@ -18,7 +20,9 @@
       "line": 4,
       "rule": "fortios.text_label",
       "iface": "port1",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -27,7 +31,9 @@
       "line": 5,
       "rule": "fortios.text_label",
       "iface": "port1",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -59,7 +65,9 @@
       "rule": "fortios.text_label",
       "iface": "wan1",
       "parent": "port1",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -91,7 +99,9 @@
       "rule": "fortios.text_label",
       "iface": "t1-bgw1",
       "parent": "port1",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -101,7 +111,9 @@
       "rule": "fortios.text_label",
       "iface": "t1-bgw1",
       "parent": "port1",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -121,7 +133,9 @@
       "line": 34,
       "rule": "fortios.text_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -157,7 +171,9 @@
       "line": 49,
       "rule": "fortios.text_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -166,7 +182,9 @@
       "line": 49,
       "rule": "fortios.text_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -175,7 +193,9 @@
       "line": 49,
       "rule": "fortios.text_vlan",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -202,7 +222,9 @@
       "line": 55,
       "rule": "fortios.text_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -211,7 +233,9 @@
       "line": 55,
       "rule": "fortios.text_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -220,7 +244,9 @@
       "line": 55,
       "rule": "fortios.text_vlan",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {

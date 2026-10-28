@@ -285,6 +285,8 @@
       "orphan": false
     }
   },
-  "vlan_db": [203],
+  "vlan_db": [
+    203
+  ],
   "is_switch": false
 }

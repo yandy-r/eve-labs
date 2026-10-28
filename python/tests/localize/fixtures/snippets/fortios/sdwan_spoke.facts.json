@@ -9,7 +9,9 @@
     "oob-mgmt": "oob-mgmt"
   },
   "eve_to_config": {
-    "port8": ["port8"]
+    "port8": [
+      "port8"
+    ]
   },
   "facts": [
     {
@@ -18,7 +20,9 @@
       "line": 1,
       "rule": "fortios.comment_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -27,7 +31,9 @@
       "line": 1,
       "rule": "fortios.comment_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -36,7 +42,9 @@
       "line": 5,
       "rule": "fortios.comment_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -45,7 +53,9 @@
       "line": 5,
       "rule": "fortios.comment_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -54,7 +64,9 @@
       "line": 5,
       "rule": "fortios.comment_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -63,7 +75,9 @@
       "line": 5,
       "rule": "fortios.comment_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -72,7 +86,9 @@
       "line": 5,
       "rule": "fortios.comment_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -81,7 +97,9 @@
       "line": 5,
       "rule": "fortios.comment_cloud",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "alt": "pnet9",
       "confidence": "PROVEN"
     },
@@ -91,7 +109,9 @@
       "line": 6,
       "rule": "fortios.comment_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -100,7 +120,9 @@
       "line": 7,
       "rule": "fortios.comment_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -109,7 +131,9 @@
       "line": 7,
       "rule": "fortios.comment_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -118,7 +142,9 @@
       "line": 8,
       "rule": "fortios.comment_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -127,7 +153,9 @@
       "line": 8,
       "rule": "fortios.comment_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -136,7 +164,9 @@
       "line": 8,
       "rule": "fortios.comment_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -145,7 +175,9 @@
       "line": 9,
       "rule": "fortios.comment_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -172,7 +204,9 @@
       "line": 19,
       "rule": "fortios.text_cloud",
       "iface": "port8",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "alt": "pnet9",
       "confidence": "PROVEN"
     },
@@ -182,7 +216,9 @@
       "line": 20,
       "rule": "fortios.text_label",
       "iface": "port8",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -191,7 +227,9 @@
       "line": 20,
       "rule": "fortios.text_vlan",
       "iface": "port8",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -223,7 +261,9 @@
       "rule": "fortios.text_label",
       "iface": "oob-mgmt",
       "parent": "port8",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -232,7 +272,9 @@
       "line": 37,
       "rule": "fortios.text_cloud",
       "iface": "port1",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "alt": "pnet9",
       "confidence": "PROVEN"
     },
@@ -242,7 +284,9 @@
       "line": 38,
       "rule": "fortios.text_label",
       "iface": "port1",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -251,7 +295,9 @@
       "line": 38,
       "rule": "fortios.text_vlan",
       "iface": "port1",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -283,7 +329,9 @@
       "rule": "fortios.text_label",
       "iface": "wan1",
       "parent": "port1",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -292,7 +340,9 @@
       "line": 51,
       "rule": "fortios.text_cloud",
       "iface": "port3",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "alt": "pnet9",
       "confidence": "PROVEN"
     },
@@ -302,7 +352,9 @@
       "line": 52,
       "rule": "fortios.text_label",
       "iface": "port3",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -311,7 +363,9 @@
       "line": 52,
       "rule": "fortios.text_vlan",
       "iface": "port3",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -343,7 +397,9 @@
       "rule": "fortios.text_label",
       "iface": "wan2",
       "parent": "port3",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -363,7 +419,9 @@
       "line": 68,
       "rule": "fortios.text_label",
       "iface": "port2",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -372,7 +430,9 @@
       "line": 69,
       "rule": "fortios.text_label",
       "iface": "port2",
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -392,7 +452,9 @@
       "line": 78,
       "rule": "fortios.comment_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -401,7 +463,9 @@
       "line": 78,
       "rule": "fortios.comment_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -419,7 +483,9 @@
       "line": 95,
       "rule": "fortios.secret",
       "iface": null,
-      "flags": ["secret"],
+      "flags": [
+        "secret"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -428,7 +494,9 @@
       "line": 96,
       "rule": "fortios.text_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -437,7 +505,9 @@
       "line": 96,
       "rule": "fortios.text_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -511,7 +581,9 @@
       "line": 155,
       "rule": "fortios.text_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -520,7 +592,9 @@
       "line": 155,
       "rule": "fortios.text_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -549,7 +623,9 @@
       "line": 161,
       "rule": "fortios.text_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -558,7 +634,9 @@
       "line": 161,
       "rule": "fortios.text_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -587,7 +665,9 @@
       "line": 167,
       "rule": "fortios.text_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -623,7 +703,9 @@
       "line": 181,
       "rule": "fortios.text_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -632,7 +714,9 @@
       "line": 181,
       "rule": "fortios.text_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -659,7 +743,9 @@
       "line": 192,
       "rule": "fortios.text_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -668,7 +754,9 @@
       "line": 192,
       "rule": "fortios.text_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -695,7 +783,9 @@
       "line": 203,
       "rule": "fortios.text_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -704,7 +794,9 @@
       "line": 203,
       "rule": "fortios.text_label",
       "iface": null,
-      "flags": ["cosmetic"],
+      "flags": [
+        "cosmetic"
+      ],
       "confidence": "PROVEN"
     },
     {
@@ -801,5 +893,7 @@
   },
   "vlan_db": [],
   "is_switch": false,
-  "secrets": ["CHANGE-ME-sdwan-lab-psk"]
+  "secrets": [
+    "CHANGE-ME-sdwan-lab-psk"
+  ]
 }
