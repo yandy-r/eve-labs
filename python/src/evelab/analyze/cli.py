@@ -412,7 +412,7 @@ def _ensure_branch(sess: Session, ctx: WriteCtx) -> None:
     if ctx.branch_done or ctx.git is None:
         return
     ctx.branch_done = True
-    name = gitops.branch_name(ctx.git, sess.inv.hostname, sess.args.branch)
+    name = gitops.branch_name(ctx.git, sess.inv.hostname or "", sess.args.branch)
     if name is not None:
         gitops.switch_branch(ctx.git, name)
         sess.ui.note(f"on branch {name} ({ctx.git.reason})")
