@@ -6,6 +6,8 @@
 # 4 IP-less overlays (2 hubs x 2 ISPs), BGP on loopback 10.200.0.61 to both hubs (iBGP AS 64001), ADVPN 2.0
 # (advpn-select on zones HUB1/HUB2), eBGP + default-originate to the LAN router(s), local internet breakout.
 # DC-APPS uses tie-break fib-best-match so host routes (/32s from the BGWs) pick the hub of the site owning the host.
+# Hub remote-gws .31 (dc1) / .41 (dc2) are static NATs on the site CSRv (c8kv-75 / c8kv-77) to the hub's
+# per-provider IPsec loopback, so these tunnels run IKEv2 NAT-T (UDP 4500); nothing to change on the spoke.
 # INET VLANs: static addressing; reserve .61 on EVE-INET-202 (it has a DHCP pool). PSK is a lab placeholder.
 #
 
@@ -106,7 +108,7 @@ config vpn ipsec phase1-interface
         set network-id 11
         set remote-gw 10.100.201.31
         set psksecret CHANGE-ME-sdwan-lab-psk
-        set comments "dc1-fgt1 via EVE-INET-201"
+        set comments "dc1-fgt1 via EVE-INET-201 (NAT on c8kv-75)"
     next
     edit "H1_INET2"
         set interface "wan2"
@@ -124,7 +126,7 @@ config vpn ipsec phase1-interface
         set network-id 12
         set remote-gw 10.100.202.31
         set psksecret CHANGE-ME-sdwan-lab-psk
-        set comments "dc1-fgt1 via EVE-INET-202"
+        set comments "dc1-fgt1 via EVE-INET-202 (NAT on c8kv-75)"
     next
     edit "H2_INET1"
         set interface "wan1"
@@ -142,7 +144,7 @@ config vpn ipsec phase1-interface
         set network-id 21
         set remote-gw 10.100.201.41
         set psksecret CHANGE-ME-sdwan-lab-psk
-        set comments "dc2-fgt1 via EVE-INET-201"
+        set comments "dc2-fgt1 via EVE-INET-201 (NAT on c8kv-77)"
     next
     edit "H2_INET2"
         set interface "wan2"
@@ -160,7 +162,7 @@ config vpn ipsec phase1-interface
         set network-id 22
         set remote-gw 10.100.202.41
         set psksecret CHANGE-ME-sdwan-lab-psk
-        set comments "dc2-fgt1 via EVE-INET-202"
+        set comments "dc2-fgt1 via EVE-INET-202 (NAT on c8kv-77)"
     next
 end
 config vpn ipsec phase2-interface
