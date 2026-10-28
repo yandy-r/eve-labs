@@ -12,9 +12,7 @@
       "line": 5,
       "rule": "nxos.secret",
       "iface": null,
-      "flags": [
-        "secret"
-      ]
+      "flags": ["secret"]
     },
     {
       "kind": "secret",
@@ -22,9 +20,7 @@
       "line": 6,
       "rule": "nxos.secret",
       "iface": null,
-      "flags": [
-        "secret"
-      ]
+      "flags": ["secret"]
     },
     {
       "kind": "domain",
@@ -39,9 +35,7 @@
       "line": 11,
       "rule": "nxos.secret",
       "iface": null,
-      "flags": [
-        "secret"
-      ]
+      "flags": ["secret"]
     },
     {
       "kind": "vlan_def",
@@ -121,9 +115,7 @@
       "line": 35,
       "rule": "nxos.route_nexthop",
       "iface": null,
-      "flags": [
-        "nexthop"
-      ]
+      "flags": ["nexthop"]
     },
     {
       "kind": "ip_gateway",
@@ -186,9 +178,7 @@
       "line": 101,
       "rule": "nxos.desc_cloud",
       "iface": "eth1/6",
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "alt": "pnet9"
     },
     {
@@ -197,9 +187,7 @@
       "line": 101,
       "rule": "nxos.desc_label",
       "iface": "eth1/6",
-      "flags": [
-        "cosmetic"
-      ]
+      "flags": ["cosmetic"]
     },
     {
       "kind": "vlan_list",
@@ -441,14 +429,6 @@
       "orphan": false
     }
   },
-  "vlan_db": [
-    1,
-    100,
-    101,
-    202,
-    501,
-    502,
-    3101
-  ],
+  "vlan_db": [1, 100, 101, 202, 501, 502, 3101],
   "is_switch": true
 }

@@ -228,25 +228,15 @@
       "orphan": true
     }
   },
-  "vlan_db": [
-    1,
-    100,
-    101,
-    203,
-    3101
-  ],
+  "vlan_db": [1, 100, 101, 203, 3101],
   "is_switch": true,
-  "secrets": [
-    "$9$abcdef"
-  ],
+  "secrets": ["$9$abcdef"],
   "iface_keys": {
     "Gi16.2": "gi16.2",
     "GigabitEthernet16.2": "gi16.2",
     "Vlan 203": "vl203"
   },
   "eve_to_config": {
-    "Gi16": [
-      "GigabitEthernet16"
-    ]
+    "Gi16": ["GigabitEthernet16"]
   }
 }

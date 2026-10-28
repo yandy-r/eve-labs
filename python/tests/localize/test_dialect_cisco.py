@@ -179,8 +179,7 @@ class TestSelection(unittest.TestCase):
 # targeted behaviour
 # --------------------------------------------------------------------------- #
 
-BANNER = textwrap.dedent(
-    """\
+BANNER = textwrap.dedent("""\
     hostname r1
     banner motd ^C
     ip name-server 10.9.9.9
@@ -192,8 +191,7 @@ BANNER = textwrap.dedent(
     ip domain-name netlab.local
     interface Vlan5
      ip address 10.5.5.5 255.255.255.0
-    """
-)
+    """)
 
 
 class TestBanners(unittest.TestCase):
@@ -270,8 +268,7 @@ class TestSwitching(unittest.TestCase):
         self.assertIn("vl203", pc.ifaces)
 
     def test_allowed_add_all_none(self) -> None:
-        text = textwrap.dedent(
-            """\
+        text = textwrap.dedent("""\
             interface Ethernet0/0
              switchport trunk allowed vlan 10,201-203
              switchport trunk allowed vlan add 300
@@ -281,8 +278,7 @@ class TestSwitching(unittest.TestCase):
              switchport trunk allowed vlan all
             interface Ethernet0/2
              switchport trunk allowed vlan none
-            """
-        )
+            """)
         for name in CISCO:
             with self.subTest(dialect=name):
                 pc = parse(name, text)
@@ -305,8 +301,7 @@ class TestSwitching(unittest.TestCase):
         self.assertEqual(pc.ifaces["et0/0"].native_vlan, 99)
 
     def test_never_tag_facts(self) -> None:
-        text = textwrap.dedent(
-            """\
+        text = textwrap.dedent("""\
             vrf definition Mgmt-vrf
              rd 2:2
              address-family ipv4
@@ -320,8 +315,7 @@ class TestSwitching(unittest.TestCase):
              switchport trunk encapsulation dot1q
             vlan 100
              name servers
-            """
-        )
+            """)
         for name in CISCO:
             with self.subTest(dialect=name):
                 pc = parse(name, text)
@@ -385,13 +379,11 @@ class TestIosSpecifics(unittest.TestCase):
         self.assertEqual(ios.iface_key("Vlan 203"), "vl203")
 
     def test_routes(self) -> None:
-        text = textwrap.dedent(
-            """\
+        text = textwrap.dedent("""\
             ip route vrf Mgmt-vrf 0.0.0.0 0.0.0.0 10.100.203.1
             ip route 10.0.0.0 255.0.0.0 GigabitEthernet1 10.100.51.254 name HOME
             ip default-gateway 10.100.51.1
-            """
-        )
+            """)
         pc = parse("iosxe", text)
         got = [(f.kind, f.value, sorted(f.flags)) for f in pc.facts]
         self.assertEqual(

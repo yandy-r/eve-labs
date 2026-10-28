@@ -162,8 +162,7 @@ class TestReviewMenu(TreeCase):
 # #27 plugin persistence
 # --------------------------------------------------------------------------- #
 
-PLUGIN = textwrap.dedent(
-    """\
+PLUGIN = textwrap.dedent("""\
     from evelab.localize.dialects import register
     from evelab.localize.dialects.linuxsh import LinuxSh
 
@@ -172,8 +171,7 @@ PLUGIN = textwrap.dedent(
     class PlugLinux(LinuxSh):
         name = "plug_linux"
         priority = 10_000
-    """
-)
+    """)
 
 
 class TestPluginPersistence(TreeCase):
@@ -339,16 +337,14 @@ class TestPluginScenarioClash(TreeCase):
         plug = self.tree.tmp / "plug"
         plug.mkdir()
         (plug / "ov.py").write_text(
-            textwrap.dedent(
-                """\
+            textwrap.dedent("""\
                 from evelab.localize.scenarios import register_scenario
 
                 @register_scenario
                 class Ov:
                     id = "services"
                     order = 50
-                """
-            ),
+                """),
             encoding="utf-8",
         )
         services = scenarios.SCENARIOS["services"]

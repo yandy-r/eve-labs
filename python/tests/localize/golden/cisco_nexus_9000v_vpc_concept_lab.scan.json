@@ -10,9 +10,7 @@
       "site_key": "nexus_vpc.internet",
       "role": "inet",
       "status": "DHCP",
-      "networks": [
-        "6"
-      ],
+      "networks": ["6"],
       "bridge": "pnet0",
       "labels": {
         "6": "Internet"
@@ -23,9 +21,7 @@
           "tag": "untagged",
           "subnet": null,
           "gateway": null,
-          "scopes": [
-            "startup"
-          ],
+          "scopes": ["startup"],
           "members": 1,
           "outliers": 0
         }
@@ -41,16 +37,12 @@
       "current": "pnet0",
       "default": "pnet0",
       "default_source": "keep",
-      "choices": [
-        "pnet0"
-      ],
+      "choices": ["pnet0"],
       "depends_on": [],
       "affects": 0,
       "segment": "INTERNET",
       "scenario": "bridge",
-      "notes": [
-        "the target bridge must provide DHCP"
-      ],
+      "notes": ["the target bridge must provide DHCP"],
       "answered": false,
       "answer": null
     },
@@ -63,16 +55,11 @@
       "default": "Internet",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "nexus_vpc.internet/vlan",
-        "nexus_vpc.internet/subnet"
-      ],
+      "depends_on": ["nexus_vpc.internet/vlan", "nexus_vpc.internet/subnet"],
       "affects": 1,
       "segment": "INTERNET",
       "scenario": "labels",
-      "notes": [
-        "generic label: only the network name changes"
-      ],
+      "notes": ["generic label: only the network name changes"],
       "answered": false,
       "answer": null
     },
@@ -84,17 +71,12 @@
       "current": null,
       "default": "none",
       "default_source": "keep",
-      "choices": [
-        "none",
-        "all"
-      ],
+      "choices": ["none", "all"],
       "depends_on": [],
       "affects": 0,
       "segment": null,
       "scenario": "secrets",
-      "notes": [
-        "the old value remains in git history; rotate it wherever it is used"
-      ],
+      "notes": ["the old value remains in git history; rotate it wherever it is used"],
       "answered": false,
       "answer": null
     }
@@ -104,94 +86,68 @@
       "code": "CONFIG_NOT_PUSHED",
       "severity": "info",
       "msg": "node 1 (ISP-CE) has config=\"0\": the embedded config is not pushed at boot",
-      "refs": [
-        "node:1"
-      ]
+      "refs": ["node:1"]
     },
     {
       "code": "CONFIG_NOT_PUSHED",
       "severity": "info",
       "msg": "node 2 (DS-NX1) has config=\"0\": the embedded config is not pushed at boot",
-      "refs": [
-        "node:2"
-      ]
+      "refs": ["node:2"]
     },
     {
       "code": "CONFIG_NOT_PUSHED",
       "severity": "info",
       "msg": "node 3 (DS-NX2) has config=\"0\": the embedded config is not pushed at boot",
-      "refs": [
-        "node:3"
-      ]
+      "refs": ["node:3"]
     },
     {
       "code": "CONFIG_NOT_PUSHED",
       "severity": "info",
       "msg": "node 4 (AC-NX1) has config=\"0\": the embedded config is not pushed at boot",
-      "refs": [
-        "node:4"
-      ]
+      "refs": ["node:4"]
     },
     {
       "code": "CONFIG_NOT_PUSHED",
       "severity": "info",
       "msg": "node 5 (AC-NX2) has config=\"0\": the embedded config is not pushed at boot",
-      "refs": [
-        "node:5"
-      ]
+      "refs": ["node:5"]
     },
     {
       "code": "DHCP_UPLINK",
       "severity": "info",
       "msg": "segment INTERNET: DHCP uplink on ISP-CE; the target bridge must provide DHCP",
-      "refs": [
-        "segment:INTERNET",
-        "node:1"
-      ]
+      "refs": ["segment:INTERNET", "node:1"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 2: 3 committed secret(s)",
-      "refs": [
-        "node:2"
-      ]
+      "refs": ["node:2"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 3: 3 committed secret(s)",
-      "refs": [
-        "node:3"
-      ]
+      "refs": ["node:3"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 4: 3 committed secret(s)",
-      "refs": [
-        "node:4"
-      ]
+      "refs": ["node:4"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 5: 3 committed secret(s)",
-      "refs": [
-        "node:5"
-      ]
+      "refs": ["node:5"]
     }
   ],
   "protected": {
     "vlans": {
       "startup": "1,100"
     },
-    "prefixes": [
-      "10.1.1.0/29",
-      "10.1.1.0/30",
-      "10.1.1.4/30",
-      "192.168.100.0/24"
-    ],
+    "prefixes": ["10.1.1.0/29", "10.1.1.0/30", "10.1.1.4/30", "192.168.100.0/24"],
     "lookalikes": {}
   }
 }

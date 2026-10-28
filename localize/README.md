@@ -59,23 +59,23 @@ Labs without cloud networks need no manifest and are reported as `no clouds`.
      value);
    - `k` keeps the current value, `s` skips the segment, `?` shows the evidence, `b` goes back,
      `q` quits without writing.
-   The bridge prompt also lists the cloud bridges present on this host with their state (`up`,
-   `down`, `no-carrier`, `not on this host`); on an EVE host the plan warns
-   (`BRIDGE_NOT_ON_HOST`, `BRIDGE_NO_CARRIER`) when a target bridge is missing or has no link.
-   A `CARRIER` (trunk) is asked after the segments it carries and follows them by default. If they
-   go to different bridges, or you put the trunk elsewhere, the plan reports `CARRIER_SPLIT`: a
-   conflict while the trunk has no explicit answer, a warning once you answer it (the VLANs then
-   live on several host bridges, which only works if those are joined outside EVE).
-   Secrets are read with `getpass` and are never written to answer files unless you pass
-   `--save-secrets`.
-   Addressing answers are checked as you type: a subnet that overlaps another segment (baseline
-   or already answered) is refused, the gateway default after a subnet change is always a host of
-   the new subnet, and a split map must give every device a new address. If the plan still has
-   conflicts or blockers that name segments, the tool asks `Revise the answers for ...?` and asks
-   only those segments again, so you do not lose the other answers.
+     The bridge prompt also lists the cloud bridges present on this host with their state (`up`,
+     `down`, `no-carrier`, `not on this host`); on an EVE host the plan warns
+     (`BRIDGE_NOT_ON_HOST`, `BRIDGE_NO_CARRIER`) when a target bridge is missing or has no link.
+     A `CARRIER` (trunk) is asked after the segments it carries and follows them by default. If they
+     go to different bridges, or you put the trunk elsewhere, the plan reports `CARRIER_SPLIT`: a
+     conflict while the trunk has no explicit answer, a warning once you answer it (the VLANs then
+     live on several host bridges, which only works if those are joined outside EVE).
+     Secrets are read with `getpass` and are never written to answer files unless you pass
+     `--save-secrets`.
+     Addressing answers are checked as you type: a subnet that overlaps another segment (baseline
+     or already answered) is refused, the gateway default after a subnet change is always a host of
+     the new subnet, and a split map must give every device a new address. If the plan still has
+     conflicts or blockers that name segments, the tool asks `Revise the answers for ...?` and asks
+     only those segments again, so you do not lose the other answers.
 4. **Review.** A plan summary per lab, then a menu: `r` toggle edit groups, `d [filter]` decoded
    diff (XML attribute changes name the network and attribute, e.g. `[e1a2b3c4d5e6] network 3
-   'MGMT' type:`), `i [filter]` list the edits with their ids, `x ID` explain one edit (a unique id
+'MGMT' type:`), `i [filter]` list the edits with their ids, `x ID` explain one edit (a unique id
    prefix is enough), `s FILE` save the plan, `a` apply, `n` skip this lab, `q` quit.
 5. **Apply.** Preflight (running nodes, dirty git state, lock), backup, atomic write, validation
    (spans, counts, `check-labs`), journal. A failed validation rolls the lab back (exit 5).
@@ -232,7 +232,7 @@ change), unpinned labs, and that `localize/site.example.toml` matches `profile -
 3. `./scripts/eve-localize discover --lab new --write` writes `new.localize.toml.draft` next to
    the lab. Review it:
    - set `site_key`s. Reuse an existing `site.*` key only when it is truly the same real network
-     *and* the baselines agree: the example profile is generated from the first lab that uses a key,
+     _and_ the baselines agree: the example profile is generated from the first lab that uses a key,
      and applying it must stay a no-op for every lab;
    - confirm hint merges with `[[merge]]` (`units` are cloud network names or carrier aliases such
      as `trunk:204`), pin `status` (`DHCP`, `LABEL_ONLY`), `[[outlier]]`s, `[[legacy]]` policies;

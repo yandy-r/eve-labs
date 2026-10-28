@@ -10,12 +10,7 @@
       "site_key": "backbone.trunk",
       "role": "trunk",
       "status": "CARRIER",
-      "networks": [
-        "132",
-        "137",
-        "140",
-        "152"
-      ],
+      "networks": ["132", "137", "140", "152"],
       "bridge": "pnet0",
       "labels": {
         "132": "trunk",
@@ -23,11 +18,7 @@
         "140": "trunk",
         "152": "trunk"
       },
-      "carries": [
-        "MGMT",
-        "FW-MGMT-204",
-        "OUT-255"
-      ],
+      "carries": ["MGMT", "FW-MGMT-204", "OUT-255"],
       "schemes": []
     },
     {
@@ -35,13 +26,7 @@
       "site_key": "backbone.fw_mgmt",
       "role": "mgmt",
       "status": "LABEL_ONLY",
-      "networks": [
-        "139",
-        "141",
-        "83",
-        "60",
-        "148"
-      ],
+      "networks": ["139", "141", "83", "60", "148"],
       "bridge": "pnet0",
       "labels": {
         "139": "204-51",
@@ -101,12 +86,7 @@
           "tag": 203,
           "subnet": "172.21.203.0/24",
           "gateway": "172.21.203.254",
-          "scopes": [
-            "startup",
-            "vxlan-dmvpn-backbone",
-            "vxlan-no-vpc",
-            "vxlan-vpc"
-          ],
+          "scopes": ["startup", "vxlan-dmvpn-backbone", "vxlan-no-vpc", "vxlan-vpc"],
           "members": 316,
           "outliers": 0
         },
@@ -114,11 +94,7 @@
           "tag": 1103,
           "subnet": "10.100.103.0/24",
           "gateway": "10.100.103.1",
-          "scopes": [
-            "startup",
-            "vxlan-no-vpc",
-            "vxlan-vpc"
-          ],
+          "scopes": ["startup", "vxlan-no-vpc", "vxlan-vpc"],
           "members": 237,
           "outliers": 0
         },
@@ -126,9 +102,7 @@
           "tag": "untagged",
           "subnet": "10.100.103.0/24",
           "gateway": "10.100.103.1",
-          "scopes": [
-            "vxlan-vpc"
-          ],
+          "scopes": ["vxlan-vpc"],
           "members": 34,
           "outliers": 4
         }
@@ -139,10 +113,7 @@
       "site_key": "backbone.inet_201",
       "role": "inet",
       "status": "LABEL_ONLY",
-      "networks": [
-        "25",
-        "78"
-      ],
+      "networks": ["25", "78"],
       "bridge": "pnet0",
       "labels": {
         "25": "INET-201",
@@ -156,10 +127,7 @@
       "site_key": "backbone.inet_202",
       "role": "inet",
       "status": "LABEL_ONLY",
-      "networks": [
-        "44",
-        "117"
-      ],
+      "networks": ["44", "117"],
       "bridge": "pnet0",
       "labels": {
         "44": "INET-202",
@@ -173,9 +141,7 @@
       "site_key": "backbone.out_255",
       "role": "inet",
       "status": "DHCP",
-      "networks": [
-        "166"
-      ],
+      "networks": ["166"],
       "bridge": "pnet0",
       "labels": {
         "166": "out-255"
@@ -186,9 +152,7 @@
           "tag": "untagged",
           "subnet": null,
           "gateway": null,
-          "scopes": [
-            "vxlan-dmvpn-backbone"
-          ],
+          "scopes": ["vxlan-dmvpn-backbone"],
           "members": 1,
           "outliers": 0
         }
@@ -204,9 +168,7 @@
       "current": "pnet0",
       "default": "pnet0",
       "default_source": "keep",
-      "choices": [
-        "pnet0"
-      ],
+      "choices": ["pnet0"],
       "depends_on": [],
       "affects": 0,
       "segment": "FW-MGMT-204",
@@ -223,9 +185,7 @@
       "current": "pnet0",
       "default": "pnet0",
       "default_source": "keep",
-      "choices": [
-        "pnet0"
-      ],
+      "choices": ["pnet0"],
       "depends_on": [],
       "affects": 0,
       "segment": "MGMT",
@@ -242,9 +202,7 @@
       "current": "pnet0",
       "default": "pnet0",
       "default_source": "keep",
-      "choices": [
-        "pnet0"
-      ],
+      "choices": ["pnet0"],
       "depends_on": [],
       "affects": 0,
       "segment": "INET-201",
@@ -261,9 +219,7 @@
       "current": "pnet0",
       "default": "pnet0",
       "default_source": "keep",
-      "choices": [
-        "pnet0"
-      ],
+      "choices": ["pnet0"],
       "depends_on": [],
       "affects": 0,
       "segment": "INET-202",
@@ -280,16 +236,12 @@
       "current": "pnet0",
       "default": "pnet0",
       "default_source": "keep",
-      "choices": [
-        "pnet0"
-      ],
+      "choices": ["pnet0"],
       "depends_on": [],
       "affects": 0,
       "segment": "OUT-255",
       "scenario": "bridge",
-      "notes": [
-        "the target bridge must provide DHCP"
-      ],
+      "notes": ["the target bridge must provide DHCP"],
       "answered": false,
       "answer": null
     },
@@ -301,16 +253,12 @@
       "current": "pnet0",
       "default": "pnet0",
       "default_source": "follows carried",
-      "choices": [
-        "pnet0"
-      ],
+      "choices": ["pnet0"],
       "depends_on": [],
       "affects": 0,
       "segment": "TRUNK",
       "scenario": "bridge",
-      "notes": [
-        "carries MGMT, FW-MGMT-204, OUT-255"
-      ],
+      "notes": ["carries MGMT, FW-MGMT-204, OUT-255"],
       "answered": false,
       "answer": null
     },
@@ -344,9 +292,7 @@
       "affects": 411,
       "segment": "MGMT",
       "scenario": "segment_l3",
-      "notes": [
-        "49 baseline host(s)"
-      ],
+      "notes": ["49 baseline host(s)"],
       "answered": false,
       "answer": null
     },
@@ -359,9 +305,7 @@
       "default": "172.21.203.254",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "backbone.mgmt/subnet"
-      ],
+      "depends_on": ["backbone.mgmt/subnet"],
       "affects": 110,
       "segment": "MGMT",
       "scenario": "segment_l3",
@@ -378,16 +322,11 @@
       "default": "trunk",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "backbone.trunk/vlan",
-        "backbone.trunk/subnet"
-      ],
+      "depends_on": ["backbone.trunk/vlan", "backbone.trunk/subnet"],
       "affects": 4,
       "segment": "TRUNK",
       "scenario": "labels",
-      "notes": [
-        "generic label: only the network name changes"
-      ],
+      "notes": ["generic label: only the network name changes"],
       "answered": false,
       "answer": null
     },
@@ -400,16 +339,11 @@
       "default": "204-31",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "backbone.fw_mgmt/vlan",
-        "backbone.fw_mgmt/subnet"
-      ],
+      "depends_on": ["backbone.fw_mgmt/vlan", "backbone.fw_mgmt/subnet"],
       "affects": 5,
       "segment": "FW-MGMT-204",
       "scenario": "labels",
-      "notes": [
-        "0 text reference(s) follow the label"
-      ],
+      "notes": ["0 text reference(s) follow the label"],
       "answered": false,
       "answer": null
     },
@@ -422,16 +356,11 @@
       "default": "mgmt-203",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "backbone.mgmt/vlan",
-        "backbone.mgmt/subnet"
-      ],
+      "depends_on": ["backbone.mgmt/vlan", "backbone.mgmt/subnet"],
       "affects": 16,
       "segment": "MGMT",
       "scenario": "labels",
-      "notes": [
-        "0 text reference(s) follow the label"
-      ],
+      "notes": ["0 text reference(s) follow the label"],
       "answered": false,
       "answer": null
     },
@@ -444,16 +373,11 @@
       "default": "INET-201",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "backbone.inet_201/vlan",
-        "backbone.inet_201/subnet"
-      ],
+      "depends_on": ["backbone.inet_201/vlan", "backbone.inet_201/subnet"],
       "affects": 2,
       "segment": "INET-201",
       "scenario": "labels",
-      "notes": [
-        "0 text reference(s) follow the label"
-      ],
+      "notes": ["0 text reference(s) follow the label"],
       "answered": false,
       "answer": null
     },
@@ -466,16 +390,11 @@
       "default": "INET-202",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "backbone.inet_202/vlan",
-        "backbone.inet_202/subnet"
-      ],
+      "depends_on": ["backbone.inet_202/vlan", "backbone.inet_202/subnet"],
       "affects": 2,
       "segment": "INET-202",
       "scenario": "labels",
-      "notes": [
-        "0 text reference(s) follow the label"
-      ],
+      "notes": ["0 text reference(s) follow the label"],
       "answered": false,
       "answer": null
     },
@@ -488,16 +407,11 @@
       "default": "out-255",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "backbone.out_255/vlan",
-        "backbone.out_255/subnet"
-      ],
+      "depends_on": ["backbone.out_255/vlan", "backbone.out_255/subnet"],
       "affects": 1,
       "segment": "OUT-255",
       "scenario": "labels",
-      "notes": [
-        "0 text reference(s) follow the label"
-      ],
+      "notes": ["0 text reference(s) follow the label"],
       "answered": false,
       "answer": null
     },
@@ -650,9 +564,7 @@
       "affects": 0,
       "segment": null,
       "scenario": "services",
-      "notes": [
-        "search-list entry only: \"\" drops it from the lists"
-      ],
+      "notes": ["search-list entry only: \"\" drops it from the lists"],
       "answered": false,
       "answer": null
     },
@@ -664,18 +576,12 @@
       "current": null,
       "default": "none",
       "default_source": "keep",
-      "choices": [
-        "none",
-        "psk",
-        "all"
-      ],
+      "choices": ["none", "psk", "all"],
       "depends_on": [],
       "affects": 0,
       "segment": null,
       "scenario": "secrets",
-      "notes": [
-        "the old value remains in git history; rotate it wherever it is used"
-      ],
+      "notes": ["the old value remains in git history; rotate it wherever it is used"],
       "answered": false,
       "answer": null
     }
@@ -685,1629 +591,1207 @@
       "code": "TRUNK_ATTRS",
       "severity": "info",
       "msg": "carrier TRUNK: native_vlan=1, vlan8021ad=-1 (shown only, never edited)",
-      "refs": [
-        "segment:TRUNK"
-      ]
+      "refs": ["segment:TRUNK"]
     },
     {
       "code": "OUTLIER",
       "severity": "warn",
       "msg": "segment MGMT: node 74 (c8kv-74) 10.100.105.74 does not match scheme tag untagged 10.100.103.0/24 gw 10.100.103.1; excluded by default",
-      "refs": [
-        "segment:MGMT",
-        "node:74"
-      ]
+      "refs": ["segment:MGMT", "node:74"]
     },
     {
       "code": "OUTLIER",
       "severity": "warn",
       "msg": "segment MGMT: node 84 (bb-rr84) 10.100.103.83 does not match scheme tag untagged 10.100.103.0/24 gw 10.100.103.1; excluded by default",
-      "refs": [
-        "segment:MGMT",
-        "node:84"
-      ]
+      "refs": ["segment:MGMT", "node:84"]
     },
     {
       "code": "UNCONFIGURED",
       "severity": "info",
       "msg": "segment FW-MGMT-204: no config on b1-fgt1 port8, b2-fgt1 port8, csvc-fgt1 port8, dc1-fgt1 port8, dc2-fgt1 port8 (bridge/label only)",
-      "refs": [
-        "segment:FW-MGMT-204",
-        "node:10",
-        "node:20",
-        "node:41",
-        "node:7",
-        "node:8"
-      ]
+      "refs": ["segment:FW-MGMT-204", "node:10", "node:20", "node:41", "node:7", "node:8"]
     },
     {
       "code": "UNCONFIGURED",
       "severity": "info",
       "msg": "segment MGMT: no config on b2-sw1 Gi3/3, b1-sw1 Gi3/3 (bridge/label only)",
-      "refs": [
-        "segment:MGMT",
-        "node:22",
-        "node:9"
-      ]
+      "refs": ["segment:MGMT", "node:22", "node:9"]
     },
     {
       "code": "UNCONFIGURED",
       "severity": "info",
       "msg": "segment INET-201: no config on b1-fgt1 port1, b2-fgt1 port1, csvc-fgt1 port1, dc1-fgt1 port1, dc2-fgt1 port1 (bridge/label only)",
-      "refs": [
-        "segment:INET-201",
-        "node:10",
-        "node:20",
-        "node:41",
-        "node:7",
-        "node:8"
-      ]
+      "refs": ["segment:INET-201", "node:10", "node:20", "node:41", "node:7", "node:8"]
     },
     {
       "code": "UNCONFIGURED",
       "severity": "info",
       "msg": "segment INET-202: no config on b1-fgt1 port3, b2-fgt1 port3, csvc-fgt1 port3, dc1-fgt1 port3, dc2-fgt1 port3 (bridge/label only)",
-      "refs": [
-        "segment:INET-202",
-        "node:10",
-        "node:20",
-        "node:41",
-        "node:7",
-        "node:8"
-      ]
+      "refs": ["segment:INET-202", "node:10", "node:20", "node:41", "node:7", "node:8"]
     },
     {
       "code": "DHCP_UPLINK",
       "severity": "info",
       "msg": "segment OUT-255: DHCP uplink on c8kv-30; the target bridge must provide DHCP",
-      "refs": [
-        "segment:OUT-255",
-        "node:30"
-      ]
+      "refs": ["segment:OUT-255", "node:30"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 12: 4 committed secret(s)",
-      "refs": [
-        "node:12"
-      ]
+      "refs": ["node:12"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 12: 12 committed secret(s)",
-      "refs": [
-        "node:12"
-      ]
+      "refs": ["node:12"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 12: 12 committed secret(s)",
-      "refs": [
-        "node:12"
-      ]
+      "refs": ["node:12"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 12: 13 committed secret(s)",
-      "refs": [
-        "node:12"
-      ]
+      "refs": ["node:12"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 13: 4 committed secret(s)",
-      "refs": [
-        "node:13"
-      ]
+      "refs": ["node:13"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 13: 12 committed secret(s)",
-      "refs": [
-        "node:13"
-      ]
+      "refs": ["node:13"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 13: 12 committed secret(s)",
-      "refs": [
-        "node:13"
-      ]
+      "refs": ["node:13"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 13: 13 committed secret(s)",
-      "refs": [
-        "node:13"
-      ]
+      "refs": ["node:13"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 21: 4 committed secret(s)",
-      "refs": [
-        "node:21"
-      ]
+      "refs": ["node:21"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 21: 12 committed secret(s)",
-      "refs": [
-        "node:21"
-      ]
+      "refs": ["node:21"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 21: 12 committed secret(s)",
-      "refs": [
-        "node:21"
-      ]
+      "refs": ["node:21"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 21: 13 committed secret(s)",
-      "refs": [
-        "node:21"
-      ]
+      "refs": ["node:21"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 25: 4 committed secret(s)",
-      "refs": [
-        "node:25"
-      ]
+      "refs": ["node:25"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 25: 12 committed secret(s)",
-      "refs": [
-        "node:25"
-      ]
+      "refs": ["node:25"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 25: 12 committed secret(s)",
-      "refs": [
-        "node:25"
-      ]
+      "refs": ["node:25"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 25: 13 committed secret(s)",
-      "refs": [
-        "node:25"
-      ]
+      "refs": ["node:25"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 26: 4 committed secret(s)",
-      "refs": [
-        "node:26"
-      ]
+      "refs": ["node:26"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 26: 12 committed secret(s)",
-      "refs": [
-        "node:26"
-      ]
+      "refs": ["node:26"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 26: 12 committed secret(s)",
-      "refs": [
-        "node:26"
-      ]
+      "refs": ["node:26"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 26: 13 committed secret(s)",
-      "refs": [
-        "node:26"
-      ]
+      "refs": ["node:26"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 1: 4 committed secret(s)",
-      "refs": [
-        "node:1"
-      ]
+      "refs": ["node:1"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 1: 12 committed secret(s)",
-      "refs": [
-        "node:1"
-      ]
+      "refs": ["node:1"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 1: 12 committed secret(s)",
-      "refs": [
-        "node:1"
-      ]
+      "refs": ["node:1"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 1: 16 committed secret(s)",
-      "refs": [
-        "node:1"
-      ]
+      "refs": ["node:1"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 3: 4 committed secret(s)",
-      "refs": [
-        "node:3"
-      ]
+      "refs": ["node:3"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 3: 12 committed secret(s)",
-      "refs": [
-        "node:3"
-      ]
+      "refs": ["node:3"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 3: 12 committed secret(s)",
-      "refs": [
-        "node:3"
-      ]
+      "refs": ["node:3"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 3: 13 committed secret(s)",
-      "refs": [
-        "node:3"
-      ]
+      "refs": ["node:3"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 4: 4 committed secret(s)",
-      "refs": [
-        "node:4"
-      ]
+      "refs": ["node:4"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 4: 12 committed secret(s)",
-      "refs": [
-        "node:4"
-      ]
+      "refs": ["node:4"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 4: 12 committed secret(s)",
-      "refs": [
-        "node:4"
-      ]
+      "refs": ["node:4"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 4: 13 committed secret(s)",
-      "refs": [
-        "node:4"
-      ]
+      "refs": ["node:4"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 5: 4 committed secret(s)",
-      "refs": [
-        "node:5"
-      ]
+      "refs": ["node:5"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 5: 12 committed secret(s)",
-      "refs": [
-        "node:5"
-      ]
+      "refs": ["node:5"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 5: 12 committed secret(s)",
-      "refs": [
-        "node:5"
-      ]
+      "refs": ["node:5"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 5: 13 committed secret(s)",
-      "refs": [
-        "node:5"
-      ]
+      "refs": ["node:5"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 28: 4 committed secret(s)",
-      "refs": [
-        "node:28"
-      ]
+      "refs": ["node:28"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 28: 12 committed secret(s)",
-      "refs": [
-        "node:28"
-      ]
+      "refs": ["node:28"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 28: 12 committed secret(s)",
-      "refs": [
-        "node:28"
-      ]
+      "refs": ["node:28"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 28: 13 committed secret(s)",
-      "refs": [
-        "node:28"
-      ]
+      "refs": ["node:28"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 15: 4 committed secret(s)",
-      "refs": [
-        "node:15"
-      ]
+      "refs": ["node:15"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 15: 12 committed secret(s)",
-      "refs": [
-        "node:15"
-      ]
+      "refs": ["node:15"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 15: 12 committed secret(s)",
-      "refs": [
-        "node:15"
-      ]
+      "refs": ["node:15"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 15: 13 committed secret(s)",
-      "refs": [
-        "node:15"
-      ]
+      "refs": ["node:15"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 2: 4 committed secret(s)",
-      "refs": [
-        "node:2"
-      ]
+      "refs": ["node:2"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 2: 12 committed secret(s)",
-      "refs": [
-        "node:2"
-      ]
+      "refs": ["node:2"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 2: 12 committed secret(s)",
-      "refs": [
-        "node:2"
-      ]
+      "refs": ["node:2"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 2: 13 committed secret(s)",
-      "refs": [
-        "node:2"
-      ]
+      "refs": ["node:2"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 9: 3 committed secret(s)",
-      "refs": [
-        "node:9"
-      ]
+      "refs": ["node:9"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 9: 3 committed secret(s)",
-      "refs": [
-        "node:9"
-      ]
+      "refs": ["node:9"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 9: 3 committed secret(s)",
-      "refs": [
-        "node:9"
-      ]
+      "refs": ["node:9"]
     },
     {
       "code": "CORRUPT_CONFIG_REGION",
       "severity": "info",
       "msg": "configset:vxlan-dmvpn-backbone node 9: 1 interface block(s) with a broken header; their facts are CORRELATED at most",
-      "refs": [
-        "node:9"
-      ]
+      "refs": ["node:9"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 9: 4 committed secret(s)",
-      "refs": [
-        "node:9"
-      ]
+      "refs": ["node:9"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 14: 4 committed secret(s)",
-      "refs": [
-        "node:14"
-      ]
+      "refs": ["node:14"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 14: 4 committed secret(s)",
-      "refs": [
-        "node:14"
-      ]
+      "refs": ["node:14"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 14: 4 committed secret(s)",
-      "refs": [
-        "node:14"
-      ]
+      "refs": ["node:14"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 14: 5 committed secret(s)",
-      "refs": [
-        "node:14"
-      ]
+      "refs": ["node:14"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 22: 3 committed secret(s)",
-      "refs": [
-        "node:22"
-      ]
+      "refs": ["node:22"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 22: 3 committed secret(s)",
-      "refs": [
-        "node:22"
-      ]
+      "refs": ["node:22"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 22: 3 committed secret(s)",
-      "refs": [
-        "node:22"
-      ]
+      "refs": ["node:22"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 22: 4 committed secret(s)",
-      "refs": [
-        "node:22"
-      ]
+      "refs": ["node:22"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 66: 4 committed secret(s)",
-      "refs": [
-        "node:66"
-      ]
+      "refs": ["node:66"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 66: 4 committed secret(s)",
-      "refs": [
-        "node:66"
-      ]
+      "refs": ["node:66"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 66: 4 committed secret(s)",
-      "refs": [
-        "node:66"
-      ]
+      "refs": ["node:66"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 66: 5 committed secret(s)",
-      "refs": [
-        "node:66"
-      ]
+      "refs": ["node:66"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 67: 4 committed secret(s)",
-      "refs": [
-        "node:67"
-      ]
+      "refs": ["node:67"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 67: 4 committed secret(s)",
-      "refs": [
-        "node:67"
-      ]
+      "refs": ["node:67"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 67: 4 committed secret(s)",
-      "refs": [
-        "node:67"
-      ]
+      "refs": ["node:67"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 67: 5 committed secret(s)",
-      "refs": [
-        "node:67"
-      ]
+      "refs": ["node:67"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 68: 4 committed secret(s)",
-      "refs": [
-        "node:68"
-      ]
+      "refs": ["node:68"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 68: 4 committed secret(s)",
-      "refs": [
-        "node:68"
-      ]
+      "refs": ["node:68"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 68: 4 committed secret(s)",
-      "refs": [
-        "node:68"
-      ]
+      "refs": ["node:68"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 68: 5 committed secret(s)",
-      "refs": [
-        "node:68"
-      ]
+      "refs": ["node:68"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 6: 4 committed secret(s)",
-      "refs": [
-        "node:6"
-      ]
+      "refs": ["node:6"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 6: 4 committed secret(s)",
-      "refs": [
-        "node:6"
-      ]
+      "refs": ["node:6"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 6: 4 committed secret(s)",
-      "refs": [
-        "node:6"
-      ]
+      "refs": ["node:6"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 6: 5 committed secret(s)",
-      "refs": [
-        "node:6"
-      ]
+      "refs": ["node:6"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 70: 4 committed secret(s)",
-      "refs": [
-        "node:70"
-      ]
+      "refs": ["node:70"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 70: 4 committed secret(s)",
-      "refs": [
-        "node:70"
-      ]
+      "refs": ["node:70"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 70: 4 committed secret(s)",
-      "refs": [
-        "node:70"
-      ]
+      "refs": ["node:70"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 70: 5 committed secret(s)",
-      "refs": [
-        "node:70"
-      ]
+      "refs": ["node:70"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 42: 4 committed secret(s)",
-      "refs": [
-        "node:42"
-      ]
+      "refs": ["node:42"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 42: 4 committed secret(s)",
-      "refs": [
-        "node:42"
-      ]
+      "refs": ["node:42"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 42: 4 committed secret(s)",
-      "refs": [
-        "node:42"
-      ]
+      "refs": ["node:42"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 42: 7 committed secret(s)",
-      "refs": [
-        "node:42"
-      ]
+      "refs": ["node:42"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 44: 4 committed secret(s)",
-      "refs": [
-        "node:44"
-      ]
+      "refs": ["node:44"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 44: 4 committed secret(s)",
-      "refs": [
-        "node:44"
-      ]
+      "refs": ["node:44"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 44: 4 committed secret(s)",
-      "refs": [
-        "node:44"
-      ]
+      "refs": ["node:44"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 44: 5 committed secret(s)",
-      "refs": [
-        "node:44"
-      ]
+      "refs": ["node:44"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 45: 4 committed secret(s)",
-      "refs": [
-        "node:45"
-      ]
+      "refs": ["node:45"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 45: 4 committed secret(s)",
-      "refs": [
-        "node:45"
-      ]
+      "refs": ["node:45"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 45: 4 committed secret(s)",
-      "refs": [
-        "node:45"
-      ]
+      "refs": ["node:45"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 45: 7 committed secret(s)",
-      "refs": [
-        "node:45"
-      ]
+      "refs": ["node:45"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 46: 3 committed secret(s)",
-      "refs": [
-        "node:46"
-      ]
+      "refs": ["node:46"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 46: 4 committed secret(s)",
-      "refs": [
-        "node:46"
-      ]
+      "refs": ["node:46"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 47: 3 committed secret(s)",
-      "refs": [
-        "node:47"
-      ]
+      "refs": ["node:47"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 47: 4 committed secret(s)",
-      "refs": [
-        "node:47"
-      ]
+      "refs": ["node:47"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 54: 3 committed secret(s)",
-      "refs": [
-        "node:54"
-      ]
+      "refs": ["node:54"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 54: 3 committed secret(s)",
-      "refs": [
-        "node:54"
-      ]
+      "refs": ["node:54"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 54: 3 committed secret(s)",
-      "refs": [
-        "node:54"
-      ]
+      "refs": ["node:54"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 54: 4 committed secret(s)",
-      "refs": [
-        "node:54"
-      ]
+      "refs": ["node:54"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 55: 3 committed secret(s)",
-      "refs": [
-        "node:55"
-      ]
+      "refs": ["node:55"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 55: 3 committed secret(s)",
-      "refs": [
-        "node:55"
-      ]
+      "refs": ["node:55"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 55: 3 committed secret(s)",
-      "refs": [
-        "node:55"
-      ]
+      "refs": ["node:55"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 55: 4 committed secret(s)",
-      "refs": [
-        "node:55"
-      ]
+      "refs": ["node:55"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 56: 3 committed secret(s)",
-      "refs": [
-        "node:56"
-      ]
+      "refs": ["node:56"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 56: 4 committed secret(s)",
-      "refs": [
-        "node:56"
-      ]
+      "refs": ["node:56"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 57: 3 committed secret(s)",
-      "refs": [
-        "node:57"
-      ]
+      "refs": ["node:57"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 57: 4 committed secret(s)",
-      "refs": [
-        "node:57"
-      ]
+      "refs": ["node:57"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 58: 3 committed secret(s)",
-      "refs": [
-        "node:58"
-      ]
+      "refs": ["node:58"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 58: 4 committed secret(s)",
-      "refs": [
-        "node:58"
-      ]
+      "refs": ["node:58"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 59: 3 committed secret(s)",
-      "refs": [
-        "node:59"
-      ]
+      "refs": ["node:59"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 59: 4 committed secret(s)",
-      "refs": [
-        "node:59"
-      ]
+      "refs": ["node:59"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 74: 4 committed secret(s)",
-      "refs": [
-        "node:74"
-      ]
+      "refs": ["node:74"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 74: 4 committed secret(s)",
-      "refs": [
-        "node:74"
-      ]
+      "refs": ["node:74"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 74: 4 committed secret(s)",
-      "refs": [
-        "node:74"
-      ]
+      "refs": ["node:74"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 74: 5 committed secret(s)",
-      "refs": [
-        "node:74"
-      ]
+      "refs": ["node:74"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 75: 4 committed secret(s)",
-      "refs": [
-        "node:75"
-      ]
+      "refs": ["node:75"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 75: 4 committed secret(s)",
-      "refs": [
-        "node:75"
-      ]
+      "refs": ["node:75"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 75: 4 committed secret(s)",
-      "refs": [
-        "node:75"
-      ]
+      "refs": ["node:75"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 75: 5 committed secret(s)",
-      "refs": [
-        "node:75"
-      ]
+      "refs": ["node:75"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 77: 4 committed secret(s)",
-      "refs": [
-        "node:77"
-      ]
+      "refs": ["node:77"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 77: 4 committed secret(s)",
-      "refs": [
-        "node:77"
-      ]
+      "refs": ["node:77"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 77: 4 committed secret(s)",
-      "refs": [
-        "node:77"
-      ]
+      "refs": ["node:77"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 77: 5 committed secret(s)",
-      "refs": [
-        "node:77"
-      ]
+      "refs": ["node:77"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 30: 4 committed secret(s)",
-      "refs": [
-        "node:30"
-      ]
+      "refs": ["node:30"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 30: 4 committed secret(s)",
-      "refs": [
-        "node:30"
-      ]
+      "refs": ["node:30"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 30: 4 committed secret(s)",
-      "refs": [
-        "node:30"
-      ]
+      "refs": ["node:30"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 30: 7 committed secret(s)",
-      "refs": [
-        "node:30"
-      ]
+      "refs": ["node:30"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 31: 4 committed secret(s)",
-      "refs": [
-        "node:31"
-      ]
+      "refs": ["node:31"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 31: 4 committed secret(s)",
-      "refs": [
-        "node:31"
-      ]
+      "refs": ["node:31"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 31: 4 committed secret(s)",
-      "refs": [
-        "node:31"
-      ]
+      "refs": ["node:31"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 31: 6 committed secret(s)",
-      "refs": [
-        "node:31"
-      ]
+      "refs": ["node:31"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 32: 4 committed secret(s)",
-      "refs": [
-        "node:32"
-      ]
+      "refs": ["node:32"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 32: 4 committed secret(s)",
-      "refs": [
-        "node:32"
-      ]
+      "refs": ["node:32"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 32: 4 committed secret(s)",
-      "refs": [
-        "node:32"
-      ]
+      "refs": ["node:32"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 32: 7 committed secret(s)",
-      "refs": [
-        "node:32"
-      ]
+      "refs": ["node:32"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 39: 4 committed secret(s)",
-      "refs": [
-        "node:39"
-      ]
+      "refs": ["node:39"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 39: 4 committed secret(s)",
-      "refs": [
-        "node:39"
-      ]
+      "refs": ["node:39"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 39: 4 committed secret(s)",
-      "refs": [
-        "node:39"
-      ]
+      "refs": ["node:39"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 39: 6 committed secret(s)",
-      "refs": [
-        "node:39"
-      ]
+      "refs": ["node:39"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 76: 4 committed secret(s)",
-      "refs": [
-        "node:76"
-      ]
+      "refs": ["node:76"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 76: 4 committed secret(s)",
-      "refs": [
-        "node:76"
-      ]
+      "refs": ["node:76"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 76: 4 committed secret(s)",
-      "refs": [
-        "node:76"
-      ]
+      "refs": ["node:76"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 76: 5 committed secret(s)",
-      "refs": [
-        "node:76"
-      ]
+      "refs": ["node:76"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 78: 4 committed secret(s)",
-      "refs": [
-        "node:78"
-      ]
+      "refs": ["node:78"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 78: 4 committed secret(s)",
-      "refs": [
-        "node:78"
-      ]
+      "refs": ["node:78"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 78: 4 committed secret(s)",
-      "refs": [
-        "node:78"
-      ]
+      "refs": ["node:78"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 78: 5 committed secret(s)",
-      "refs": [
-        "node:78"
-      ]
+      "refs": ["node:78"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 79: 2 committed secret(s)",
-      "refs": [
-        "node:79"
-      ]
+      "refs": ["node:79"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 79: 2 committed secret(s)",
-      "refs": [
-        "node:79"
-      ]
+      "refs": ["node:79"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 79: 2 committed secret(s)",
-      "refs": [
-        "node:79"
-      ]
+      "refs": ["node:79"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 79: 2 committed secret(s)",
-      "refs": [
-        "node:79"
-      ]
+      "refs": ["node:79"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 80: 2 committed secret(s)",
-      "refs": [
-        "node:80"
-      ]
+      "refs": ["node:80"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 80: 2 committed secret(s)",
-      "refs": [
-        "node:80"
-      ]
+      "refs": ["node:80"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 80: 2 committed secret(s)",
-      "refs": [
-        "node:80"
-      ]
+      "refs": ["node:80"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 80: 2 committed secret(s)",
-      "refs": [
-        "node:80"
-      ]
+      "refs": ["node:80"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 81: 2 committed secret(s)",
-      "refs": [
-        "node:81"
-      ]
+      "refs": ["node:81"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 81: 2 committed secret(s)",
-      "refs": [
-        "node:81"
-      ]
+      "refs": ["node:81"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 81: 2 committed secret(s)",
-      "refs": [
-        "node:81"
-      ]
+      "refs": ["node:81"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 81: 2 committed secret(s)",
-      "refs": [
-        "node:81"
-      ]
+      "refs": ["node:81"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 82: 2 committed secret(s)",
-      "refs": [
-        "node:82"
-      ]
+      "refs": ["node:82"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 82: 2 committed secret(s)",
-      "refs": [
-        "node:82"
-      ]
+      "refs": ["node:82"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 82: 2 committed secret(s)",
-      "refs": [
-        "node:82"
-      ]
+      "refs": ["node:82"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 82: 2 committed secret(s)",
-      "refs": [
-        "node:82"
-      ]
+      "refs": ["node:82"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 83: 4 committed secret(s)",
-      "refs": [
-        "node:83"
-      ]
+      "refs": ["node:83"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 83: 4 committed secret(s)",
-      "refs": [
-        "node:83"
-      ]
+      "refs": ["node:83"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 83: 4 committed secret(s)",
-      "refs": [
-        "node:83"
-      ]
+      "refs": ["node:83"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 83: 5 committed secret(s)",
-      "refs": [
-        "node:83"
-      ]
+      "refs": ["node:83"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 84: 4 committed secret(s)",
-      "refs": [
-        "node:84"
-      ]
+      "refs": ["node:84"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 84: 4 committed secret(s)",
-      "refs": [
-        "node:84"
-      ]
+      "refs": ["node:84"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 84: 4 committed secret(s)",
-      "refs": [
-        "node:84"
-      ]
+      "refs": ["node:84"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 84: 5 committed secret(s)",
-      "refs": [
-        "node:84"
-      ]
+      "refs": ["node:84"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 48: 4 committed secret(s)",
-      "refs": [
-        "node:48"
-      ]
+      "refs": ["node:48"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 48: 4 committed secret(s)",
-      "refs": [
-        "node:48"
-      ]
+      "refs": ["node:48"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 48: 4 committed secret(s)",
-      "refs": [
-        "node:48"
-      ]
+      "refs": ["node:48"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 48: 4 committed secret(s)",
-      "refs": [
-        "node:48"
-      ]
+      "refs": ["node:48"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 49: 4 committed secret(s)",
-      "refs": [
-        "node:49"
-      ]
+      "refs": ["node:49"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 49: 4 committed secret(s)",
-      "refs": [
-        "node:49"
-      ]
+      "refs": ["node:49"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 49: 4 committed secret(s)",
-      "refs": [
-        "node:49"
-      ]
+      "refs": ["node:49"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 49: 4 committed secret(s)",
-      "refs": [
-        "node:49"
-      ]
+      "refs": ["node:49"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 50: 4 committed secret(s)",
-      "refs": [
-        "node:50"
-      ]
+      "refs": ["node:50"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 50: 4 committed secret(s)",
-      "refs": [
-        "node:50"
-      ]
+      "refs": ["node:50"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 50: 4 committed secret(s)",
-      "refs": [
-        "node:50"
-      ]
+      "refs": ["node:50"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 50: 4 committed secret(s)",
-      "refs": [
-        "node:50"
-      ]
+      "refs": ["node:50"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 51: 4 committed secret(s)",
-      "refs": [
-        "node:51"
-      ]
+      "refs": ["node:51"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-vpc node 51: 4 committed secret(s)",
-      "refs": [
-        "node:51"
-      ]
+      "refs": ["node:51"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-no-vpc node 51: 4 committed secret(s)",
-      "refs": [
-        "node:51"
-      ]
+      "refs": ["node:51"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 51: 4 committed secret(s)",
-      "refs": [
-        "node:51"
-      ]
+      "refs": ["node:51"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 52: 5 committed secret(s)",
-      "refs": [
-        "node:52"
-      ]
+      "refs": ["node:52"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 52: 5 committed secret(s)",
-      "refs": [
-        "node:52"
-      ]
+      "refs": ["node:52"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 53: 5 committed secret(s)",
-      "refs": [
-        "node:53"
-      ]
+      "refs": ["node:53"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:vxlan-dmvpn-backbone node 53: 5 committed secret(s)",
-      "refs": [
-        "node:53"
-      ]
+      "refs": ["node:53"]
     }
   ],
   "protected": {

@@ -12,9 +12,7 @@
       "line": 9,
       "rule": "nxos.secret",
       "iface": null,
-      "flags": [
-        "secret"
-      ]
+      "flags": ["secret"]
     },
     {
       "kind": "secret",
@@ -22,9 +20,7 @@
       "line": 12,
       "rule": "nxos.secret",
       "iface": null,
-      "flags": [
-        "secret"
-      ]
+      "flags": ["secret"]
     },
     {
       "kind": "secret",
@@ -32,9 +28,7 @@
       "line": 12,
       "rule": "nxos.secret",
       "iface": null,
-      "flags": [
-        "secret"
-      ]
+      "flags": ["secret"]
     },
     {
       "kind": "vlan_def",
@@ -97,9 +91,6 @@
       "orphan": false
     }
   },
-  "vlan_db": [
-    1,
-    100
-  ],
+  "vlan_db": [1, 100],
   "is_switch": false
 }

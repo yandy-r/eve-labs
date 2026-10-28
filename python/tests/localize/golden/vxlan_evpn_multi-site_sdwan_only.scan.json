@@ -10,12 +10,7 @@
       "site_key": "site.trunk",
       "role": "trunk",
       "status": "CARRIER",
-      "networks": [
-        "132",
-        "137",
-        "140",
-        "152"
-      ],
+      "networks": ["132", "137", "140", "152"],
       "bridge": "pnet0",
       "labels": {
         "132": "EVE-TRUNK",
@@ -23,10 +18,7 @@
         "140": "EVE-TRUNK",
         "152": "EVE-TRUNK"
       },
-      "carries": [
-        "MGMT-204",
-        "MGMT-203"
-      ],
+      "carries": ["MGMT-204", "MGMT-203"],
       "schemes": []
     },
     {
@@ -34,13 +26,7 @@
       "site_key": "site.mgmt_b",
       "role": "mgmt",
       "status": "CONFIGURABLE",
-      "networks": [
-        "139",
-        "141",
-        "83",
-        "60",
-        "148"
-      ],
+      "networks": ["139", "141", "83", "60", "148"],
       "bridge": "pnet0",
       "labels": {
         "139": "EVE-MGMT-204",
@@ -55,10 +41,7 @@
           "tag": 3,
           "subnet": "10.100.204.0/24",
           "gateway": "10.100.204.1",
-          "scopes": [
-            "sdwan-vxlan-evpn",
-            "startup"
-          ],
+          "scopes": ["sdwan-vxlan-evpn", "startup"],
           "members": 37,
           "outliers": 0
         }
@@ -69,14 +52,7 @@
       "site_key": "site.mgmt_a",
       "role": "mgmt",
       "status": "CONFIGURABLE",
-      "networks": [
-        "74",
-        "76",
-        "91",
-        "54",
-        "55",
-        "165"
-      ],
+      "networks": ["74", "76", "91", "54", "55", "165"],
       "bridge": "pnet0",
       "labels": {
         "74": "EVE-MGMT-203",
@@ -92,10 +68,7 @@
           "tag": 2,
           "subnet": "10.100.203.0/24",
           "gateway": "10.100.203.1",
-          "scopes": [
-            "sdwan-vxlan-evpn",
-            "startup"
-          ],
+          "scopes": ["sdwan-vxlan-evpn", "startup"],
           "members": 130,
           "outliers": 0
         }
@@ -106,9 +79,7 @@
       "site_key": "site.inet_a",
       "role": "inet",
       "status": "CONFIGURABLE",
-      "networks": [
-        "25"
-      ],
+      "networks": ["25"],
       "bridge": "pnet0",
       "labels": {
         "25": "EVE-INET-201"
@@ -119,10 +90,7 @@
           "tag": 201,
           "subnet": "10.100.201.0/24",
           "gateway": "10.100.201.1",
-          "scopes": [
-            "sdwan-vxlan-evpn",
-            "startup"
-          ],
+          "scopes": ["sdwan-vxlan-evpn", "startup"],
           "members": 31,
           "outliers": 0
         }
@@ -133,9 +101,7 @@
       "site_key": "site.inet_b",
       "role": "inet",
       "status": "CONFIGURABLE",
-      "networks": [
-        "44"
-      ],
+      "networks": ["44"],
       "bridge": "pnet0",
       "labels": {
         "44": "EVE-INET-202"
@@ -146,10 +112,7 @@
           "tag": 202,
           "subnet": "10.100.202.0/24",
           "gateway": "10.100.202.1",
-          "scopes": [
-            "sdwan-vxlan-evpn",
-            "startup"
-          ],
+          "scopes": ["sdwan-vxlan-evpn", "startup"],
           "members": 31,
           "outliers": 0
         }
@@ -165,9 +128,7 @@
       "current": "pnet0",
       "default": "pnet0",
       "default_source": "keep",
-      "choices": [
-        "pnet0"
-      ],
+      "choices": ["pnet0"],
       "depends_on": [],
       "affects": 0,
       "segment": "MGMT-204",
@@ -184,9 +145,7 @@
       "current": "pnet0",
       "default": "pnet0",
       "default_source": "keep",
-      "choices": [
-        "pnet0"
-      ],
+      "choices": ["pnet0"],
       "depends_on": [],
       "affects": 0,
       "segment": "MGMT-203",
@@ -203,9 +162,7 @@
       "current": "pnet0",
       "default": "pnet0",
       "default_source": "keep",
-      "choices": [
-        "pnet0"
-      ],
+      "choices": ["pnet0"],
       "depends_on": [],
       "affects": 0,
       "segment": "INET-201",
@@ -222,9 +179,7 @@
       "current": "pnet0",
       "default": "pnet0",
       "default_source": "keep",
-      "choices": [
-        "pnet0"
-      ],
+      "choices": ["pnet0"],
       "depends_on": [],
       "affects": 0,
       "segment": "INET-202",
@@ -241,16 +196,12 @@
       "current": "pnet0",
       "default": "pnet0",
       "default_source": "follows carried",
-      "choices": [
-        "pnet0"
-      ],
+      "choices": ["pnet0"],
       "depends_on": [],
       "affects": 0,
       "segment": "TRUNK",
       "scenario": "bridge",
-      "notes": [
-        "carries MGMT-204, MGMT-203"
-      ],
+      "notes": ["carries MGMT-204, MGMT-203"],
       "answered": false,
       "answer": null
     },
@@ -335,9 +286,7 @@
       "affects": 30,
       "segment": "MGMT-204",
       "scenario": "segment_l3",
-      "notes": [
-        "8 baseline host(s)"
-      ],
+      "notes": ["8 baseline host(s)"],
       "answered": false,
       "answer": null
     },
@@ -350,9 +299,7 @@
       "default": "10.100.204.1",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "site.mgmt_b/subnet"
-      ],
+      "depends_on": ["site.mgmt_b/subnet"],
       "affects": 21,
       "segment": "MGMT-204",
       "scenario": "segment_l3",
@@ -373,9 +320,7 @@
       "affects": 92,
       "segment": "MGMT-203",
       "scenario": "segment_l3",
-      "notes": [
-        "27 baseline host(s)"
-      ],
+      "notes": ["27 baseline host(s)"],
       "answered": false,
       "answer": null
     },
@@ -388,9 +333,7 @@
       "default": "10.100.203.1",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "site.mgmt_a/subnet"
-      ],
+      "depends_on": ["site.mgmt_a/subnet"],
       "affects": 46,
       "segment": "MGMT-203",
       "scenario": "segment_l3",
@@ -411,9 +354,7 @@
       "affects": 24,
       "segment": "INET-201",
       "scenario": "segment_l3",
-      "notes": [
-        "9 baseline host(s)"
-      ],
+      "notes": ["9 baseline host(s)"],
       "answered": false,
       "answer": null
     },
@@ -426,9 +367,7 @@
       "default": "10.100.201.1",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "site.inet_a/subnet"
-      ],
+      "depends_on": ["site.inet_a/subnet"],
       "affects": 5,
       "segment": "INET-201",
       "scenario": "segment_l3",
@@ -449,9 +388,7 @@
       "affects": 24,
       "segment": "INET-202",
       "scenario": "segment_l3",
-      "notes": [
-        "9 baseline host(s)"
-      ],
+      "notes": ["9 baseline host(s)"],
       "answered": false,
       "answer": null
     },
@@ -464,9 +401,7 @@
       "default": "10.100.202.1",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "site.inet_b/subnet"
-      ],
+      "depends_on": ["site.inet_b/subnet"],
       "affects": 5,
       "segment": "INET-202",
       "scenario": "segment_l3",
@@ -483,16 +418,11 @@
       "default": "EVE-TRUNK",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "site.trunk/vlan",
-        "site.trunk/subnet"
-      ],
+      "depends_on": ["site.trunk/vlan", "site.trunk/subnet"],
       "affects": 8,
       "segment": "TRUNK",
       "scenario": "labels",
-      "notes": [
-        "4 text reference(s) follow the label"
-      ],
+      "notes": ["4 text reference(s) follow the label"],
       "answered": false,
       "answer": null
     },
@@ -505,16 +435,11 @@
       "default": "EVE-MGMT-204",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "site.mgmt_b/vlan",
-        "site.mgmt_b/subnet"
-      ],
+      "depends_on": ["site.mgmt_b/vlan", "site.mgmt_b/subnet"],
       "affects": 46,
       "segment": "MGMT-204",
       "scenario": "labels",
-      "notes": [
-        "41 text reference(s) follow the label"
-      ],
+      "notes": ["41 text reference(s) follow the label"],
       "answered": false,
       "answer": null
     },
@@ -527,16 +452,11 @@
       "default": "EVE-MGMT-203",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "site.mgmt_a/vlan",
-        "site.mgmt_a/subnet"
-      ],
+      "depends_on": ["site.mgmt_a/vlan", "site.mgmt_a/subnet"],
       "affects": 38,
       "segment": "MGMT-203",
       "scenario": "labels",
-      "notes": [
-        "32 text reference(s) follow the label"
-      ],
+      "notes": ["32 text reference(s) follow the label"],
       "answered": false,
       "answer": null
     },
@@ -549,16 +469,11 @@
       "default": "EVE-INET-201",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "site.inet_a/vlan",
-        "site.inet_a/subnet"
-      ],
+      "depends_on": ["site.inet_a/vlan", "site.inet_a/subnet"],
       "affects": 26,
       "segment": "INET-201",
       "scenario": "labels",
-      "notes": [
-        "25 text reference(s) follow the label"
-      ],
+      "notes": ["25 text reference(s) follow the label"],
       "answered": false,
       "answer": null
     },
@@ -571,16 +486,11 @@
       "default": "EVE-INET-202",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "site.inet_b/vlan",
-        "site.inet_b/subnet"
-      ],
+      "depends_on": ["site.inet_b/vlan", "site.inet_b/subnet"],
       "affects": 31,
       "segment": "INET-202",
       "scenario": "labels",
-      "notes": [
-        "30 text reference(s) follow the label"
-      ],
+      "notes": ["30 text reference(s) follow the label"],
       "answered": false,
       "answer": null
     },
@@ -665,9 +575,7 @@
       "affects": 0,
       "segment": null,
       "scenario": "services",
-      "notes": [
-        "search-list entry only: \"\" drops it from the lists"
-      ],
+      "notes": ["search-list entry only: \"\" drops it from the lists"],
       "answered": false,
       "answer": null
     },
@@ -701,9 +609,7 @@
       "affects": 0,
       "segment": null,
       "scenario": "services",
-      "notes": [
-        "advanced: SLA/health-check targets, default keep"
-      ],
+      "notes": ["advanced: SLA/health-check targets, default keep"],
       "answered": false,
       "answer": null
     },
@@ -720,9 +626,7 @@
       "affects": 0,
       "segment": null,
       "scenario": "services",
-      "notes": [
-        "advanced: SLA/health-check targets, default keep"
-      ],
+      "notes": ["advanced: SLA/health-check targets, default keep"],
       "answered": false,
       "answer": null
     },
@@ -751,18 +655,12 @@
       "current": null,
       "default": "none",
       "default_source": "keep",
-      "choices": [
-        "none",
-        "psk",
-        "all"
-      ],
+      "choices": ["none", "psk", "all"],
       "depends_on": [],
       "affects": 0,
       "segment": null,
       "scenario": "secrets",
-      "notes": [
-        "the old value remains in git history; rotate it wherever it is used"
-      ],
+      "notes": ["the old value remains in git history; rotate it wherever it is used"],
       "answered": false,
       "answer": null
     }
@@ -772,465 +670,349 @@
       "code": "TRUNK_ATTRS",
       "severity": "info",
       "msg": "carrier TRUNK: native_vlan=1, vlan8021ad=-1 (shown only, never edited)",
-      "refs": [
-        "segment:TRUNK"
-      ]
+      "refs": ["segment:TRUNK"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 12: 4 committed secret(s)",
-      "refs": [
-        "node:12"
-      ]
+      "refs": ["node:12"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 12: 5 committed secret(s)",
-      "refs": [
-        "node:12"
-      ]
+      "refs": ["node:12"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 13: 4 committed secret(s)",
-      "refs": [
-        "node:13"
-      ]
+      "refs": ["node:13"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 13: 5 committed secret(s)",
-      "refs": [
-        "node:13"
-      ]
+      "refs": ["node:13"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 21: 4 committed secret(s)",
-      "refs": [
-        "node:21"
-      ]
+      "refs": ["node:21"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 21: 5 committed secret(s)",
-      "refs": [
-        "node:21"
-      ]
+      "refs": ["node:21"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 25: 4 committed secret(s)",
-      "refs": [
-        "node:25"
-      ]
+      "refs": ["node:25"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 25: 5 committed secret(s)",
-      "refs": [
-        "node:25"
-      ]
+      "refs": ["node:25"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 26: 4 committed secret(s)",
-      "refs": [
-        "node:26"
-      ]
+      "refs": ["node:26"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 26: 5 committed secret(s)",
-      "refs": [
-        "node:26"
-      ]
+      "refs": ["node:26"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 1: 4 committed secret(s)",
-      "refs": [
-        "node:1"
-      ]
+      "refs": ["node:1"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 1: 6 committed secret(s)",
-      "refs": [
-        "node:1"
-      ]
+      "refs": ["node:1"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 3: 4 committed secret(s)",
-      "refs": [
-        "node:3"
-      ]
+      "refs": ["node:3"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 3: 5 committed secret(s)",
-      "refs": [
-        "node:3"
-      ]
+      "refs": ["node:3"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 4: 4 committed secret(s)",
-      "refs": [
-        "node:4"
-      ]
+      "refs": ["node:4"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 4: 5 committed secret(s)",
-      "refs": [
-        "node:4"
-      ]
+      "refs": ["node:4"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 5: 4 committed secret(s)",
-      "refs": [
-        "node:5"
-      ]
+      "refs": ["node:5"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 5: 5 committed secret(s)",
-      "refs": [
-        "node:5"
-      ]
+      "refs": ["node:5"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 28: 4 committed secret(s)",
-      "refs": [
-        "node:28"
-      ]
+      "refs": ["node:28"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 28: 5 committed secret(s)",
-      "refs": [
-        "node:28"
-      ]
+      "refs": ["node:28"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 15: 4 committed secret(s)",
-      "refs": [
-        "node:15"
-      ]
+      "refs": ["node:15"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 15: 5 committed secret(s)",
-      "refs": [
-        "node:15"
-      ]
+      "refs": ["node:15"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 2: 4 committed secret(s)",
-      "refs": [
-        "node:2"
-      ]
+      "refs": ["node:2"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 2: 5 committed secret(s)",
-      "refs": [
-        "node:2"
-      ]
+      "refs": ["node:2"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 9: 3 committed secret(s)",
-      "refs": [
-        "node:9"
-      ]
+      "refs": ["node:9"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 9: 4 committed secret(s)",
-      "refs": [
-        "node:9"
-      ]
+      "refs": ["node:9"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 22: 3 committed secret(s)",
-      "refs": [
-        "node:22"
-      ]
+      "refs": ["node:22"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 22: 4 committed secret(s)",
-      "refs": [
-        "node:22"
-      ]
+      "refs": ["node:22"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 46: 3 committed secret(s)",
-      "refs": [
-        "node:46"
-      ]
+      "refs": ["node:46"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 46: 4 committed secret(s)",
-      "refs": [
-        "node:46"
-      ]
+      "refs": ["node:46"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 47: 3 committed secret(s)",
-      "refs": [
-        "node:47"
-      ]
+      "refs": ["node:47"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 47: 4 committed secret(s)",
-      "refs": [
-        "node:47"
-      ]
+      "refs": ["node:47"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 75: 4 committed secret(s)",
-      "refs": [
-        "node:75"
-      ]
+      "refs": ["node:75"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 75: 5 committed secret(s)",
-      "refs": [
-        "node:75"
-      ]
+      "refs": ["node:75"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 77: 4 committed secret(s)",
-      "refs": [
-        "node:77"
-      ]
+      "refs": ["node:77"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 77: 5 committed secret(s)",
-      "refs": [
-        "node:77"
-      ]
+      "refs": ["node:77"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 79: 2 committed secret(s)",
-      "refs": [
-        "node:79"
-      ]
+      "refs": ["node:79"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 80: 2 committed secret(s)",
-      "refs": [
-        "node:80"
-      ]
+      "refs": ["node:80"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 81: 2 committed secret(s)",
-      "refs": [
-        "node:81"
-      ]
+      "refs": ["node:81"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 82: 2 committed secret(s)",
-      "refs": [
-        "node:82"
-      ]
+      "refs": ["node:82"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 48: 4 committed secret(s)",
-      "refs": [
-        "node:48"
-      ]
+      "refs": ["node:48"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 48: 4 committed secret(s)",
-      "refs": [
-        "node:48"
-      ]
+      "refs": ["node:48"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 49: 4 committed secret(s)",
-      "refs": [
-        "node:49"
-      ]
+      "refs": ["node:49"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 49: 4 committed secret(s)",
-      "refs": [
-        "node:49"
-      ]
+      "refs": ["node:49"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 50: 4 committed secret(s)",
-      "refs": [
-        "node:50"
-      ]
+      "refs": ["node:50"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 50: 4 committed secret(s)",
-      "refs": [
-        "node:50"
-      ]
+      "refs": ["node:50"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 51: 4 committed secret(s)",
-      "refs": [
-        "node:51"
-      ]
+      "refs": ["node:51"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 51: 4 committed secret(s)",
-      "refs": [
-        "node:51"
-      ]
+      "refs": ["node:51"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 52: 5 committed secret(s)",
-      "refs": [
-        "node:52"
-      ]
+      "refs": ["node:52"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 52: 5 committed secret(s)",
-      "refs": [
-        "node:52"
-      ]
+      "refs": ["node:52"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 53: 5 committed secret(s)",
-      "refs": [
-        "node:53"
-      ]
+      "refs": ["node:53"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "configset:sdwan-vxlan-evpn node 53: 5 committed secret(s)",
-      "refs": [
-        "node:53"
-      ]
+      "refs": ["node:53"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "sidecar:vxlan_evpn_multi-site_sdwan_only_cfgs/10_b1-fgt1.txt node 10: 4 committed secret(s)",
-      "refs": [
-        "node:10"
-      ]
+      "refs": ["node:10"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "sidecar:vxlan_evpn_multi-site_sdwan_only_cfgs/20_b2-fgt1.txt node 20: 4 committed secret(s)",
-      "refs": [
-        "node:20"
-      ]
+      "refs": ["node:20"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "sidecar:vxlan_evpn_multi-site_sdwan_only_cfgs/41_csvc-fgt1.txt node 41: 4 committed secret(s)",
-      "refs": [
-        "node:41"
-      ]
+      "refs": ["node:41"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "sidecar:vxlan_evpn_multi-site_sdwan_only_cfgs/7_dc1-fgt1.txt node 7: 2 committed secret(s)",
-      "refs": [
-        "node:7"
-      ]
+      "refs": ["node:7"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "sidecar:vxlan_evpn_multi-site_sdwan_only_cfgs/8_dc2-fgt1.txt node 8: 2 committed secret(s)",
-      "refs": [
-        "node:8"
-      ]
+      "refs": ["node:8"]
     }
   ],
   "protected": {

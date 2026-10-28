@@ -981,8 +981,7 @@ class ToyIOS(RuleDialect):
     block_starts = None
 
 
-TOY_TEXT = textwrap.dedent(
-    """\
+TOY_TEXT = textwrap.dedent("""\
     hostname b1-sw1
     !
     username admin privilege 15 secret 9 $9$abcdef
@@ -1030,8 +1029,7 @@ TOY_TEXT = textwrap.dedent(
     end
     interface GigabitEthernet9/9
      switchport access vlan 77
-    """
-)
+    """)
 
 
 def toy_ct(text: str = TOY_TEXT) -> ConfigText:
@@ -1888,8 +1886,7 @@ class TestBlocksIndent(unittest.TestCase):
 
 
 class TestBlocksFortios(unittest.TestCase):
-    TEXT = textwrap.dedent(
-        """\
+    TEXT = textwrap.dedent("""\
         config system interface
             edit "port8"
                 set vdom "root"
@@ -1912,8 +1909,7 @@ class TestBlocksFortios(unittest.TestCase):
             config ntpserver
                 edit 1
                     set server "pool.ntp.org"
-        """
-    )
+        """)
 
     def test_stack_paths_and_kinds(self) -> None:
         lay = blocks.split(self.TEXT, "fortios")
@@ -1963,8 +1959,7 @@ class TestBlocksFortios(unittest.TestCase):
 
 
 class TestBlocksBrace(unittest.TestCase):
-    TEXT = textwrap.dedent(
-        """\
+    TEXT = textwrap.dedent("""\
         system {
             name-server {
                 10.100.51.11;
@@ -1980,8 +1975,7 @@ class TestBlocksBrace(unittest.TestCase):
                 }
             }
             ge-0/0/3 { unit 1240 { vlan-id 1240; } }
-        }"""
-    )
+        }""")
 
     def test_paths(self) -> None:
         lay = blocks.split(self.TEXT, "brace")
@@ -2027,8 +2021,7 @@ class TestBlocksBrace(unittest.TestCase):
 
 
 class TestBlocksFlat(unittest.TestCase):
-    TEXT = textwrap.dedent(
-        """\
+    TEXT = textwrap.dedent("""\
         #!/bin/sh
         ip addr add 10.100.51.5/24 dev eth0
         cat << EOF > /etc/resolv.conf
@@ -2042,8 +2035,7 @@ class TestBlocksFlat(unittest.TestCase):
         x
         EOT
         route add default gw 10.100.51.1
-        """
-    )
+        """)
 
     def test_heredocs(self) -> None:
         lay = blocks.split(self.TEXT, "flat")
@@ -2404,8 +2396,7 @@ pattern = '^ip name-server vrf \\S+ (?P<v>IPV4)$'
 kind = "dns_server"
 """
 
-EOS_TEXT = textwrap.dedent(
-    """\
+EOS_TEXT = textwrap.dedent("""\
     ! device: sw1 (cEOS, EOS-4.30)
     username admin secret 0 hunter2
     ip name-server vrf MGMT 10.1.1.53
@@ -2414,8 +2405,7 @@ EOS_TEXT = textwrap.dedent(
        ip address 10.7.0.1/24
     interface Ethernet2
        switchport access vlan 12
-    """
-)
+    """)
 
 
 class TestPacks(unittest.TestCase):
@@ -2540,8 +2530,7 @@ class TestPacks(unittest.TestCase):
     def test_python_plugin_registers_dialect(self) -> None:
         self.write(
             "myplugin.py",
-            textwrap.dedent(
-                """\
+            textwrap.dedent("""\
                 from evelab.localize.dialects import PatternRule, RuleDialect, register
 
                 @register
@@ -2549,8 +2538,7 @@ class TestPacks(unittest.TestCase):
                     name = "plugged"
                     templates = ("plug*",)
                     rules = (PatternRule("p.dom", r"^domain (?P<v>\\S+)$", "domain"),)
-                """
-            ),
+                """),
         )
         load_packs([self.dir])
         parsed = REGISTRY["plugged"].parse(make_ct("domain a.b\n", "plugged"))

@@ -6,7 +6,7 @@ This document combines three candidate designs and the judges' reviews of them i
 The baseline is **Design 2 (discovery-first, plugin-based)**, because the user asked for a tool that adapts when "other
 labs and scenarios" are added. Grafted onto it:
 
-- from **Design 1**: committed, *generated* per-lab manifests with pinned counts, tri-state matching, a
+- from **Design 1**: committed, _generated_ per-lab manifests with pinned counts, tri-state matching, a
   baseline/revert workflow, CI validation and leak scan, TOML rule packs, and `site_key` bindings.
 - from **Design 3**: fact confidence levels, a protected inventory, the declarative `RuleDialect`, saved plans
   checked by hash, a journal with undo, a segment/scheme matrix, the bridge roles wizard, and explicit blockers.
@@ -60,35 +60,35 @@ Hand-editing is error-prone. The same digits appear everywhere as lab-internal v
 
 ### 1.3 Non-goals (v1), each reported explicitly instead of done silently
 
-| Not done in v1 | What the tool does instead |
-|---|---|
-| Structural config changes: untagged→tagged (new subif), tagged→untagged, DHCP→static, inserting routes or NAT | Reports a **blocker** that lists the exact lines to change by hand. A `transforms/` registry exists. One reference transform is planned as task T22 (optional wave). |
-| Inventing values for devices with no config (Forti/F5 with `config="0"` and no sidecar) | Status `LABEL_ONLY`. Only bridge and label questions are asked. |
-| Regenerating thumbnails | Notice: EVE regenerates them on the next save. |
-| Mapping image names / docker images / templates between hosts | `scan --images` lists images missing on this host (EVE host only), for information. Out of scope because these are not network values; the fix is installing images. |
-| IPv6 rewriting | IPv6 literals are **detected and reported** as "unhandled" in in-scope blobs. Nothing is silently ignored. |
-| Changing EVE trunk attributes (`native_vlan`, `vlan8021ad`, interface `vid`) | Shown in the analysis. A warning appears when the user's bridge roles say the native VLAN differs (section 7.4). |
-| Removing secrets from git history | `secrets` scenario: replace with a placeholder plus a printed rotation and history note. History rewrites are the maintainer's decision. |
-| git clean/smudge filters, `skip-worktree` | Scoped out: they are fragile with EVE rewriting whole files. The supported workflow is `revert → git pull → apply --answers` (section 11.7). The `--out` copy mode avoids a dirty tree altogether. |
+| Not done in v1                                                                                                | What the tool does instead                                                                                                                                                                         |
+| ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Structural config changes: untagged→tagged (new subif), tagged→untagged, DHCP→static, inserting routes or NAT | Reports a **blocker** that lists the exact lines to change by hand. A `transforms/` registry exists. One reference transform is planned as task T22 (optional wave).                               |
+| Inventing values for devices with no config (Forti/F5 with `config="0"` and no sidecar)                       | Status `LABEL_ONLY`. Only bridge and label questions are asked.                                                                                                                                    |
+| Regenerating thumbnails                                                                                       | Notice: EVE regenerates them on the next save.                                                                                                                                                     |
+| Mapping image names / docker images / templates between hosts                                                 | `scan --images` lists images missing on this host (EVE host only), for information. Out of scope because these are not network values; the fix is installing images.                               |
+| IPv6 rewriting                                                                                                | IPv6 literals are **detected and reported** as "unhandled" in in-scope blobs. Nothing is silently ignored.                                                                                         |
+| Changing EVE trunk attributes (`native_vlan`, `vlan8021ad`, interface `vid`)                                  | Shown in the analysis. A warning appears when the user's bridge roles say the native VLAN differs (section 7.4).                                                                                   |
+| Removing secrets from git history                                                                             | `secrets` scenario: replace with a placeholder plus a printed rotation and history note. History rewrites are the maintainer's decision.                                                           |
+| git clean/smudge filters, `skip-worktree`                                                                     | Scoped out: they are fragile with EVE rewriting whole files. The supported workflow is `revert → git pull → apply --answers` (section 11.7). The `--out` copy mode avoids a dirty tree altogether. |
 
 ---
 
 ## 2. Concepts
 
-| Term | Meaning |
-|---|---|
-| **Cloud network** | A `<network>` with `type != "bridge"` (`pnetN`, `natN`, `cloudN`, anything else). This is the **only** test for "external". Names never decide it. |
-| **Store** | One place a config text lives: `startup` (`<configs>`), `cs:<name>` (one `<configset>`), `sidecar` (`<stem>*_cfgs/NN_name.txt`), `textobject:<id>`, or `xml` (network attributes). |
-| **Scope** | The config scope a text belongs to: `startup` or a configset name. A sidecar has the scope it mirrors, or the node's active scope. |
-| **Fact** | A typed value found at an exact span in a store, with a dialect rule id, an iface/block context, and a **confidence**. |
-| **Confidence** | `PROVEN`: config on an interface traced to the cloud, directly or through L2. `CORRELATED`: IP inside a proven subnet, the same VLAN on the same switch, or an exact label token. `HEURISTIC`: name parsing, textobject proximity, corrupt-block facts. |
-| **Segment** | One external L2/L3 domain. It contains: a group of cloud network ids; a role; one or more **schemes**; attachments; and a status of `CONFIGURABLE`, `DHCP`, `LABEL_ONLY`, `CARRIER` or `UNKNOWN`. |
-| **Scheme** | `(tag, subnet, gateway)` as observed in a set of scopes. The backbone lab has three. |
-| **Protected inventory** | Every VLAN and prefix not attributed to an external segment. An edit touching it is a **hard error**. |
-| **Manifest** | The optional, committed, *generated* `<stem>.localize.toml`. It pins segments, baseline values, counts and author decisions such as scope policy, protect lists and scenarios. |
-| **Site profile / answers** | The user's target values, gitignored. Keyed by **`site_key`**, a stable segment identity, plus value maps for services. |
-| **Baseline** | The author's values, recorded in manifests. CI enforces that committed labs match it. `revert` targets it. |
-| **Plan** | An ordered list of `Edit`s. Each has a span, the old text, the new text, provenance (question → fact → rule → evidence), category, confidence and group. |
+| Term                       | Meaning                                                                                                                                                                                                                                                 |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Cloud network**          | A `<network>` with `type != "bridge"` (`pnetN`, `natN`, `cloudN`, anything else). This is the **only** test for "external". Names never decide it.                                                                                                      |
+| **Store**                  | One place a config text lives: `startup` (`<configs>`), `cs:<name>` (one `<configset>`), `sidecar` (`<stem>*_cfgs/NN_name.txt`), `textobject:<id>`, or `xml` (network attributes).                                                                      |
+| **Scope**                  | The config scope a text belongs to: `startup` or a configset name. A sidecar has the scope it mirrors, or the node's active scope.                                                                                                                      |
+| **Fact**                   | A typed value found at an exact span in a store, with a dialect rule id, an iface/block context, and a **confidence**.                                                                                                                                  |
+| **Confidence**             | `PROVEN`: config on an interface traced to the cloud, directly or through L2. `CORRELATED`: IP inside a proven subnet, the same VLAN on the same switch, or an exact label token. `HEURISTIC`: name parsing, textobject proximity, corrupt-block facts. |
+| **Segment**                | One external L2/L3 domain. It contains: a group of cloud network ids; a role; one or more **schemes**; attachments; and a status of `CONFIGURABLE`, `DHCP`, `LABEL_ONLY`, `CARRIER` or `UNKNOWN`.                                                       |
+| **Scheme**                 | `(tag, subnet, gateway)` as observed in a set of scopes. The backbone lab has three.                                                                                                                                                                    |
+| **Protected inventory**    | Every VLAN and prefix not attributed to an external segment. An edit touching it is a **hard error**.                                                                                                                                                   |
+| **Manifest**               | The optional, committed, _generated_ `<stem>.localize.toml`. It pins segments, baseline values, counts and author decisions such as scope policy, protect lists and scenarios.                                                                          |
+| **Site profile / answers** | The user's target values, gitignored. Keyed by **`site_key`**, a stable segment identity, plus value maps for services.                                                                                                                                 |
+| **Baseline**               | The author's values, recorded in manifests. CI enforces that committed labs match it. `revert` targets it.                                                                                                                                              |
+| **Plan**                   | An ordered list of `Edit`s. Each has a span, the old text, the new text, provenance (question → fact → rule → evidence), category, confidence and group.                                                                                                |
 
 ---
 
@@ -432,7 +432,7 @@ class Plan:
   classes).
 - `DecodedBlob` (`codec.py`), `VlanList` (`textutil.py`) and `RawLab` (`unl.py`) are imported only under
   `TYPE_CHECKING` (no runtime import cycle); `model.py` uses `from __future__ import annotations` and `from pathlib
-  import Path`.
+import Path`.
 - `CORE_FACT_KINDS` stays a plain mutable `set[str]` so dialect packs/plugins may register extra kinds (section 13.3).
 - Every error in `errors.py` has `.code: str` (stable upper-case id, overridable per instance via `code=`) and
   `.exit_code: int` (section 13.1 table: `LocalizeError`/`LabParseError`/`UnsupportedLayout` 1,
@@ -515,7 +515,7 @@ class Plan:
   across labs**.
 - Files are read as bytes and decoded as UTF-8 with `surrogateescape`. Newline style (LF/CRLF) and the trailing-newline
   state are recorded and written back the same way.
-- Dialect comes from the node's template first, then content sniffing (`config system` → fortios, `tmsh ` → f5tmsh).
+- Dialect comes from the node's template first, then content sniffing (`config system` → fortios, `tmsh` → f5tmsh).
 - **Mirror detection**: if a sidecar is byte-identical to the node's decoded blob in some scope, it is marked
   `mirror_of=(scope, node)`. The backbone `_dmvpn_cfgs` mirror `vxlan-dmvpn-backbone`, or `startup` for 11 docker
   nodes.
@@ -615,15 +615,15 @@ ISP-RTR9 has `hostname ISP-RTR1`. A manifest `[nodes."N"] dialect = "..."` alway
 
 ### 6.3 Tag-bearing syntax: the only places a VLAN number can change
 
-| dialect | syntax (rule ids) |
-|---|---|
+| dialect     | syntax (rule ids)                                                                                                                                                                                                       |
+| ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ios / iosxe | `interface X.N` (subif_name), `encapsulation dot1[Qq] N`, `switchport access vlan N`, `switchport trunk allowed vlan [add] LIST`, `switchport trunk native vlan N`, top-level `vlan N` / `vlan LIST`, `interface VlanN` |
-| nxos | as ios + `vlan 1,100-101,201,…` range lists, lowercase `encapsulation dot1q N` |
-| asa | `interface X.N` + ` vlan N` |
-| fortios | `set vlanid N` inside `edit "<if>"` (parent from `set interface`) |
-| junos | `vlan-id N;`, `unit N { vlan-id N; }` |
-| linuxsh | `ip link add link P name P.N type vlan id N` |
-| f5tmsh | `create net vlan NAME tag N` |
+| nxos        | as ios + `vlan 1,100-101,201,…` range lists, lowercase `encapsulation dot1q N`                                                                                                                                          |
+| asa         | `interface X.N` + `vlan N`                                                                                                                                                                                              |
+| fortios     | `set vlanid N` inside `edit "<if>"` (parent from `set interface`)                                                                                                                                                       |
+| junos       | `vlan-id N;`, `unit N { vlan-id N; }`                                                                                                                                                                                   |
+| linuxsh     | `ip link add link P name P.N type vlan id N`                                                                                                                                                                            |
+| f5tmsh      | `create net vlan NAME tag N`                                                                                                                                                                                            |
 
 These lines never produce a tag fact and are protected: `rd 2:2`, `set ike-version 2`, `edit 2`,
 `set community 204:204`, `members 1 2`, CSS `203px`, and ISIS `net 49.0000…`. Each one appears as a `negative`
@@ -658,8 +658,8 @@ IPV4_RE = re.compile(r"(?<![\w.])(\d{1,3}(?:\.\d{1,3}){3})(?![\w.]|\.\d)")
 ```
 
 Each match is validated with `ipaddress`. The pattern never matches `172.31.240.1` inside `172.31.240.10`, cert hex
-(`01010105`), OIDs or ISIS NETs. When a mask follows the address it is captured: ` 255.255.255.0`, `/24`,
-` netmask M`. `domain_re(d)` is `(?<![\w-])` + escaped d + `(?![\w-])`. A preceding `.` is allowed so FQDN suffixes
+(`01010105`), OIDs or ISIS NETs. When a mask follows the address it is captured: `255.255.255.0`, `/24`,
+`netmask M`. `domain_re(d)` is `(?<![\w-])` + escaped d + `(?![\w-])`. A preceding `.` is allowed so FQDN suffixes
 match, so `plsnetlab.local` never matches `netlab.local`.
 
 **Resolutions applied when `textutil.py` and `dialects/` were written (T2, T5)**
@@ -684,7 +684,6 @@ match, so `plsnetlab.local` never matches `netlab.local`.
 - Contract harness: `tests/localize/test_dialect_contract.py` (`DialectContractMixin`, `check_snippet`, `check_static`,
   `skeleton`); it auto-generates `Contract_<dialect>` tests for every registered dialect with
   `fixtures/snippets/<dialect>/*.txt` + `*.facts.json`.
-
 
 **Resolutions applied when `asa.py`, `fortios.py` and `f5tmsh.py` were written (T10)** — additive, no contract change
 
@@ -741,7 +740,7 @@ additive, no contract change
   `model.CORE_FACT_KINDS` (one additive entry); `test_model` now checks a lower bound (packs may register kinds).
   `base.IPV4_KINDS` is frozen, so the Cisco dialects validate `log_server` values as IPv4 in their own `render`.
 - Static routes: the default-route next hop (`ip route [vrf X] 0.0.0.0 0.0.0.0 [IF] GW`, NX-OS `ip route 0.0.0.0/0
-  GW` at top level or in `vrf context`) and `ip default-gateway` are `ip_gateway` facts **without** flags; a
+GW` at top level or in `vrf context`) and `ip default-gateway` are `ip_gateway` facts **without** flags; a
   non-default route gives `ip_route_dst` (with its mask) plus an `ip_gateway` with flag **`nexthop`**, so gateway
   consensus (7.3) must ignore `nexthop` facts. BGP `network A [mask M]` / `network A/len` is `ip_route_dst`.
 - Other IPv4 kinds: HSRP/VRRP VIPs (`standby N ip A`, NX-OS `hsrp N` / `ip A`) are `ip_host` without a mask;
@@ -752,7 +751,7 @@ additive, no contract change
 - Descriptions (cosmetic): any `pnetN` = `cloud_ref`; `description to pnetN: <label>` gives `label_ref` = the first
   token after the colon (no overlap with other facts); `VLAN N` = `vlan_mention`. Same idea as T10's label words, but
   without `_common.py` (the Cisco descriptions in the labs only use the `to pnetN: LABEL` form).
-  *Superseded by the review fixes (labels), see 10.4:* IOS / IOS-XE descriptions are not limited to that form
+  _Superseded by the review fixes (labels), see 10.4:_ IOS / IOS-XE descriptions are not limited to that form
   (c8kv `description EVE-INET-201 (ISP1)`), so `ios_context_rules(prefix)` makes every `_common.LABEL_TOKEN` word of
   a `description` a `label_ref` (`<prefix>.desc_label`, a `ContextRule`; `IOS` mixes in `ContextRulesMixin`). NX-OS
   keeps the `to pnetN:` rule.
@@ -795,14 +794,14 @@ State: `(node, iface_key, incoming: untagged | tag N, cloud_net_ids)`, kept in a
 - **Switch port** (`is_switch=True`):
   - access `v` → carrier untagged maps to switch VLAN `v`.
   - trunk with an allowed list → those VLANs.
-  - trunk with **no allowed list → ALL VLANs in `vlan_db`**. `vlan_db` includes VLANs created *implicitly* by
+  - trunk with **no allowed list → ALL VLANs in `vlan_db`**. `vlan_db` includes VLANs created _implicitly_ by
     `switchport access vlan`, allowed lists and SVIs. This fixes the backbone dmvpn-backbone case, where mgmt-79..82 have
     `access vlan 203` but no `vlan 203` line.
   - Propagation to every other port carrying `v`: an access port → its bridge peer receives untagged; a trunk port → its
     peer receives tagged `v`; an SVI `Vlan v` with addresses → attachment on the switch itself.
 - Bridge networks are crossed to every peer interface.
-- **Switch VLAN-domain rule**: once switch VLAN `v` is proven to equal carrier tag `v`, every tag fact for `v` *on that
-  switch* is attributed to the segment as CORRELATED. That includes the `vlan v` definition, the uncabled ports
+- **Switch VLAN-domain rule**: once switch VLAN `v` is proven to equal carrier tag `v`, every tag fact for `v` _on that
+  switch_ is attributed to the segment as CORRELATED. That includes the `vlan v` definition, the uncabled ports
   (mgmt-79 e0/3, e1/1, e1/2; mgmt-81 e1/0) flagged `uncabled`, and the vlan name. Routed devices never get this rule.
 - **Orphan attribution**: an orphan tag fact (b1-sw1 `allowed vlan 203` after a broken header) is attributed
   CORRELATED only if the same node and scope has a non-orphan fact for the same VLAN already attributed (b1-sw1
@@ -815,7 +814,7 @@ State: `(node, iface_key, incoming: untagged | tag N, cloud_net_ids)`, kept in a
    `trunk`, `203-19` uplinks) becomes a CARRIER with one sub-unit per VLAN it carries.
 2. **Merge** when one of these holds:
    - (a) the manifest says so;
-   - (b) PROVEN endpoints show the same subnet *and* the same tag in the same scope (sdwan EVE-MGMT-203 direct with
+   - (b) PROVEN endpoints show the same subnet _and_ the same tag in the same scope (sdwan EVE-MGMT-203 direct with
      EVE-TRUNK:2; junos `mgmt` with `mgmt58`);
    - (c) a switch `vlan v` / `name X` where X equals another unit's network name (sdwan `vlan 3` /
      `name EVE-MGMT-204`);
@@ -824,6 +823,7 @@ State: `(node, iface_key, incoming: untagged | tag N, cloud_net_ids)`, kept in a
    Never merge when subnets conflict. A weaker **hint** never merges automatically: the NameExplainer finds a number
    equal to a carrier tag (`204-31` with `trunk:204`, `out-255` with `trunk:255`). It becomes a yes/no question unless
    the manifest confirms it.
+
 3. **Schemes per scope**:
    - **Tag** comes from a subif on the attached parent, Forti `vlanid` on the attached port, or the switch access/allowed
      VLAN toward the endpoint. If none → `untagged`. If the cloud-facing iface has no config → `unknown`.
@@ -861,7 +861,7 @@ Each digit run in a cloud network name is classified against the segment:
 - `ambiguous` (`EVE-INET-201` is both tag and octet3);
 - `unknown`.
 
-The classification drives *suggested* label templates (`EVE-MGMT-{octet3}`, `{octet3}-{host}`, `INET-{tag}`). It is
+The classification drives _suggested_ label templates (`EVE-MGMT-{octet3}`, `{octet3}-{host}`, `INET-{tag}`). It is
 never used as a value. `discover --write` records it in the manifest as `label_template`.
 
 ### 7.5 Protected inventory (`inventory.py`)
@@ -884,18 +884,18 @@ have fenced off every `10.100.x` answer and service value.
 
 ### 7.6 Findings produced by discovery
 
-| code | example |
-|---|---|
-| `UNCONFIGURED` | Junos FortiGate port8, backbone Forti/F5 |
-| `DHCP_UPLINK` | nexus, lab1, backbone out-255 |
-| `STRUCTURAL_*` | listed when relevant to the user's answers |
-| `OUTLIER` | c8kv-74, bb-rr84 |
-| `CORRUPT_CONFIG_REGION` | backbone viosl2 syslog splices |
-| `UNATTRIBUTED_LITERAL` | 172.21.255.30, 10.100.51.11 when not otherwise claimed |
-| `IPV6_UNHANDLED` | |
-| `CONFIG_NOT_PUSHED` | `config="0"` |
-| `SECRET_COMMITTED` | Azure PSK |
-| `TRUNK_ATTRS` | `native_vlan="1"` on EVE-TRUNK |
+| code                    | example                                                |
+| ----------------------- | ------------------------------------------------------ |
+| `UNCONFIGURED`          | Junos FortiGate port8, backbone Forti/F5               |
+| `DHCP_UPLINK`           | nexus, lab1, backbone out-255                          |
+| `STRUCTURAL_*`          | listed when relevant to the user's answers             |
+| `OUTLIER`               | c8kv-74, bb-rr84                                       |
+| `CORRUPT_CONFIG_REGION` | backbone viosl2 syslog splices                         |
+| `UNATTRIBUTED_LITERAL`  | 172.21.255.30, 10.100.51.11 when not otherwise claimed |
+| `IPV6_UNHANDLED`        |                                                        |
+| `CONFIG_NOT_PUSHED`     | `config="0"`                                           |
+| `SECRET_COMMITTED`      | Azure PSK                                              |
+| `TRUNK_ATTRS`           | `native_vlan="1"` on EVE-TRUNK                         |
 
 ---
 
@@ -937,7 +937,7 @@ have fenced off every `10.100.x` answer and service value.
 
 ### 8.1 Role
 
-Discovery is enough to *use* a lab. A manifest adds three things:
+Discovery is enough to _use_ a lab. A manifest adds three things:
 
 1. **Pinning for CI.** `expect` counts per segment and param, plus the baseline values. `make localize-check` fails
    when the lab changes in a way discovery attributes differently. Example: someone adds a node with a mgmt IP that no
@@ -1032,16 +1032,16 @@ pattern = 'set alias "(?P<v>pnet\d+)-trunk"'
 
 ### 8.3 The real labs
 
-| lab | manifest? | key content |
-|---|---|---|
-| `ccie_sec_v6_practice_lab`, `cisco_nexus_9000v_vxlan_bgp_evpn_concept_lab` | none (no clouds) | — |
-| `ccie_enterprise_infrastructure_practice_lab` | yes (small) | segment `SDWAN-CTRL` net 22, `site_key="site.sdwan_ctrl"`, `generic_labels=["Net"]`, status LABEL_ONLY |
-| `cisco_nexus_9000v_vpc_concept_lab` | yes | segment `INTERNET` net 6 (DHCP); `label_value` textobject 21 (subnet/gw) and 3 (dns 8.8.8.8); `generic_labels=["Internet"]`; `protect=["10.1.1.0/29","192.168.100.0/24"]` |
-| `lab1-ei-v01` | yes | segment `INTERNET` net 58 nat0 (DHCP); param `ntp_upstream` 34.202.215.187 (group advanced); `generic_labels=["Internet"]`; `protect` = simulated internet + 10/8, 172.16/16 |
-| `azure_asa_vpn` | yes | segments `INET-105` (net 1) and `MGMT-104` (net 3), separate site_keys; `site_routes` baseline `["10.25.0.0/16","10.100.0.0/16"]`; `scenarios.azure_s2s` enabled on node 1; protect `169.254.0.0/30`, `169.254.100.0/30`, `192.168.100.0/24`, `192.168.200.0/24` |
-| `vxlan_evpn_multi-site_sdwan_only` | yes | MGMT-203, MGMT-204, INET-201, INET-202, TRUNK (carrier); params dns_public, sla_targets (advanced), domain, domain_campus, search_extra, ntp, mgmt_routes |
-| `vxlan_evpn_multi-site_with_backbone` | yes | `canonical_scope="vxlan-dmvpn-backbone"`; MGMT (S1 baseline tag 203 / 172.21.203.0/24 / gw .254, `label_template="{octet3}-{host}"`); `[[legacy]]` S2 (1103/10.100.103.0/24, scopes startup+vxlan-no-vpc) and S3 (vxlan-vpc, untagged c8kv) with `policy="leave"`; TRUNK carrier (132,137,140,152); `[[merge]]` FW-MGMT-204 = 204-31..71 + trunk:204; INET-201 (25,78), INET-202 (44,117) LABEL_ONLY; OUT-255 (166) DHCP + merge trunk:255; outliers c8kv-74, bb-rr84; param dns_corp 172.21.255.12/.13 |
-| `vxlan_evpn_multi-site_junos` | yes | MGMT (5,13,24,58,76; /20, gw 10.100.255.254); INET-1240 (72, pnet2), INET-1242 (62, pnet2); `scenarios.bgp_upstream` nodes 9,18 peer_group HOME; protect `172.31.255.0/24`, `10.0.0.0/30`, `10.0.1.0/30`, `169.0.0.0/8`; params dns_mgmt 10.100.51.11, domain_campus, domain, dns_public |
+| lab                                                                        | manifest?        | key content                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| -------------------------------------------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ccie_sec_v6_practice_lab`, `cisco_nexus_9000v_vxlan_bgp_evpn_concept_lab` | none (no clouds) | —                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `ccie_enterprise_infrastructure_practice_lab`                              | yes (small)      | segment `SDWAN-CTRL` net 22, `site_key="site.sdwan_ctrl"`, `generic_labels=["Net"]`, status LABEL_ONLY                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `cisco_nexus_9000v_vpc_concept_lab`                                        | yes              | segment `INTERNET` net 6 (DHCP); `label_value` textobject 21 (subnet/gw) and 3 (dns 8.8.8.8); `generic_labels=["Internet"]`; `protect=["10.1.1.0/29","192.168.100.0/24"]`                                                                                                                                                                                                                                                                                                                               |
+| `lab1-ei-v01`                                                              | yes              | segment `INTERNET` net 58 nat0 (DHCP); param `ntp_upstream` 34.202.215.187 (group advanced); `generic_labels=["Internet"]`; `protect` = simulated internet + 10/8, 172.16/16                                                                                                                                                                                                                                                                                                                            |
+| `azure_asa_vpn`                                                            | yes              | segments `INET-105` (net 1) and `MGMT-104` (net 3), separate site_keys; `site_routes` baseline `["10.25.0.0/16","10.100.0.0/16"]`; `scenarios.azure_s2s` enabled on node 1; protect `169.254.0.0/30`, `169.254.100.0/30`, `192.168.100.0/24`, `192.168.200.0/24`                                                                                                                                                                                                                                        |
+| `vxlan_evpn_multi-site_sdwan_only`                                         | yes              | MGMT-203, MGMT-204, INET-201, INET-202, TRUNK (carrier); params dns_public, sla_targets (advanced), domain, domain_campus, search_extra, ntp, mgmt_routes                                                                                                                                                                                                                                                                                                                                               |
+| `vxlan_evpn_multi-site_with_backbone`                                      | yes              | `canonical_scope="vxlan-dmvpn-backbone"`; MGMT (S1 baseline tag 203 / 172.21.203.0/24 / gw .254, `label_template="{octet3}-{host}"`); `[[legacy]]` S2 (1103/10.100.103.0/24, scopes startup+vxlan-no-vpc) and S3 (vxlan-vpc, untagged c8kv) with `policy="leave"`; TRUNK carrier (132,137,140,152); `[[merge]]` FW-MGMT-204 = 204-31..71 + trunk:204; INET-201 (25,78), INET-202 (44,117) LABEL_ONLY; OUT-255 (166) DHCP + merge trunk:255; outliers c8kv-74, bb-rr84; param dns_corp 172.21.255.12/.13 |
+| `vxlan_evpn_multi-site_junos`                                              | yes              | MGMT (5,13,24,58,76; /20, gw 10.100.255.254); INET-1240 (72, pnet2), INET-1242 (62, pnet2); `scenarios.bgp_upstream` nodes 9,18 peer_group HOME; protect `172.31.255.0/24`, `10.0.0.0/30`, `10.0.1.0/30`, `169.0.0.0/8`; params dns_mgmt 10.100.51.11, domain_campus, domain, dns_public                                                                                                                                                                                                                |
 
 Example (junos, abridged):
 
@@ -1103,7 +1103,7 @@ key = "dns_mgmt"; kind = "ipv4_list"; site_key = "site.dns_mgmt"; baseline = ["1
 **Resolutions applied when `manifest.generate()` / `check()` were written (T15)** — additive
 
 - Signatures widened compatibly: `generate(a, previous=None)`; `check(a, m: Manifest | None, *, localized=None,
-  localized_params=None, leaks=True)`. `m=None` returns `UNPINNED` (warn) when the lab has clouds, else nothing.
+localized_params=None, leaks=True)`. `m=None` returns `UNPINNED` (warn) when the lab has clouds, else nothing.
   `localized` (segment key -> `Baseline`) / `localized_params` (param key -> values) carry the current localized values
   from `state.json`; those are then expected instead of the baseline (tri-state rule of 8.1). `a` must come from
   `analyse(lab, m)`.
@@ -1146,12 +1146,12 @@ key = "dns_mgmt"; kind = "ipv4_list"; site_key = "site.dns_mgmt"; baseline = ["1
 
 - Manifest `[[rule]]` tables are now applied (they were parsed but unused): `discover.manifest_rules(m, findings)`
   turns them into `PatternRule`s per dialect (`dialects = []` = every dialect, key `"*"`); `ConfigIndex(topo, texts,
-  extra_rules)` parses with `topology.with_rules(dialect, rules)`, an unregistered subclass copy of the dialect with the
+extra_rules)` parses with `topology.with_rules(dialect, rules)`, an unregistered subclass copy of the dialect with the
   extra rules appended (rendering does not depend on rules). Invalid rules are dropped with a `MANIFEST_RULE` error
   finding. Without a manifest nothing changes. The sdwan manifest uses five rules (c8kv-75/77 static NAT globals, PBR
   ACL networks and `set ip next-hop`, the FortiGate header comment) to resolve its `LEAK`s; the ACL wildcard
-  `0.0.0.255` was not rewritten (fine for /24 targets, a known gap otherwise). *Resolved during review fixes
-  (l3-validation)*: the rule captures `(?P<wildcard>IPV4)` and the wildcard follows the new prefix (section 11.3).
+  `0.0.0.255` was not rewritten (fine for /24 targets, a known gap otherwise). _Resolved during review fixes
+  (l3-validation)_: the rule captures `(?P<wildcard>IPV4)` and the wildcard follows the new prefix (section 11.3).
 - `site_key` policy: keys are shared across labs only when every baseline value (including the label) agrees, so that
   `localize/site.example.toml` (first lab per key wins) replays as a no-op on every lab. The real labs have no such
   pair (sdwan `EVE-INET-201` vs backbone `INET-201` etc.), so the sdwan segments use `site.*` keys and the other labs
@@ -1267,19 +1267,19 @@ class Question:
 
 ### 10.2 Relevance rules (questions follow facts)
 
-| Question | Asked only if |
-|---|---|
-| bridge | once per **segment** (not per pnet type). CARRIER defaults to the bridge of the segments it carries. Choices are annotated from `hostenv` (exists/up) and the profile roles. Moving a tagged segment to another trunk bridge keeps its tag. Moving it to a bridge marked `untagged-only` is a **blocker** (structural). |
-| merge | a hint-level link exists and the manifest has not confirmed it |
-| tag | the scheme tag is numeric and PROVEN tag facts exist; never for untagged/unknown; never for internal-only tags (junos 1241/1243) |
-| subnet / gateway | the scheme has a subnet from PROVEN facts. DHCP and LABEL_ONLY segments get no subnet question, but a status note. Label-only subnets (nexus textobject 21) are asked as "documentation only". |
-| split / host map | only when the new prefix cannot hold every baseline host offset |
-| label | the segment has cloud networks. A suggestion comes from `label_template`. Text propagation follows the distinctiveness rule (10.4). |
-| scope / legacy | the segment has legacy schemes (backbone). Default `leave`. |
-| dns / domain / ntp / probe | a ServiceFact exists in an in-scope store. One question per distinct value, with counts per dialect and store. |
-| site routes | supernet `ip_route_dst` facts exist via a segment gateway |
-| scenario groups | `applies()`: manifest-enabled or signature detected. A yes/no gate, default no. |
-| secrets | a `SECRET_COMMITTED` finding exists (optional placeholder replacement) |
+| Question                   | Asked only if                                                                                                                                                                                                                                                                                                           |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| bridge                     | once per **segment** (not per pnet type). CARRIER defaults to the bridge of the segments it carries. Choices are annotated from `hostenv` (exists/up) and the profile roles. Moving a tagged segment to another trunk bridge keeps its tag. Moving it to a bridge marked `untagged-only` is a **blocker** (structural). |
+| merge                      | a hint-level link exists and the manifest has not confirmed it                                                                                                                                                                                                                                                          |
+| tag                        | the scheme tag is numeric and PROVEN tag facts exist; never for untagged/unknown; never for internal-only tags (junos 1241/1243)                                                                                                                                                                                        |
+| subnet / gateway           | the scheme has a subnet from PROVEN facts. DHCP and LABEL_ONLY segments get no subnet question, but a status note. Label-only subnets (nexus textobject 21) are asked as "documentation only".                                                                                                                          |
+| split / host map           | only when the new prefix cannot hold every baseline host offset                                                                                                                                                                                                                                                         |
+| label                      | the segment has cloud networks. A suggestion comes from `label_template`. Text propagation follows the distinctiveness rule (10.4).                                                                                                                                                                                     |
+| scope / legacy             | the segment has legacy schemes (backbone). Default `leave`.                                                                                                                                                                                                                                                             |
+| dns / domain / ntp / probe | a ServiceFact exists in an in-scope store. One question per distinct value, with counts per dialect and store.                                                                                                                                                                                                          |
+| site routes                | supernet `ip_route_dst` facts exist via a segment gateway                                                                                                                                                                                                                                                               |
+| scenario groups            | `applies()`: manifest-enabled or signature detected. A yes/no gate, default no.                                                                                                                                                                                                                                         |
+| secrets                    | a `SECRET_COMMITTED` finding exists (optional placeholder replacement)                                                                                                                                                                                                                                                  |
 
 **Validators:**
 
@@ -1324,8 +1324,7 @@ class Question:
   names (`HostnameServiceMixin`: FortiOS, F5); otherwise the prompt requires IPv4 (no more silent `BAD_VALUE` drop
   after the questions).
 - **azure_s2s**: `local_asn` must differ from the answered-or-discovered `azure_asn` and vice versa (prompt validator,
-  plus an `AZURE_ASN_EQUAL` blocker in `plan()`); `azure_asn` also refuses Azure-reserved ASNs except Azure's default
-  65515. A non-public `peer_ip` is accepted (in-lab simulated gateway) with an `AZURE_PEER_PRIVATE` warning.
+  plus an `AZURE_ASN_EQUAL` blocker in `plan()`); `azure_asn` also refuses Azure-reserved ASNs except Azure's default 65515. A non-public `peer_ip` is accepted (in-lab simulated gateway) with an `AZURE_PEER_PRIVATE` warning.
 - **secrets**: `psk` is offered only when cleartext PSKs exist; the history note names the Azure VPN gateway only when
   the `azure_s2s` scenario applies, otherwise "rotate it wherever it is used".
 - Lab picker: a range (`2-4`) skips non-selectable labs; a single explicit number still errors. After `a` the review
@@ -1373,20 +1372,20 @@ Otherwise only the XML `name` changes. This protects `INTERNET-ONLY`, `fd-to-int
 
 **Resolutions applied during review fixes (labels)**
 
-- *Label validation.* `labels.label_error()` is the hard rule for every segment label (question validator, so the
+- _Label validation._ `labels.label_error()` is the hard rule for every segment label (question validator, so the
   answers-file and profile paths too, and again in the plan as `BAD_LABEL` error): non-empty, no surrounding blanks,
   none of `< > & "` or control characters, plus `unl.check_label` (printable, at most 64). Field limits of the device
   texts a label reaches go through an extensible dialect hook `label_problem(fact, new, text) -> str | None`, checked
   per `label_ref` / `vlan_name` fact (`labels.text_label_problem`): FortiOS `alias` at most 25 characters
   (`description` 255, `comment(s)` 1023, no `"`); Cisco (`CiscoDialect`: IOS, IOS-XE, NX-OS) `vlan N / name` at most
   32 characters without blanks. A dialect without the hook has no extra limit.
-- *Reversible propagation.* The new label must itself be findable again: text references follow only when the new
+- _Reversible propagation._ The new label must itself be findable again: text references follow only when the new
   label is one `_common.LABEL_TOKEN` and distinctive (`labels.text_safe`); otherwise the planner emits one
   `LABEL_TEXT_KEPT` warning and only the network names change (`MGMTX`, `Mgmt B`), so `revert` stays byte-identical.
   The labels an apply actually wrote into text are recorded in `state.json` as `baseline_text_labels`
   (`{label now in text: original label}`, composed over runs); the CLI passes their keys as
   `PlanOptions.written_labels`, and a written label follows a rename even when it fails the distinctiveness rule.
-- *Template-derived labels.* An unanswered label is renamed when a template that reproduces the network's current
+- _Template-derived labels._ An unanswered label is renamed when a template that reproduces the network's current
   name with the current values renders differently with the answered tag / subnet (`labels.derive(strict=True)`),
   network by network: manifest `label_template` first, then the NameExplainer suggestion, where a digit run that is
   both tag and third octet ("ambiguous") takes the kind the manifest template uses (`mgmt-203` ->
@@ -1516,16 +1515,16 @@ class ValueMaps:
 
 ### 11.2 Per location
 
-| Location | Rule |
-|---|---|
-| **Network `type`** | `attr_edit` on each network id of the segment. No attributes are added, removed or reordered. `smart`, `vlan8021ad` and `native_vlan` are preserved. |
-| **Network `name`** | By id, only on the segment's cloud networks whose current name equals the old label or matches the template. Bridges are never renamed (`Net-mgmt-203iface_*`, bridge 64 `Net`). Templated renames keep host suffixes (`203-67` → `20-67`). |
-| **Interface `vid`** | Never changed (always 1). |
-| **Startup configs / configsets** | Every `ConfigText` is parsed and rewritten **independently** with the same ValueMaps, so all stores stay consistent. Legacy-scheme scopes are handled per the `legacy_scopes` policy (default `leave`, with a warning listing them). Re-encoding goes through `encode_blob(like=original)`. |
-| **Sidecar files** | The same treatment as configs. Written back with the original newline style and trailing newline. Mirrors get identical edits, followed by an equality assertion. |
-| **Textobject HTML** | Only through `label_value` facts (manifest) or `eve_html` text-node facts. Exact IP, CIDR or label tokens that equal proven old values are matched in text nodes only. The decoded HTML is spliced and re-encoded. `<br>`, trailing spaces and CSS are untouched. Unchanged textobjects keep their exact bytes. |
-| **`<description>` / `<task>`** | Never decoded or edited. If a manifest declares `scan_description = true`, exact proven old values found there are reported as `LEAK` warnings only. Tasks can hold MB-sized PDFs. |
-| **`<lab id/name/author>`** | Never edited, except in `--out` copy mode, which sets a new `uuid4` id and an optional name suffix. |
+| Location                         | Rule                                                                                                                                                                                                                                                                                                            |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Network `type`**               | `attr_edit` on each network id of the segment. No attributes are added, removed or reordered. `smart`, `vlan8021ad` and `native_vlan` are preserved.                                                                                                                                                            |
+| **Network `name`**               | By id, only on the segment's cloud networks whose current name equals the old label or matches the template. Bridges are never renamed (`Net-mgmt-203iface_*`, bridge 64 `Net`). Templated renames keep host suffixes (`203-67` → `20-67`).                                                                     |
+| **Interface `vid`**              | Never changed (always 1).                                                                                                                                                                                                                                                                                       |
+| **Startup configs / configsets** | Every `ConfigText` is parsed and rewritten **independently** with the same ValueMaps, so all stores stay consistent. Legacy-scheme scopes are handled per the `legacy_scopes` policy (default `leave`, with a warning listing them). Re-encoding goes through `encode_blob(like=original)`.                     |
+| **Sidecar files**                | The same treatment as configs. Written back with the original newline style and trailing newline. Mirrors get identical edits, followed by an equality assertion.                                                                                                                                               |
+| **Textobject HTML**              | Only through `label_value` facts (manifest) or `eve_html` text-node facts. Exact IP, CIDR or label tokens that equal proven old values are matched in text nodes only. The decoded HTML is spliced and re-encoded. `<br>`, trailing spaces and CSS are untouched. Unchanged textobjects keep their exact bytes. |
+| **`<description>` / `<task>`**   | Never decoded or edited. If a manifest declares `scan_description = true`, exact proven old values found there are reported as `LEAK` warnings only. Tasks can hold MB-sized PDFs.                                                                                                                              |
+| **`<lab id/name/author>`**       | Never edited, except in `--out` copy mode, which sets a new `uuid4` id and an optional name suffix.                                                                                                                                                                                                             |
 
 ### 11.3 Per value class and dialect
 
@@ -1550,14 +1549,14 @@ class ValueMaps:
   sub-range. `host_overrides` win.
 - The mask token adjacent to a rewritten IP is rewritten **in its own form** (`255.255.255.0`, `/24`, `netmask M`),
   and only if the prefix length changed.
-- *Resolution applied during review fixes (l3-validation)*: an ACL wildcard is a mask form too (`mask_form =
-  "wildcard"`). A rule captures it with `(?P<mask>MASK)` (a contiguous non-netmask quad such as `0.0.0.255` is
+- _Resolution applied during review fixes (l3-validation)_: an ACL wildcard is a mask form too (`mask_form =
+"wildcard"`). A rule captures it with `(?P<mask>MASK)` (a contiguous non-netmask quad such as `0.0.0.255` is
   classified `wildcard`) or with `(?P<wildcard>IPV4)` (always read as a host mask, so `0.0.0.0` is /32). It is
   rewritten as a wildcard (`0.0.1.255` for /23) **only** when it equals the segment's old prefix (the ACL matches the
   whole segment); host matches and wider summaries keep their width (no split-delta adjustment). Wildcard facts never
   feed subnet discovery (`host_network`). The sdwan rule `sdwan.acl_any_to_net` captured its wildcard this way, which
   closes the T20 "known gap" below.
-- *Resolution applied during review fixes (integration)*: lab rework 32d9b62 (per-provider VRFs on the CSRv) removed
+- _Resolution applied during review fixes (integration)_: lab rework 32d9b62 (per-provider VRFs on the CSRv) removed
   the sdwan PBR ACL and `set ip next-hop`, so `sdwan.acl_any_to_net` and `sdwan.pbr_next_hop` were dropped from the
   manifest. `sdwan.nat_static_global` now accepts a trailing `vrf <name>`, and the FortiGate hub rules became
   `sdwan.fgt_nat_note_a/_b` (header comment), `sdwan.fgt_lo_alias_nat` (loopback alias `(NAT a.b.c.d)`) and
@@ -1580,17 +1579,17 @@ Forti `pnet0-trunk`.
 
 **Per-dialect specifics:**
 
-| dialect | specifics |
-|---|---|
-| ios / iosxe / iol | `ip domain-name` vs `ip domain name` kept as is; dotted masks; VRF defaults; uncabled ports per the VLAN-domain rule |
-| nxos | `/len` masks, 2-space indent, lowercase `dot1q` internal subifs are protected, range lists |
-| asa | trailing-space `ip address … MASK `; `route <nameif> NET MASK GW 1`; object names that are IPs (`tunnel-group 172.173.204.134`) are only changed by `azure_s2s` exact claims; `Cryptochecksum:` goes stale (info) |
-| fortios | `set vlanid`, `set ip A M`, `set gateway`, `set remote-gw`, `set router-id`, quoted alias, description and comments; static route stanza deletion supported |
-| f5tmsh | `management-ip A/len`, `management-route default gateway`, `replace-all-with { … }` lists |
-| junos | `address A/len;`, `next-hop X;`, `name-server { X routing-instance …; }`, no trailing newline kept |
-| linuxsh | `ip addr add A/len`, `ifconfig eth0 A netmask M`, `route add default gw G`, resolv.conf heredoc |
-| eve_html | text-node tokens only |
-| generic | proven-subnet IPv4 + distinctive label tokens, CORRELATED; never tags |
+| dialect           | specifics                                                                                                                                                                                                        |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ios / iosxe / iol | `ip domain-name` vs `ip domain name` kept as is; dotted masks; VRF defaults; uncabled ports per the VLAN-domain rule                                                                                             |
+| nxos              | `/len` masks, 2-space indent, lowercase `dot1q` internal subifs are protected, range lists                                                                                                                       |
+| asa               | trailing-space `ip address … MASK`; `route <nameif> NET MASK GW 1`; object names that are IPs (`tunnel-group 172.173.204.134`) are only changed by `azure_s2s` exact claims; `Cryptochecksum:` goes stale (info) |
+| fortios           | `set vlanid`, `set ip A M`, `set gateway`, `set remote-gw`, `set router-id`, quoted alias, description and comments; static route stanza deletion supported                                                      |
+| f5tmsh            | `management-ip A/len`, `management-route default gateway`, `replace-all-with { … }` lists                                                                                                                        |
+| junos             | `address A/len;`, `next-hop X;`, `name-server { X routing-instance …; }`, no trailing newline kept                                                                                                               |
+| linuxsh           | `ip addr add A/len`, `ifconfig eth0 A netmask M`, `route add default gw G`, resolv.conf heredoc                                                                                                                  |
+| eve_html          | text-node tokens only                                                                                                                                                                                            |
+| generic           | proven-subnet IPv4 + distinctive label tokens, CORRELATED; never tags                                                                                                                                            |
 
 **Resolutions applied when the core scenarios and the planner were written (T16, T18)**
 
@@ -1612,7 +1611,7 @@ Forti `pnet0-trunk`.
   entries before any scenario plans). `scenarios.load_builtin()` imports the nine built-in modules (missing ones are
   skipped); `ordered()` sorts by `order` (bridge 10, segment_l2 20, segment_l3 30, labels 40).
 - Answers are taken literally: unanswered = keep. Question defaults (role bridge, carrier follow, same-offset gateway,
-  templated label) are what the CLI stores with `--yes`. *Review fix (labels):* the templated label is derived by
+  templated label) are what the CLI stores with `--yes`. _Review fix (labels):_ the templated label is derived by
   the planner itself when the label is unanswered (10.4 resolutions), so it no longer depends on `--yes`. Exception: when no bridge answer exists the planner applies
   the role default and the carrier-follow rule itself (section 9 steps 4-5).
 - A VLAN answer for an untagged segment is a `TAG_NOT_APPLICABLE` warning (ignored), not a blocker, so one shared
@@ -1639,7 +1638,7 @@ Forti `pnet0-trunk`.
 
 - Python ≥ 3.11. The repo root is found with `git rev-parse` (optional; the tool also works outside git).
 - **Git state**: if a target file is dirty → warning. With `--require-clean` → precondition failure. A file that is
-  dirty *because of a previous localization recorded in `state.json`* counts as clean.
+  dirty _because of a previous localization recorded in `state.json`_ counts as clean.
 - **Running nodes** (`hostenv.running_nodes(lab_id)`): scan `/proc/*/cmdline` for qemu, iol, dynamips or vpcs
   processes, and `docker ps` labels/names, that reference the lab UUID or its `/opt/unetlab/tmp/<pod>/<uuid>/` path.
   Live processes → blocker, unless `--force-running`. A leftover `/opt/unetlab/tmp/*/<uuid>/` directory with **no live
@@ -1659,12 +1658,12 @@ Forti `pnet0-trunk`.
 1. Back up every touched file (`.unl` and sidecars) with `shutil.copy2` to
    `.localize/backups/<run-id>/<relpath>`, recording mode, uid and gid.
 2. For each file: write a temp file in the same directory, `fsync`, `os.chmod(orig_mode)`, and `os.chown(orig_uid,
-   orig_gid)` when euid is 0. If not root and the owner differs → warning plus a `make fix-perms` hint. Skipped on
+orig_gid)` when euid is 0. If not root and the owner differs → warning plus a `make fix-perms` hint. Skipped on
    Windows.
 3. Validate the temps (12.3) **before** `os.replace`. If any lab file fails, nothing is replaced for that lab.
 4. `os.replace` all temps, then `fsync` the directory.
 5. Append to `.localize/journal.json`: `{run_id, ts, user, host, labs: {lab_id: {files: {path: {before_sha,
-   after_sha, mode, uid, gid}}, answers_digest, plan_digest}}}`. Update `.localize/state.json`:
+after_sha, mode, uid, gid}}, answers_digest, plan_digest}}}`. Update `.localize/state.json`:
    `{lab_id: {localized: true, site_keys: {...}, values: {...}, after_sha}}`.
 6. With `--all`, each lab is its own transaction. The summary lists exactly which labs were localized, skipped, failed
    (rolled back) or untouched. `--continue-on-error` controls whether a failure stops the run.
@@ -1732,7 +1731,7 @@ git pull --ff-only
 
 `make localize-sync` prints these steps without running git. CI (`localize-check`) enforces that committed labs are at
 baseline, so contributors can't accidentally push localized values. Run `revert` before contributing a lab back. A lab
-that a cloner created *with their own site values* can be "baselined" with
+that a cloner created _with their own site values_ can be "baselined" with
 `discover --write --baseline-from-answers`, which maps their values back to the repo's site_keys when they choose to.
 
 ### 12.6 Copy mode (`--out DIR`)
@@ -1744,7 +1743,7 @@ irrelevant. It needs a re-run after upstream changes, which is idempotent.
 **Resolutions applied during review fixes (apply-safety)**
 
 - `OUT_IS_SOURCE` (blocker): `DIR` is the lab's own directory, or a copy would land on one of its source files.
-- An existing lab at the destination gets the in-place running-node check for *its* id (`RUNNING_NODES`, unless
+- An existing lab at the destination gets the in-place running-node check for _its_ id (`RUNNING_NODES`, unless
   `--force-running`) plus an `EVE_SAVE_RACE` warning.
 - The destination's id is reused on re-runs only when it is not the source's id, not another tracked lab's id, and not
   an id this run already gave another copy; otherwise a new `uuid4` is minted with a `DEST_ID_DUPLICATE` warning (a
@@ -1772,7 +1771,7 @@ irrelevant. It needs a re-run after upstream changes, which is idempotent.
 
 **Resolutions applied when `apply.py` was written (T12)** — additive to section 3.2
 
-- Edit offsets (contract for T18): `xml_attr` → `text_edit.start/end` are **byte** offsets of the attribute *value*
+- Edit offsets (contract for T18): `xml_attr` → `text_edit.start/end` are **byte** offsets of the attribute _value_
   span (`RawAttr.span`) in the `.unl`, `old`/`new` are decoded values (apply escapes via `RawLab.attr_edit`; a
   mismatching `old` is `STALE_EDIT`). `blob` (`store.kind` `startup`/`configset`, located by scope + `node_id`) and
   `textobject` (`store.name` = textobject id) → offsets into `DecodedBlob.text`. `sidecar` → offsets into
@@ -1788,7 +1787,7 @@ irrelevant. It needs a re-run after upstream changes, which is idempotent.
 - Added `apply_plans(plans, opts) -> RunRecord` (one run id, one journal entry, per-lab transactions);
   `apply_plan(plan)` = `apply_plans([plan])`. `RunRecord(run_id, ts, labs: list[LabResult], journaled, mode)` with
   `.ok`, `.exit_code` (5 > 4 > 2 > 1), `.findings`, `by_status()`; `LabResult.status` is `localized | unchanged |
-  skipped (preflight) | failed (nothing replaced or rolled back) | untouched`.
+skipped (preflight) | failed (nothing replaced or rolled back) | untouched`.
 - Re-scan hook: `rescan(staged_lab_path, plan) -> Sequence[Edit] | int`; it receives a **staged full copy** (new
   `.unl` + the lab's sidecar dirs in a temp dir) because validation runs before `os.replace`. It may raise
   `ValidationError` for scheme mismatches. `check-labs` also runs on the staged copy plus peers (the original lab is
@@ -1799,7 +1798,7 @@ irrelevant. It needs a re-run after upstream changes, which is idempotent.
 - Copy mode reuses the id of an existing destination lab (idempotent re-runs), else `uuid4`; copies the lab's
   sidecar dirs whole; is journaled (`mode: "out"`, undo deletes created files) but never touches `state.json`.
 - Journal `{schema, runs: [{run_id, ts, user, host, mode, labs: {lab_id: {lab, source, mode, files: {abs path:
-  {before_sha, after_sha, mode, uid, gid, backup, created}}, answers_digest, plan_digest, edits, prev_state}}, undone?}]}`;
+{before_sha, after_sha, mode, uid, gid, backup, created}}, answers_digest, plan_digest, edits, prev_state}}, undone?}]}`;
   undo restores `prev_state`. `state.json` entries also carry `files: {abs path: after_sha}` (used by the git-dirty
   check) and `run_id`. Preflight adds `EVE_SAVE_RACE` (warn, in place only) and `OWNER_DIFFERS` (warn, non-root).
 
@@ -1885,14 +1884,14 @@ future web UI) can fill an answers file from it and replay with `--answers --non
 
 Exit codes:
 
-| code | meaning |
-|---|---|
-| 0 | ok, or nothing to do |
-| 1 | error |
-| 2 | conflicts or blockers |
-| 3 | unanswered under `--strict` |
-| 4 | precondition failed (dirty / running / sha drift / lock) |
-| 5 | validation failed (rolled back) |
+| code | meaning                                                  |
+| ---- | -------------------------------------------------------- |
+| 0    | ok, or nothing to do                                     |
+| 1    | error                                                    |
+| 2    | conflicts or blockers                                    |
+| 3    | unanswered under `--strict`                              |
+| 4    | precondition failed (dirty / running / sha drift / lock) |
+| 5    | validation failed (rolled back)                          |
 
 **Resolutions applied when `cli.py` was written (T19)** — additive, no contract change
 
@@ -1906,8 +1905,8 @@ Exit codes:
   `scenarios.apply_answer` while the questions are walked (so dependent defaults are recomputed); an invalid value is
   `BAD_ANSWER` (exit 1). TOML files go to `profile.load_profile`; `.localize/site.toml` is used only when no
   `--profile`/`--answers` is given and it exists.
-- Question loop: questions are re-collected after every answer. A question is *answered* when its `default_source`
-  starts with `from `, `map.`, `scenarios.` or `site_routes.` (gates: `ans.scenario_enabled()` is not None). Non-
+- Question loop: questions are re-collected after every answer. A question is _answered_ when its `default_source`
+  starts with `from`, `map.`, `scenarios.` or `site_routes.` (gates: `ans.scenario_enabled()` is not None). Non-
   interactive runs skip answered questions; `--yes` stores a default only when it differs from `current`; keep mode
   records unanswered ones (`--strict` → exit 3). Interactive runs ask everything (defaults from the profile); `k` on a
   profile-answered question stores the current value (overrides the profile), `s` sets `SegmentAnswer.skip`, `b`
@@ -1921,7 +1920,7 @@ Exit codes:
   new id in `--out` mode). Unpinned labs: interactive runs confirm the matrix; non-interactive writes need
   `--allow-unpinned` (else exit 4); `--strict` without `--allow-unpinned` refuses the lab (exit 1).
 - `state.json` extras written by the CLI: `values` (target bridge/vlan/subnet/gateway/label per segment key),
-  `baseline` (values before the *first* localization, with `networks`), `baseline_maps` (service maps composed from the
+  `baseline` (values before the _first_ localization, with `networks`), `baseline_maps` (service maps composed from the
   original values), `site_keys`. `revert` builds answers as `[labs."<id>".segments."<key>"]` overrides from
   `baseline` (matched by network id, so relabelled unpinned segments are found) overlaid by manifest baselines, plus
   inverse `baseline_maps`; with neither it skips the lab. `check` feeds `values`/`baseline_maps` to `manifest.check`
@@ -2159,7 +2158,6 @@ review section.
     `LEAK`; an unpinned lab gives a warning (error under `--strict`); a stale `site.example.toml` fails.
 12. **Lint**: ruff + black through `make lint` on `python/` (config in `python/pyproject.toml`).
 
-
 **Resolutions applied when the goldens were written (T21)**
 
 - Goldens live in `python/tests/localize/golden/`: `<stem>.scan.json` = the `scan --json` lab entry plus
@@ -2186,83 +2184,83 @@ review section.
 
 ## 15. Edge cases and gap closure
 
-| # | Pitfall / gap | Handling |
-|---|---|---|
-| 1 | Labs with no clouds (ccie_sec, vxlan concept) | NONE status, "nothing to localize", exit 0, zero diff (10.6) |
-| 2 | Name-based external detection (`R-ISP`, `ISP1`, `Internet Cloud`) | external ⇔ `type != "bridge"` only |
-| 3 | Duplicate names (`Net` cloud + bridge 64; `EVE-MGMT-203`×6; `mgmt-203`×9; `INET-201`×2; textobject names) | everything keyed by id; renames by segment → ids; bridges never renamed |
-| 4 | Bridge names containing external text (`Net-mgmt-203iface_*`, `Net-R14iface_16`) | bridges excluded from rename, hints and text propagation |
-| 5 | Number in name ≠ tag (`EVE-MGMT-203`=tag 2; `mgmt-104`; `mgmt58`; `203-67`) | NameExplainer classes; display and suggestion only; ambiguous → ask |
-| 6 | Untagged segments (azure, nexus, lab1, junos mgmt) | no tag question; tagging request → STRUCTURAL blocker with exact lines |
-| 7 | DHCP uplinks | DHCP status; bridge question plus "target must provide DHCP"; no subnet question; T22 transform later |
-| 8 | Attached nodes with no config (Forti/F5 in junos/backbone, ccie EI controllers) | LABEL_ONLY; bridge and label only; never borrow values from sibling labs |
-| 9 | Values only in a textobject (nexus 21/3) | manifest `label_value`; documentation-only prompt; text-node splice |
-| 10 | SVG/CSS numbers in textobjects | html text nodes only; unchanged blobs not re-encoded |
-| 11 | Small tags colliding (`rd 2:2`, `edit 2`, `ike-version 2`, `community 204:204`, `rd 203:203`) | tag-bearing syntax only + protected inventory + negative tests |
-| 12 | External tag reused internally (junos Gi3/Gi5 `.1240`) | attached-parent scoping; protected look-alikes listed |
-| 13 | Internal-only tags (1241/1243) | no question; protected |
-| 14 | Subif/SVI number = tag | `subif_policy` rename with in-config refs; cross-config refs via `to <node>: <if>` pattern or warning |
-| 15 | NX-OS VLAN range lists | VlanList, style-preserving, collision checks |
-| 16 | L2 pass-through (BGW, IOL access to mgmt0/F5) | l2trace, PROVEN |
-| 17 | IOL trunk without allowed list; **implicit VLANs** (backbone dmvpn) | trunk = ALL of `vlan_db` including implicit VLANs |
-| 18 | Uncabled configured ports | switch VLAN-domain rule, CORRELATED, `uncabled` badge |
-| 19 | Startup vs configset disagree; nodes absent from configset | per-scope trace and schemes; each store edited independently; startup fallback |
-| 20 | Multiple schemes (backbone S1/S2/S3) | scheme matrix; canonical scope; legacy policy default `leave` (warning lists untouched scopes) |
-| 21 | Outliers / pre-existing bugs | excluded by default, `--include-outliers`; never "fixed" |
-| 22 | Sidecar dir ≠ stem; ambiguous dirs | `<stem>*_cfgs`; manifest `sidecar_dirs`; ambiguity = blocker |
-| 23 | Sidecar id reused in another lab / name mismatch | id **and** name guard; skip with warning; `[sidecar_map]` override |
-| 24 | Sidecar mirrors | mirror detection, replicated edits, equality assertion |
-| 25 | Sidecar-only values (Forti/F5) | sidecars are first-class stores; post-apply "re-paste to devices" note |
-| 26 | UTF-8 em dash, CRLF/LF, trailing spaces, leading/missing newline, `^C`, text after `end` | byte-exact span splices; newline style recorded |
-| 27 | Non-canonical base64 | read-only blob; edits blocked |
-| 28 | Stray `<objects/>`, huge task PDF, attribute order | ET read-only; raw splicing; skip regions; outside-span byte check |
-| 29 | Garbage or empty blobs | opaque; info finding |
-| 30 | Spliced syslog / truncated headers | tolerant blocks; orphan facts CORRELATED by value; badge |
-| 31 | Node name ≠ role/hostname | dialect from template/image/content; config by node id |
-| 32 | IP prefix substrings, cert hex | boundary tokenizer + `ipaddress` validation |
-| 33 | Mask forms, prefix change | adjacent mask token rewritten in its own form |
-| 34 | Supernet / home routes | `site_routes` list question; deletion only where the dialect supports it |
-| 35 | /20 as two /24s (junos) | broadest prefix; offset map; **split map** or host overrides when it doesn't fit |
-| 36 | Gateway .1 vs .254 | separate question, default same offset |
-| 37 | Same host octet across segments | maps per segment subnet, never by last octet |
-| 38 | Router-id / peers derived from external IPs | CORRELATED members rewritten, listed as "derived" |
-| 39 | Two segments on one untagged pnet (azure) | bridge question per segment; warning if they stay shared with different subnets |
-| 40 | Moving one segment off a shared trunk (sdwan INET) | allowed with the tag unchanged; untagged-only target = blocker |
-| 41 | Domain substrings; three domain syntaxes | anchored rules + `domain_re`; one question per domain |
-| 42 | `name servers` VLAN name | anchored DNS keywords only |
-| 43 | Public-looking internal IPs; 1.1.1.0/30 labels | only proven-subnet members or anchored services; protected inventory |
-| 44 | 169.254 APIPA external vs internal | `azure_s2s` scoped to Tunnel1 /30 + its routes; others protected |
-| 45 | Peer IP used as object name | `azure_s2s` exact claim, ASAv-1 only |
-| 46 | Committed real secret | redacted; placeholder option; rotation + history note |
-| 47 | Cryptochecksum, timestamps, UDI, PKI, call-home | no rule matches; info for the checksum |
-| 48 | Upstream eBGP instead of a default route | `bgp_upstream` scenario (peer IP, AS, prefixes; community recomputed if the local AS changes) |
-| 49 | Internal prefix exported upstream (172.31.255.0/24) | overlap warning; advanced question |
-| 50 | Generic labels vs policy names (`INTERNET-ONLY`) | distinctiveness rule: XML name only |
-| 51 | `pnet0` in text; alias across segments | cosmetic cloud_ref group; ambiguous aliases skipped |
-| 52 | `(VLAN 3)`, "reserve .31" free text | label-line-scoped cosmetic edits; under non-offset maps rewritten or warned |
-| 53 | Cross-config references to renamed subifs | `to <node>: <if>` rewrite or `LEAK` warning |
-| 54 | Collision with addresses in use at the target site / DHCP pools | profile `reserved` / `dhcp_pool` per segment → warnings |
-| 55 | Lab-internal overlap with target subnets (lab1 172.16/16, 10/8 deny lists) | protected inventory → conflict, or warning for prefix-list-only |
-| 56 | Running lab | process-based detection; leftover tmp dir = info "not wiped" |
-| 57 | Lab open in UI (EVE overwrites on save) | warnings; `check` detects "reverted by EVE?"; `--out` copy mode |
-| 58 | `config="0"` / active configset mismatch | notice per node; next-steps list wipes; `scan` shows which scope each node boots from (pointers not auto-changed: EVE UI decision) |
-| 59 | Thumbnails stale | notice |
-| 60 | Ownership `www-data`, mode | chmod/chown to the original on the temp file; `--fix-perms` |
-| 61 | Re-runs, partial localization | current→target planning; tri-state; 0-edit re-plan |
-| 62 | File changed between plan and apply | sha precondition blocker |
-| 63 | Unique `<lab id>` | never edited in place; `--out` makes a uuid4; check-labs over the repo |
-| 64 | `git pull` after localizing; contributing back | `revert → pull → apply`; CI enforces baseline; `--out` alternative |
-| 65 | Cross-lab "same real network" vs "same name" | explicit `site_key` bindings in manifests; value-match suggestions are never auto-applied |
-| 66 | Cloner's own new labs (values ≠ author baseline) | discovery works on any values; `discover --baseline-from-answers` |
-| 67 | Unknown future vendor | generic dialect (CORRELATED IPv4 + label tokens, no tags) + finding; add a rule pack |
-| 68 | Unknown future EVE XML layout | ET cross-check → read-only |
-| 69 | IPv6 literals | `IPV6_UNHANDLED` findings; not rewritten |
-| 70 | EVE trunk attrs (`native_vlan`, `vlan8021ad`) | displayed; warning if profile `bridges.*.native_vlan` differs; not edited |
-| 71 | Platform VLAN limits | IOS/NX-OS reserved ranges validated; Forti/Junos/F5 at 1-4094; host bridge VLAN filtering not checkable → `--check-host` info (`bridge vlan show` if present) |
-| 72 | Image / template availability | out of scope; `scan --images` lists missing images on the EVE host |
-| 73 | Windows / non-POSIX | O_EXCL lock fallback; chown/sys probes skipped; paths via pathlib |
-| 74 | Machine-readable prompting | `scan --json` question schema + `--answers --non-interactive` |
-| 75 | Sidecar node-id drift after re-adding nodes | id+name guard reports a mismatch; `[sidecar_map]` in the manifest re-maps |
+| #   | Pitfall / gap                                                                                             | Handling                                                                                                                                                      |
+| --- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Labs with no clouds (ccie_sec, vxlan concept)                                                             | NONE status, "nothing to localize", exit 0, zero diff (10.6)                                                                                                  |
+| 2   | Name-based external detection (`R-ISP`, `ISP1`, `Internet Cloud`)                                         | external ⇔ `type != "bridge"` only                                                                                                                            |
+| 3   | Duplicate names (`Net` cloud + bridge 64; `EVE-MGMT-203`×6; `mgmt-203`×9; `INET-201`×2; textobject names) | everything keyed by id; renames by segment → ids; bridges never renamed                                                                                       |
+| 4   | Bridge names containing external text (`Net-mgmt-203iface_*`, `Net-R14iface_16`)                          | bridges excluded from rename, hints and text propagation                                                                                                      |
+| 5   | Number in name ≠ tag (`EVE-MGMT-203`=tag 2; `mgmt-104`; `mgmt58`; `203-67`)                               | NameExplainer classes; display and suggestion only; ambiguous → ask                                                                                           |
+| 6   | Untagged segments (azure, nexus, lab1, junos mgmt)                                                        | no tag question; tagging request → STRUCTURAL blocker with exact lines                                                                                        |
+| 7   | DHCP uplinks                                                                                              | DHCP status; bridge question plus "target must provide DHCP"; no subnet question; T22 transform later                                                         |
+| 8   | Attached nodes with no config (Forti/F5 in junos/backbone, ccie EI controllers)                           | LABEL_ONLY; bridge and label only; never borrow values from sibling labs                                                                                      |
+| 9   | Values only in a textobject (nexus 21/3)                                                                  | manifest `label_value`; documentation-only prompt; text-node splice                                                                                           |
+| 10  | SVG/CSS numbers in textobjects                                                                            | html text nodes only; unchanged blobs not re-encoded                                                                                                          |
+| 11  | Small tags colliding (`rd 2:2`, `edit 2`, `ike-version 2`, `community 204:204`, `rd 203:203`)             | tag-bearing syntax only + protected inventory + negative tests                                                                                                |
+| 12  | External tag reused internally (junos Gi3/Gi5 `.1240`)                                                    | attached-parent scoping; protected look-alikes listed                                                                                                         |
+| 13  | Internal-only tags (1241/1243)                                                                            | no question; protected                                                                                                                                        |
+| 14  | Subif/SVI number = tag                                                                                    | `subif_policy` rename with in-config refs; cross-config refs via `to <node>: <if>` pattern or warning                                                         |
+| 15  | NX-OS VLAN range lists                                                                                    | VlanList, style-preserving, collision checks                                                                                                                  |
+| 16  | L2 pass-through (BGW, IOL access to mgmt0/F5)                                                             | l2trace, PROVEN                                                                                                                                               |
+| 17  | IOL trunk without allowed list; **implicit VLANs** (backbone dmvpn)                                       | trunk = ALL of `vlan_db` including implicit VLANs                                                                                                             |
+| 18  | Uncabled configured ports                                                                                 | switch VLAN-domain rule, CORRELATED, `uncabled` badge                                                                                                         |
+| 19  | Startup vs configset disagree; nodes absent from configset                                                | per-scope trace and schemes; each store edited independently; startup fallback                                                                                |
+| 20  | Multiple schemes (backbone S1/S2/S3)                                                                      | scheme matrix; canonical scope; legacy policy default `leave` (warning lists untouched scopes)                                                                |
+| 21  | Outliers / pre-existing bugs                                                                              | excluded by default, `--include-outliers`; never "fixed"                                                                                                      |
+| 22  | Sidecar dir ≠ stem; ambiguous dirs                                                                        | `<stem>*_cfgs`; manifest `sidecar_dirs`; ambiguity = blocker                                                                                                  |
+| 23  | Sidecar id reused in another lab / name mismatch                                                          | id **and** name guard; skip with warning; `[sidecar_map]` override                                                                                            |
+| 24  | Sidecar mirrors                                                                                           | mirror detection, replicated edits, equality assertion                                                                                                        |
+| 25  | Sidecar-only values (Forti/F5)                                                                            | sidecars are first-class stores; post-apply "re-paste to devices" note                                                                                        |
+| 26  | UTF-8 em dash, CRLF/LF, trailing spaces, leading/missing newline, `^C`, text after `end`                  | byte-exact span splices; newline style recorded                                                                                                               |
+| 27  | Non-canonical base64                                                                                      | read-only blob; edits blocked                                                                                                                                 |
+| 28  | Stray `<objects/>`, huge task PDF, attribute order                                                        | ET read-only; raw splicing; skip regions; outside-span byte check                                                                                             |
+| 29  | Garbage or empty blobs                                                                                    | opaque; info finding                                                                                                                                          |
+| 30  | Spliced syslog / truncated headers                                                                        | tolerant blocks; orphan facts CORRELATED by value; badge                                                                                                      |
+| 31  | Node name ≠ role/hostname                                                                                 | dialect from template/image/content; config by node id                                                                                                        |
+| 32  | IP prefix substrings, cert hex                                                                            | boundary tokenizer + `ipaddress` validation                                                                                                                   |
+| 33  | Mask forms, prefix change                                                                                 | adjacent mask token rewritten in its own form                                                                                                                 |
+| 34  | Supernet / home routes                                                                                    | `site_routes` list question; deletion only where the dialect supports it                                                                                      |
+| 35  | /20 as two /24s (junos)                                                                                   | broadest prefix; offset map; **split map** or host overrides when it doesn't fit                                                                              |
+| 36  | Gateway .1 vs .254                                                                                        | separate question, default same offset                                                                                                                        |
+| 37  | Same host octet across segments                                                                           | maps per segment subnet, never by last octet                                                                                                                  |
+| 38  | Router-id / peers derived from external IPs                                                               | CORRELATED members rewritten, listed as "derived"                                                                                                             |
+| 39  | Two segments on one untagged pnet (azure)                                                                 | bridge question per segment; warning if they stay shared with different subnets                                                                               |
+| 40  | Moving one segment off a shared trunk (sdwan INET)                                                        | allowed with the tag unchanged; untagged-only target = blocker                                                                                                |
+| 41  | Domain substrings; three domain syntaxes                                                                  | anchored rules + `domain_re`; one question per domain                                                                                                         |
+| 42  | `name servers` VLAN name                                                                                  | anchored DNS keywords only                                                                                                                                    |
+| 43  | Public-looking internal IPs; 1.1.1.0/30 labels                                                            | only proven-subnet members or anchored services; protected inventory                                                                                          |
+| 44  | 169.254 APIPA external vs internal                                                                        | `azure_s2s` scoped to Tunnel1 /30 + its routes; others protected                                                                                              |
+| 45  | Peer IP used as object name                                                                               | `azure_s2s` exact claim, ASAv-1 only                                                                                                                          |
+| 46  | Committed real secret                                                                                     | redacted; placeholder option; rotation + history note                                                                                                         |
+| 47  | Cryptochecksum, timestamps, UDI, PKI, call-home                                                           | no rule matches; info for the checksum                                                                                                                        |
+| 48  | Upstream eBGP instead of a default route                                                                  | `bgp_upstream` scenario (peer IP, AS, prefixes; community recomputed if the local AS changes)                                                                 |
+| 49  | Internal prefix exported upstream (172.31.255.0/24)                                                       | overlap warning; advanced question                                                                                                                            |
+| 50  | Generic labels vs policy names (`INTERNET-ONLY`)                                                          | distinctiveness rule: XML name only                                                                                                                           |
+| 51  | `pnet0` in text; alias across segments                                                                    | cosmetic cloud_ref group; ambiguous aliases skipped                                                                                                           |
+| 52  | `(VLAN 3)`, "reserve .31" free text                                                                       | label-line-scoped cosmetic edits; under non-offset maps rewritten or warned                                                                                   |
+| 53  | Cross-config references to renamed subifs                                                                 | `to <node>: <if>` rewrite or `LEAK` warning                                                                                                                   |
+| 54  | Collision with addresses in use at the target site / DHCP pools                                           | profile `reserved` / `dhcp_pool` per segment → warnings                                                                                                       |
+| 55  | Lab-internal overlap with target subnets (lab1 172.16/16, 10/8 deny lists)                                | protected inventory → conflict, or warning for prefix-list-only                                                                                               |
+| 56  | Running lab                                                                                               | process-based detection; leftover tmp dir = info "not wiped"                                                                                                  |
+| 57  | Lab open in UI (EVE overwrites on save)                                                                   | warnings; `check` detects "reverted by EVE?"; `--out` copy mode                                                                                               |
+| 58  | `config="0"` / active configset mismatch                                                                  | notice per node; next-steps list wipes; `scan` shows which scope each node boots from (pointers not auto-changed: EVE UI decision)                            |
+| 59  | Thumbnails stale                                                                                          | notice                                                                                                                                                        |
+| 60  | Ownership `www-data`, mode                                                                                | chmod/chown to the original on the temp file; `--fix-perms`                                                                                                   |
+| 61  | Re-runs, partial localization                                                                             | current→target planning; tri-state; 0-edit re-plan                                                                                                            |
+| 62  | File changed between plan and apply                                                                       | sha precondition blocker                                                                                                                                      |
+| 63  | Unique `<lab id>`                                                                                         | never edited in place; `--out` makes a uuid4; check-labs over the repo                                                                                        |
+| 64  | `git pull` after localizing; contributing back                                                            | `revert → pull → apply`; CI enforces baseline; `--out` alternative                                                                                            |
+| 65  | Cross-lab "same real network" vs "same name"                                                              | explicit `site_key` bindings in manifests; value-match suggestions are never auto-applied                                                                     |
+| 66  | Cloner's own new labs (values ≠ author baseline)                                                          | discovery works on any values; `discover --baseline-from-answers`                                                                                             |
+| 67  | Unknown future vendor                                                                                     | generic dialect (CORRELATED IPv4 + label tokens, no tags) + finding; add a rule pack                                                                          |
+| 68  | Unknown future EVE XML layout                                                                             | ET cross-check → read-only                                                                                                                                    |
+| 69  | IPv6 literals                                                                                             | `IPV6_UNHANDLED` findings; not rewritten                                                                                                                      |
+| 70  | EVE trunk attrs (`native_vlan`, `vlan8021ad`)                                                             | displayed; warning if profile `bridges.*.native_vlan` differs; not edited                                                                                     |
+| 71  | Platform VLAN limits                                                                                      | IOS/NX-OS reserved ranges validated; Forti/Junos/F5 at 1-4094; host bridge VLAN filtering not checkable → `--check-host` info (`bridge vlan show` if present) |
+| 72  | Image / template availability                                                                             | out of scope; `scan --images` lists missing images on the EVE host                                                                                            |
+| 73  | Windows / non-POSIX                                                                                       | O_EXCL lock fallback; chown/sys probes skipped; paths via pathlib                                                                                             |
+| 74  | Machine-readable prompting                                                                                | `scan --json` question schema + `--answers --non-interactive`                                                                                                 |
+| 75  | Sidecar node-id drift after re-adding nodes                                                               | id+name guard reports a mismatch; `[sidecar_map]` in the manifest re-maps                                                                                     |
 
 ---
 
@@ -2276,44 +2274,44 @@ Rules for implementors:
 - Stdlib only. ruff + black. Python 3.11.
 - Every task ships unit tests under `python/tests/localize/`.
 
-| ID | Task | Owns | Depends on | Notes |
-|---|---|---|---|---|
-| **T1** | Contracts | `evelocal/__init__.py` (now `evelab/localize/`), `errors.py`, `model.py`, `eve-localize` shim, `python/tests/localize/__init__.py` | — | Exactly as in section 4. Small, done first. |
-| **T2** | Text utilities | `textutil.py`, `test_textutil.py` | T1 | IPv4/IPv6, masks, VlanList, token/domain regexes, HTML text regions |
-| **T3** | RawLab + codec | `unl.py`, `codec.py`, `test_unl.py`, `test_codec.py`, `fixtures/minilabs/*` | T1 | span index, ET cross-check, splice, round-trip on all real labs |
-| **T4** | TOML + manifest + profile | `tomlw.py`, `manifest.py` (load/validate/schema), `profile.py`, tests | T1 | `generate()`/`check()` bodies are completed in T15 |
-| **T5** | Dialect framework | `dialects/__init__.py`, `dialects/base.py`, `dialects/blocks.py`, `test_dialect_contract.py` | T1, T2 | RuleDialect, PatternRule, TOML pack loader, `--plugins` loader, contract test harness |
-| **T6** | UI | `ui.py`, tests | T1 | prompts, tables, pager, decoded diff, redaction |
-| **T7** | Host env | `hostenv.py`, tests (fake /proc, /sys) | T1 | bridges, running nodes, tmp leftovers, images, lock helpers |
-| **T8** | Stores | `stores.py`, `test_stores.py` | T3, T5 (pick) | embedded + sidecar, id+name guard, mirrors, newline style |
-| **T9** | Cisco dialects | `dialects/ios.py`, `iosxe.py`, `nxos.py`, `fixtures/snippets/{ios,iosxe,nxos}` | T5 | incl. IOL L2, implicit vlan_db, orphan blocks |
-| **T10** | ASA / Forti / F5 dialects | `dialects/asa.py`, `fortios.py`, `f5tmsh.py`, fixtures | T5 | Forti parent resolution, stanza deletion support flag |
-| **T11** | Junos / linux / vpcs / html / generic | `dialects/junos.py`, `linuxsh.py`, `vpcs.py`, `eve_html.py`, `generic.py`, fixtures | T5 | brace parser override for Junos |
-| **T12** | Apply engine | `apply.py`, `test_apply.py` | T3, T7 | preflight, backup, atomic write, owner/mode, validate (spans, counts, check-labs via importlib), journal, state, undo. Re-scan hook injected as a callable. |
-| **T13** | Topology + L2 trace | `discover/topology.py`, `discover/l2trace.py`, `test_l2trace.py` | T8, T9 (minilab tests use IOS/NX-OS) | per-scope BFS, VLAN-domain rule, orphan attribution |
-| **T14** | Segments + names + inventory + analyse | `discover/segments.py`, `names.py`, `inventory.py`, `discover/__init__.py`, `test_segments.py` | T13, T4 (manifest pins) | merge rules, schemes, outliers, status, correlation, protected inventory |
-| **T15** | Manifest generation/check | `manifest.py` (`generate`, `check`), `test_manifest_check.py` | T14, T4 | expect counts, leak scan, baseline check, unpinned status |
-| **T16** | Core scenarios | `scenarios/__init__.py`, `base.py`, `bridge.py`, `segment_l2.py`, `segment_l3.py`, `labels.py` | T14, T2 | questions + plan fragments; PARAM_KINDS registry |
-| **T17** | Extra scenarios | `scenarios/services.py`, `site_routes.py`, `bgp_upstream.py`, `azure_s2s.py`, `secrets.py` | T14 (can stub-test with T16's base) | |
-| **T18** | Planner | `planner.py`, `test_planner.py` | T16 (base only), T2 | ValueMaps, claims, single pass, conflicts/blockers, explain, plan JSON |
-| **T19** | CLI | `cli.py`, `test_cli.py` | T6, T12, T15, T16, T17, T18 | commands, picker, `--all` carry-forward, `--json` question schema, `--out`, exit codes |
-| **T20** | Real-lab manifests + example profile | `labs/**/*.localize.toml` (7 files), `localize/site.example.toml`, `localize/README.md` | T15, T19 | generated with `discover --write`, then author decisions applied per section 8.3 |
-| **T21** | Goldens + round-trip | `golden/*.scan.json`, `golden/*.answers.toml`, `test_labs_golden.py`, `test_roundtrip.py` | T19, T20 | the acceptance suite (section 14, items 7-8) |
-| **T22** | Repo wiring | `Makefile` (non-managed section), `.gitignore`, README/AGENTS mention | T19 | `make test` includes localize-test + localize-check |
-| **T23** *(optional, later)* | First structural transform | `transforms/__init__.py`, `transforms/ios_dhcp_to_static.py` | T18 | proves the extension point (nexus ISP-CE, lab1 R27) |
+| ID                          | Task                                   | Owns                                                                                                                               | Depends on                           | Notes                                                                                                                                                       |
+| --------------------------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **T1**                      | Contracts                              | `evelocal/__init__.py` (now `evelab/localize/`), `errors.py`, `model.py`, `eve-localize` shim, `python/tests/localize/__init__.py` | —                                    | Exactly as in section 4. Small, done first.                                                                                                                 |
+| **T2**                      | Text utilities                         | `textutil.py`, `test_textutil.py`                                                                                                  | T1                                   | IPv4/IPv6, masks, VlanList, token/domain regexes, HTML text regions                                                                                         |
+| **T3**                      | RawLab + codec                         | `unl.py`, `codec.py`, `test_unl.py`, `test_codec.py`, `fixtures/minilabs/*`                                                        | T1                                   | span index, ET cross-check, splice, round-trip on all real labs                                                                                             |
+| **T4**                      | TOML + manifest + profile              | `tomlw.py`, `manifest.py` (load/validate/schema), `profile.py`, tests                                                              | T1                                   | `generate()`/`check()` bodies are completed in T15                                                                                                          |
+| **T5**                      | Dialect framework                      | `dialects/__init__.py`, `dialects/base.py`, `dialects/blocks.py`, `test_dialect_contract.py`                                       | T1, T2                               | RuleDialect, PatternRule, TOML pack loader, `--plugins` loader, contract test harness                                                                       |
+| **T6**                      | UI                                     | `ui.py`, tests                                                                                                                     | T1                                   | prompts, tables, pager, decoded diff, redaction                                                                                                             |
+| **T7**                      | Host env                               | `hostenv.py`, tests (fake /proc, /sys)                                                                                             | T1                                   | bridges, running nodes, tmp leftovers, images, lock helpers                                                                                                 |
+| **T8**                      | Stores                                 | `stores.py`, `test_stores.py`                                                                                                      | T3, T5 (pick)                        | embedded + sidecar, id+name guard, mirrors, newline style                                                                                                   |
+| **T9**                      | Cisco dialects                         | `dialects/ios.py`, `iosxe.py`, `nxos.py`, `fixtures/snippets/{ios,iosxe,nxos}`                                                     | T5                                   | incl. IOL L2, implicit vlan_db, orphan blocks                                                                                                               |
+| **T10**                     | ASA / Forti / F5 dialects              | `dialects/asa.py`, `fortios.py`, `f5tmsh.py`, fixtures                                                                             | T5                                   | Forti parent resolution, stanza deletion support flag                                                                                                       |
+| **T11**                     | Junos / linux / vpcs / html / generic  | `dialects/junos.py`, `linuxsh.py`, `vpcs.py`, `eve_html.py`, `generic.py`, fixtures                                                | T5                                   | brace parser override for Junos                                                                                                                             |
+| **T12**                     | Apply engine                           | `apply.py`, `test_apply.py`                                                                                                        | T3, T7                               | preflight, backup, atomic write, owner/mode, validate (spans, counts, check-labs via importlib), journal, state, undo. Re-scan hook injected as a callable. |
+| **T13**                     | Topology + L2 trace                    | `discover/topology.py`, `discover/l2trace.py`, `test_l2trace.py`                                                                   | T8, T9 (minilab tests use IOS/NX-OS) | per-scope BFS, VLAN-domain rule, orphan attribution                                                                                                         |
+| **T14**                     | Segments + names + inventory + analyse | `discover/segments.py`, `names.py`, `inventory.py`, `discover/__init__.py`, `test_segments.py`                                     | T13, T4 (manifest pins)              | merge rules, schemes, outliers, status, correlation, protected inventory                                                                                    |
+| **T15**                     | Manifest generation/check              | `manifest.py` (`generate`, `check`), `test_manifest_check.py`                                                                      | T14, T4                              | expect counts, leak scan, baseline check, unpinned status                                                                                                   |
+| **T16**                     | Core scenarios                         | `scenarios/__init__.py`, `base.py`, `bridge.py`, `segment_l2.py`, `segment_l3.py`, `labels.py`                                     | T14, T2                              | questions + plan fragments; PARAM_KINDS registry                                                                                                            |
+| **T17**                     | Extra scenarios                        | `scenarios/services.py`, `site_routes.py`, `bgp_upstream.py`, `azure_s2s.py`, `secrets.py`                                         | T14 (can stub-test with T16's base)  |                                                                                                                                                             |
+| **T18**                     | Planner                                | `planner.py`, `test_planner.py`                                                                                                    | T16 (base only), T2                  | ValueMaps, claims, single pass, conflicts/blockers, explain, plan JSON                                                                                      |
+| **T19**                     | CLI                                    | `cli.py`, `test_cli.py`                                                                                                            | T6, T12, T15, T16, T17, T18          | commands, picker, `--all` carry-forward, `--json` question schema, `--out`, exit codes                                                                      |
+| **T20**                     | Real-lab manifests + example profile   | `labs/**/*.localize.toml` (7 files), `localize/site.example.toml`, `localize/README.md`                                            | T15, T19                             | generated with `discover --write`, then author decisions applied per section 8.3                                                                            |
+| **T21**                     | Goldens + round-trip                   | `golden/*.scan.json`, `golden/*.answers.toml`, `test_labs_golden.py`, `test_roundtrip.py`                                          | T19, T20                             | the acceptance suite (section 14, items 7-8)                                                                                                                |
+| **T22**                     | Repo wiring                            | `Makefile` (non-managed section), `.gitignore`, README/AGENTS mention                                                              | T19                                  | `make test` includes localize-test + localize-check                                                                                                         |
+| **T23** _(optional, later)_ | First structural transform             | `transforms/__init__.py`, `transforms/ios_dhcp_to_static.py`                                                                       | T18                                  | proves the extension point (nexus ISP-CE, lab1 R27)                                                                                                         |
 
 **Parallel waves**
 
-| Wave | Tasks |
-|---|---|
-| 0 | T1 |
-| 1 | T2, T3, T4, T6, T7 (parallel); T5 starts when T2 lands |
-| 2 | T8, T9, T10, T11, T12 (parallel) |
-| 3 | T13, then T14 |
-| 4 | T15, T16, T17, T18 (parallel; T18 needs only `scenarios/base.py` from T16, so T16 lands that file first) |
-| 5 | T19 |
-| 6 | T20, then T21; T22 alongside |
-| 7 | T23 (optional) |
+| Wave | Tasks                                                                                                    |
+| ---- | -------------------------------------------------------------------------------------------------------- |
+| 0    | T1                                                                                                       |
+| 1    | T2, T3, T4, T6, T7 (parallel); T5 starts when T2 lands                                                   |
+| 2    | T8, T9, T10, T11, T12 (parallel)                                                                         |
+| 3    | T13, then T14                                                                                            |
+| 4    | T15, T16, T17, T18 (parallel; T18 needs only `scenarios/base.py` from T16, so T16 lands that file first) |
+| 5    | T19                                                                                                      |
+| 6    | T20, then T21; T22 alongside                                                                             |
+| 7    | T23 (optional)                                                                                           |
 
 **Shared fixtures**: `fixtures/minilabs/` (from T3) is used by T8, T12, T13 and T14. Minilabs are stored as
 `<stem>.unl.fixture` (never `*.unl`, because this repo is EVE's live labs tree and the web UI would list them); tests load

@@ -10,9 +10,7 @@
       "site_key": "azure.inet",
       "role": "inet",
       "status": "CONFIGURABLE",
-      "networks": [
-        "1"
-      ],
+      "networks": ["1"],
       "bridge": "pnet0",
       "labels": {
         "1": "Internet-105"
@@ -23,9 +21,7 @@
           "tag": "untagged",
           "subnet": "10.100.105.0/24",
           "gateway": "10.100.105.1",
-          "scopes": [
-            "startup"
-          ],
+          "scopes": ["startup"],
           "members": 5,
           "outliers": 0
         }
@@ -36,9 +32,7 @@
       "site_key": "azure.mgmt",
       "role": "mgmt",
       "status": "CONFIGURABLE",
-      "networks": [
-        "3"
-      ],
+      "networks": ["3"],
       "bridge": "pnet0",
       "labels": {
         "3": "mgmt-104"
@@ -49,9 +43,7 @@
           "tag": "untagged",
           "subnet": "10.100.104.0/24",
           "gateway": "10.100.104.1",
-          "scopes": [
-            "startup"
-          ],
+          "scopes": ["startup"],
           "members": 6,
           "outliers": 0
         }
@@ -67,9 +59,7 @@
       "current": "pnet0",
       "default": "pnet0",
       "default_source": "keep",
-      "choices": [
-        "pnet0"
-      ],
+      "choices": ["pnet0"],
       "depends_on": [],
       "affects": 0,
       "segment": "INET-105",
@@ -86,9 +76,7 @@
       "current": "pnet0",
       "default": "pnet0",
       "default_source": "keep",
-      "choices": [
-        "pnet0"
-      ],
+      "choices": ["pnet0"],
       "depends_on": [],
       "affects": 0,
       "segment": "MGMT-104",
@@ -110,9 +98,7 @@
       "affects": 5,
       "segment": "INET-105",
       "scenario": "segment_l3",
-      "notes": [
-        "3 baseline host(s)"
-      ],
+      "notes": ["3 baseline host(s)"],
       "answered": false,
       "answer": null
     },
@@ -125,9 +111,7 @@
       "default": "10.100.105.1",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "azure.inet/subnet"
-      ],
+      "depends_on": ["azure.inet/subnet"],
       "affects": 3,
       "segment": "INET-105",
       "scenario": "segment_l3",
@@ -148,9 +132,7 @@
       "affects": 6,
       "segment": "MGMT-104",
       "scenario": "segment_l3",
-      "notes": [
-        "3 baseline host(s)"
-      ],
+      "notes": ["3 baseline host(s)"],
       "answered": false,
       "answer": null
     },
@@ -163,9 +145,7 @@
       "default": "10.100.104.1",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "azure.mgmt/subnet"
-      ],
+      "depends_on": ["azure.mgmt/subnet"],
       "affects": 4,
       "segment": "MGMT-104",
       "scenario": "segment_l3",
@@ -182,16 +162,11 @@
       "default": "Internet-105",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "azure.inet/vlan",
-        "azure.inet/subnet"
-      ],
+      "depends_on": ["azure.inet/vlan", "azure.inet/subnet"],
       "affects": 1,
       "segment": "INET-105",
       "scenario": "labels",
-      "notes": [
-        "0 text reference(s) follow the label"
-      ],
+      "notes": ["0 text reference(s) follow the label"],
       "answered": false,
       "answer": null
     },
@@ -204,16 +179,11 @@
       "default": "mgmt-104",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "azure.mgmt/vlan",
-        "azure.mgmt/subnet"
-      ],
+      "depends_on": ["azure.mgmt/vlan", "azure.mgmt/subnet"],
       "affects": 1,
       "segment": "MGMT-104",
       "scenario": "labels",
-      "notes": [
-        "0 text reference(s) follow the label"
-      ],
+      "notes": ["0 text reference(s) follow the label"],
       "answered": false,
       "answer": null
     },
@@ -242,17 +212,12 @@
       "current": null,
       "default": "no",
       "default_source": "gate (default no)",
-      "choices": [
-        "yes",
-        "no"
-      ],
+      "choices": ["yes", "no"],
       "depends_on": [],
       "affects": 0,
       "segment": null,
       "scenario": "azure_s2s",
-      "notes": [
-        "node ASAv-1: Azure VPN gateway 172.173.204.134"
-      ],
+      "notes": ["node ASAv-1: Azure VPN gateway 172.173.204.134"],
       "answered": false,
       "answer": null
     },
@@ -265,9 +230,7 @@
       "default": "172.173.204.134",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "azure_s2s/enabled"
-      ],
+      "depends_on": ["azure_s2s/enabled"],
       "affects": 0,
       "segment": null,
       "scenario": "azure_s2s",
@@ -284,15 +247,11 @@
       "default": "169.254.21.1",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "azure_s2s/enabled"
-      ],
+      "depends_on": ["azure_s2s/enabled"],
       "affects": 0,
       "segment": null,
       "scenario": "azure_s2s",
-      "notes": [
-        "the other addresses of the /30 follow by offset"
-      ],
+      "notes": ["the other addresses of the /30 follow by offset"],
       "answered": false,
       "answer": null
     },
@@ -305,9 +264,7 @@
       "default": "10.200.100.254",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "azure_s2s/enabled"
-      ],
+      "depends_on": ["azure_s2s/enabled"],
       "affects": 0,
       "segment": null,
       "scenario": "azure_s2s",
@@ -324,15 +281,11 @@
       "default": "65101",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "azure_s2s/enabled"
-      ],
+      "depends_on": ["azure_s2s/enabled"],
       "affects": 0,
       "segment": null,
       "scenario": "azure_s2s",
-      "notes": [
-        "changed lab-wide (peers of this node follow)"
-      ],
+      "notes": ["changed lab-wide (peers of this node follow)"],
       "answered": false,
       "answer": null
     },
@@ -345,9 +298,7 @@
       "default": "65100",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "azure_s2s/enabled"
-      ],
+      "depends_on": ["azure_s2s/enabled"],
       "affects": 0,
       "segment": null,
       "scenario": "azure_s2s",
@@ -364,15 +315,11 @@
       "default": null,
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "azure_s2s/enabled"
-      ],
+      "depends_on": ["azure_s2s/enabled"],
       "affects": 0,
       "segment": null,
       "scenario": "azure_s2s",
-      "notes": [
-        "read with getpass or {env=...}; never saved unless --save-secrets"
-      ],
+      "notes": ["read with getpass or {env=...}; never saved unless --save-secrets"],
       "answered": false,
       "answer": null
     },
@@ -384,11 +331,7 @@
       "current": null,
       "default": "none",
       "default_source": "keep",
-      "choices": [
-        "none",
-        "psk",
-        "all"
-      ],
+      "choices": ["none", "psk", "all"],
       "depends_on": [],
       "affects": 0,
       "segment": null,
@@ -405,17 +348,13 @@
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 1: 6 committed secret(s)",
-      "refs": [
-        "node:1"
-      ]
+      "refs": ["node:1"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 3: 4 committed secret(s)",
-      "refs": [
-        "node:3"
-      ]
+      "refs": ["node:3"]
     }
   ],
   "protected": {

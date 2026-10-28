@@ -9,12 +9,8 @@
     "EXT-TENANT1": "ext-tenant1"
   },
   "eve_to_config": {
-    "E1.1": [
-      "1.1"
-    ],
-    "Mgmt": [
-      "mgmt"
-    ]
+    "E1.1": ["1.1"],
+    "Mgmt": ["mgmt"]
   },
   "facts": [
     {
@@ -23,9 +19,7 @@
       "line": 1,
       "rule": "f5.comment_label",
       "iface": null,
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     },
     {
@@ -34,9 +28,7 @@
       "line": 1,
       "rule": "f5.comment_label",
       "iface": null,
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     },
     {
@@ -45,9 +37,7 @@
       "line": 1,
       "rule": "f5.comment_label",
       "iface": null,
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     },
     {
@@ -56,9 +46,7 @@
       "line": 3,
       "rule": "f5.comment_label",
       "iface": null,
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     },
     {
@@ -67,9 +55,7 @@
       "line": 3,
       "rule": "f5.comment_label",
       "iface": null,
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     },
     {
@@ -78,9 +64,7 @@
       "line": 3,
       "rule": "f5.comment_label",
       "iface": null,
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     },
     {
@@ -89,9 +73,7 @@
       "line": 3,
       "rule": "f5.comment_label",
       "iface": null,
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     },
     {
@@ -100,9 +82,7 @@
       "line": 4,
       "rule": "f5.comment_label",
       "iface": null,
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     },
     {
@@ -111,9 +91,7 @@
       "line": 5,
       "rule": "f5.comment_label",
       "iface": null,
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     },
     {
@@ -122,9 +100,7 @@
       "line": 5,
       "rule": "f5.comment_label",
       "iface": null,
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     },
     {
@@ -133,9 +109,7 @@
       "line": 6,
       "rule": "f5.comment_label",
       "iface": null,
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     },
     {
@@ -144,9 +118,7 @@
       "line": 7,
       "rule": "f5.comment_label",
       "iface": null,
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     },
     {
@@ -155,9 +127,7 @@
       "line": 7,
       "rule": "f5.comment_vlan",
       "iface": null,
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     },
     {
@@ -231,9 +201,7 @@
       "line": 15,
       "rule": "f5.comment_label",
       "iface": null,
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     },
     {
@@ -242,9 +210,7 @@
       "line": 15,
       "rule": "f5.comment_label",
       "iface": null,
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     },
     {
@@ -264,9 +230,7 @@
       "line": 18,
       "rule": "f5.desc_label",
       "iface": null,
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     },
     {
@@ -286,9 +250,7 @@
       "line": 19,
       "rule": "f5.desc_label",
       "iface": null,
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     },
     {
@@ -372,9 +334,7 @@
       "line": 31,
       "rule": "f5.comment_label",
       "iface": null,
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     },
     {
@@ -383,9 +343,7 @@
       "line": 31,
       "rule": "f5.comment_label",
       "iface": null,
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     }
   ],

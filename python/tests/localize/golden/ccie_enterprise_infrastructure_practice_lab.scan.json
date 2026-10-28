@@ -10,9 +10,7 @@
       "site_key": "site.sdwan_ctrl",
       "role": null,
       "status": "LABEL_ONLY",
-      "networks": [
-        "22"
-      ],
+      "networks": ["22"],
       "bridge": "pnet0",
       "labels": {
         "22": "Net"
@@ -30,9 +28,7 @@
       "current": "pnet0",
       "default": "pnet0",
       "default_source": "keep",
-      "choices": [
-        "pnet0"
-      ],
+      "choices": ["pnet0"],
       "depends_on": [],
       "affects": 0,
       "segment": "SDWAN-CTRL",
@@ -50,16 +46,11 @@
       "default": "Net",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "site.sdwan_ctrl/vlan",
-        "site.sdwan_ctrl/subnet"
-      ],
+      "depends_on": ["site.sdwan_ctrl/vlan", "site.sdwan_ctrl/subnet"],
       "affects": 1,
       "segment": "SDWAN-CTRL",
       "scenario": "labels",
-      "notes": [
-        "generic label: only the network name changes"
-      ],
+      "notes": ["generic label: only the network name changes"],
       "answered": false,
       "answer": null
     }
@@ -69,12 +60,7 @@
       "code": "UNCONFIGURED",
       "severity": "info",
       "msg": "segment SDWAN-CTRL: no config on vManager eth0, vBond eth0, vSmart eth0 (bridge/label only)",
-      "refs": [
-        "segment:SDWAN-CTRL",
-        "node:45",
-        "node:46",
-        "node:47"
-      ]
+      "refs": ["segment:SDWAN-CTRL", "node:45", "node:46", "node:47"]
     }
   ],
   "protected": {

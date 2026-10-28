@@ -9,9 +9,7 @@
     "oob-mgmt": "oob-mgmt"
   },
   "eve_to_config": {
-    "port8": [
-      "port8"
-    ]
+    "port8": ["port8"]
   },
   "facts": [
     {
@@ -20,9 +18,7 @@
       "line": 5,
       "rule": "fortios.secret",
       "iface": null,
-      "flags": [
-        "secret"
-      ],
+      "flags": ["secret"],
       "confidence": "PROVEN"
     },
     {
@@ -85,9 +81,7 @@
       "line": 29,
       "rule": "fortios.text_label",
       "iface": "port4",
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     },
     {
@@ -119,9 +113,7 @@
       "rule": "fortios.text_vlan",
       "iface": "lan-205",
       "parent": "port4",
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "confidence": "PROVEN"
     },
     {
@@ -131,9 +123,7 @@
       "rule": "fortios.text_cloud",
       "iface": "lan-205",
       "parent": "port4",
-      "flags": [
-        "cosmetic"
-      ],
+      "flags": ["cosmetic"],
       "alt": "cloud9",
       "confidence": "PROVEN"
     },
@@ -218,7 +208,5 @@
   },
   "vlan_db": [],
   "is_switch": false,
-  "secrets": [
-    "SH2nlSm9hhDgX0yWl3OAi1W1Qu1jOZ2zNOgl2Fb3dGM="
-  ]
+  "secrets": ["SH2nlSm9hhDgX0yWl3OAi1W1Qu1jOZ2zNOgl2Fb3dGM="]
 }

@@ -10,13 +10,7 @@
       "site_key": "junos.mgmt",
       "role": "mgmt",
       "status": "CONFIGURABLE",
-      "networks": [
-        "5",
-        "13",
-        "24",
-        "58",
-        "76"
-      ],
+      "networks": ["5", "13", "24", "58", "76"],
       "bridge": "pnet0",
       "labels": {
         "5": "mgmt",
@@ -31,9 +25,7 @@
           "tag": "untagged",
           "subnet": "10.100.240.0/20",
           "gateway": "10.100.255.254",
-          "scopes": [
-            "startup"
-          ],
+          "scopes": ["startup"],
           "members": 32,
           "outliers": 0
         }
@@ -44,9 +36,7 @@
       "site_key": "junos.inet_a",
       "role": "inet",
       "status": "CONFIGURABLE",
-      "networks": [
-        "72"
-      ],
+      "networks": ["72"],
       "bridge": "pnet2",
       "labels": {
         "72": "INET-1240"
@@ -57,9 +47,7 @@
           "tag": 1240,
           "subnet": "172.31.240.0/24",
           "gateway": null,
-          "scopes": [
-            "startup"
-          ],
+          "scopes": ["startup"],
           "members": 6,
           "outliers": 0
         }
@@ -70,9 +58,7 @@
       "site_key": "junos.inet_b",
       "role": "inet",
       "status": "CONFIGURABLE",
-      "networks": [
-        "62"
-      ],
+      "networks": ["62"],
       "bridge": "pnet2",
       "labels": {
         "62": "INET-1242"
@@ -83,9 +69,7 @@
           "tag": 1242,
           "subnet": "172.31.242.0/24",
           "gateway": null,
-          "scopes": [
-            "startup"
-          ],
+          "scopes": ["startup"],
           "members": 6,
           "outliers": 0
         }
@@ -101,9 +85,7 @@
       "current": "pnet0",
       "default": "pnet0",
       "default_source": "keep",
-      "choices": [
-        "pnet0"
-      ],
+      "choices": ["pnet0"],
       "depends_on": [],
       "affects": 0,
       "segment": "MGMT",
@@ -120,9 +102,7 @@
       "current": "pnet2",
       "default": "pnet2",
       "default_source": "keep",
-      "choices": [
-        "pnet2"
-      ],
+      "choices": ["pnet2"],
       "depends_on": [],
       "affects": 0,
       "segment": "INET-1240",
@@ -139,9 +119,7 @@
       "current": "pnet2",
       "default": "pnet2",
       "default_source": "keep",
-      "choices": [
-        "pnet2"
-      ],
+      "choices": ["pnet2"],
       "depends_on": [],
       "affects": 0,
       "segment": "INET-1242",
@@ -197,9 +175,7 @@
       "affects": 32,
       "segment": "MGMT",
       "scenario": "segment_l3",
-      "notes": [
-        "17 baseline host(s)"
-      ],
+      "notes": ["17 baseline host(s)"],
       "answered": false,
       "answer": null
     },
@@ -212,9 +188,7 @@
       "default": "10.100.255.254",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "junos.mgmt/subnet"
-      ],
+      "depends_on": ["junos.mgmt/subnet"],
       "affects": 16,
       "segment": "MGMT",
       "scenario": "segment_l3",
@@ -235,9 +209,7 @@
       "affects": 4,
       "segment": "INET-1240",
       "scenario": "segment_l3",
-      "notes": [
-        "2 baseline host(s)"
-      ],
+      "notes": ["2 baseline host(s)"],
       "answered": false,
       "answer": null
     },
@@ -254,9 +226,7 @@
       "affects": 4,
       "segment": "INET-1242",
       "scenario": "segment_l3",
-      "notes": [
-        "2 baseline host(s)"
-      ],
+      "notes": ["2 baseline host(s)"],
       "answered": false,
       "answer": null
     },
@@ -269,16 +239,11 @@
       "default": "mgmt",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "junos.mgmt/vlan",
-        "junos.mgmt/subnet"
-      ],
+      "depends_on": ["junos.mgmt/vlan", "junos.mgmt/subnet"],
       "affects": 5,
       "segment": "MGMT",
       "scenario": "labels",
-      "notes": [
-        "generic label: only the network name changes"
-      ],
+      "notes": ["generic label: only the network name changes"],
       "answered": false,
       "answer": null
     },
@@ -291,16 +256,11 @@
       "default": "INET-1240",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "junos.inet_a/vlan",
-        "junos.inet_a/subnet"
-      ],
+      "depends_on": ["junos.inet_a/vlan", "junos.inet_a/subnet"],
       "affects": 1,
       "segment": "INET-1240",
       "scenario": "labels",
-      "notes": [
-        "0 text reference(s) follow the label"
-      ],
+      "notes": ["0 text reference(s) follow the label"],
       "answered": false,
       "answer": null
     },
@@ -313,16 +273,11 @@
       "default": "INET-1242",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "junos.inet_b/vlan",
-        "junos.inet_b/subnet"
-      ],
+      "depends_on": ["junos.inet_b/vlan", "junos.inet_b/subnet"],
       "affects": 1,
       "segment": "INET-1242",
       "scenario": "labels",
-      "notes": [
-        "0 text reference(s) follow the label"
-      ],
+      "notes": ["0 text reference(s) follow the label"],
       "answered": false,
       "answer": null
     },
@@ -419,17 +374,12 @@
       "current": null,
       "default": "no",
       "default_source": "gate (default no)",
-      "choices": [
-        "yes",
-        "no"
-      ],
+      "choices": ["yes", "no"],
       "depends_on": [],
       "affects": 0,
       "segment": null,
       "scenario": "bgp_upstream",
-      "notes": [
-        "replaces a default route toward the home network"
-      ],
+      "notes": ["replaces a default route toward the home network"],
       "answered": false,
       "answer": null
     },
@@ -442,15 +392,11 @@
       "default": "172.31.240.1",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "bgp_upstream/enabled"
-      ],
+      "depends_on": ["bgp_upstream/enabled"],
       "affects": 0,
       "segment": null,
       "scenario": "bgp_upstream",
-      "notes": [
-        "keeping the current value follows the segment subnet map"
-      ],
+      "notes": ["keeping the current value follows the segment subnet map"],
       "answered": false,
       "answer": null
     },
@@ -463,15 +409,11 @@
       "default": "172.31.242.1",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "bgp_upstream/enabled"
-      ],
+      "depends_on": ["bgp_upstream/enabled"],
       "affects": 0,
       "segment": null,
       "scenario": "bgp_upstream",
-      "notes": [
-        "keeping the current value follows the segment subnet map"
-      ],
+      "notes": ["keeping the current value follows the segment subnet map"],
       "answered": false,
       "answer": null
     },
@@ -484,9 +426,7 @@
       "default": "65299",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "bgp_upstream/enabled"
-      ],
+      "depends_on": ["bgp_upstream/enabled"],
       "affects": 0,
       "segment": null,
       "scenario": "bgp_upstream",
@@ -503,15 +443,11 @@
       "default": "65300",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "bgp_upstream/enabled"
-      ],
+      "depends_on": ["bgp_upstream/enabled"],
       "affects": 0,
       "segment": null,
       "scenario": "bgp_upstream",
-      "notes": [
-        "changed lab-wide; route-map communities follow"
-      ],
+      "notes": ["changed lab-wide; route-map communities follow"],
       "answered": false,
       "answer": null
     },
@@ -524,9 +460,7 @@
       "default": "keep",
       "default_source": "keep",
       "choices": null,
-      "depends_on": [
-        "bgp_upstream/enabled"
-      ],
+      "depends_on": ["bgp_upstream/enabled"],
       "affects": 0,
       "segment": null,
       "scenario": "bgp_upstream",
@@ -545,10 +479,7 @@
       "current": null,
       "default": "none",
       "default_source": "keep",
-      "choices": [
-        "none",
-        "all"
-      ],
+      "choices": ["none", "all"],
       "depends_on": [],
       "affects": 0,
       "segment": null,
@@ -584,161 +515,121 @@
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 1: 2 committed secret(s)",
-      "refs": [
-        "node:1"
-      ]
+      "refs": ["node:1"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 2: 2 committed secret(s)",
-      "refs": [
-        "node:2"
-      ]
+      "refs": ["node:2"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 3: 2 committed secret(s)",
-      "refs": [
-        "node:3"
-      ]
+      "refs": ["node:3"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 4: 2 committed secret(s)",
-      "refs": [
-        "node:4"
-      ]
+      "refs": ["node:4"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 5: 2 committed secret(s)",
-      "refs": [
-        "node:5"
-      ]
+      "refs": ["node:5"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 6: 2 committed secret(s)",
-      "refs": [
-        "node:6"
-      ]
+      "refs": ["node:6"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 7: 2 committed secret(s)",
-      "refs": [
-        "node:7"
-      ]
+      "refs": ["node:7"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 8: 2 committed secret(s)",
-      "refs": [
-        "node:8"
-      ]
+      "refs": ["node:8"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 10: 2 committed secret(s)",
-      "refs": [
-        "node:10"
-      ]
+      "refs": ["node:10"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 11: 2 committed secret(s)",
-      "refs": [
-        "node:11"
-      ]
+      "refs": ["node:11"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 12: 2 committed secret(s)",
-      "refs": [
-        "node:12"
-      ]
+      "refs": ["node:12"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 13: 2 committed secret(s)",
-      "refs": [
-        "node:13"
-      ]
+      "refs": ["node:13"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 14: 2 committed secret(s)",
-      "refs": [
-        "node:14"
-      ]
+      "refs": ["node:14"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 15: 2 committed secret(s)",
-      "refs": [
-        "node:15"
-      ]
+      "refs": ["node:15"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 16: 2 committed secret(s)",
-      "refs": [
-        "node:16"
-      ]
+      "refs": ["node:16"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 17: 2 committed secret(s)",
-      "refs": [
-        "node:17"
-      ]
+      "refs": ["node:17"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 44: 2 committed secret(s)",
-      "refs": [
-        "node:44"
-      ]
+      "refs": ["node:44"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 45: 2 committed secret(s)",
-      "refs": [
-        "node:45"
-      ]
+      "refs": ["node:45"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 9: 4 committed secret(s)",
-      "refs": [
-        "node:9"
-      ]
+      "refs": ["node:9"]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
       "msg": "startup:startup node 18: 4 committed secret(s)",
-      "refs": [
-        "node:18"
-      ]
+      "refs": ["node:18"]
     }
   ],
   "protected": {

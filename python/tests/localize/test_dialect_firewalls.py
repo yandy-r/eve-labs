@@ -340,7 +340,7 @@ class TestF5Real(unittest.TestCase):
             with self.subTest(bad=bad), self.assertRaises(LocalizeError) as cm:
                 F5_D.render(ntp, bad, ctx)
             self.assertEqual(cm.exception.code, "BAD_VALUE")
-        (dns, _) = facts(parsed, "dns_server")
+        dns, _ = facts(parsed, "dns_server")
         self.assertEqual(F5_D.render(dns, dns.value, ctx), [])
 
     def test_eve_names_and_route_deletion(self) -> None:
