@@ -29,6 +29,18 @@ The labs carry this host's cloud bridges, VLANs, management subnets, labels and 
 Guide: [`localize/README.md`](localize/README.md). Local answers and backups live in the gitignored
 `.localize/`.
 
+Images, QEMU builds and node sizes are host-specific too. `scripts/eve-analyze` compares the labs
+with the images and resources of your EVE server, recommends substitutions (for example another
+Nexus 9000v release), asks, and rewrites the labs. On a clone of this repository it commits on a
+local `analyze/<host>` branch; on a fork it commits on the current branch:
+
+```bash
+./scripts/eve-analyze scan        # what this host lacks, lab by lab
+./scripts/eve-analyze             # interactive: pick labs, answer, review, apply + commit
+```
+
+Guide: [`analyze/README.md`](analyze/README.md).
+
 ## Workflow
 
 Commit from the host after changing labs in the UI:

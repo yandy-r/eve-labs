@@ -38,8 +38,8 @@ from ipaddress import IPv4Address, IPv4Network
 from pathlib import Path
 from typing import IO, Any
 
-from evelab.common import hostenv
-from evelab.common.paths import REPO_ROOT, SCRIPTS_DIR
+from evelab.common import hostenv, labfiles
+from evelab.common.paths import SCRIPTS_DIR
 from evelab.common.unl import RawLab
 
 from . import SCHEMA, __version__, apply, manifest, planner, profile
@@ -290,96 +290,15 @@ def worst(codes: Iterable[int]) -> int:
     return next((c for c in EXIT_PRIORITY if c in cs), 0)
 
 
-def _git_top(start: Path) -> Path | None:
-    try:
-        res = subprocess.run(
-            ["git", "-C", str(start), "rev-parse", "--show-toplevel"],
-            capture_output=True,
-            text=True,
-            timeout=30,
-            check=False,
-        )
-    except (OSError, subprocess.SubprocessError):
-        return None
-    out = res.stdout.strip()
-    return Path(out).resolve() if res.returncode == 0 and out else None
-
-
-def find_root(arg: Path | None) -> Path:
-    if arg is not None:
-        return arg.resolve()
-    return _git_top(Path.cwd()) or REPO_ROOT
-
-
-def all_labs(root: Path) -> list[Path]:
-    """``git ls-files '*.unl'`` under ``root``; fallback: rglob (no dot dirs)."""
-    paths: list[Path] = []
-    if _git_top(root) == root:
-        try:
-            out = subprocess.run(
-                ["git", "-C", str(root), "ls-files", "-z", "--", "*.unl"],
-                capture_output=True,
-                timeout=30,
-                check=False,
-            ).stdout
-            paths = [root / p for p in out.decode().split("\0") if p]
-        except (OSError, subprocess.SubprocessError):
-            paths = []
-    if not paths:
-        for p in root.rglob("*.unl"):
-            rel = p.relative_to(root).parts
-            if any(part.startswith(".") for part in rel[:-1]):
-                continue
-            paths.append(p)
-    return sorted(p for p in paths if p.is_file())
-
-
-def _rel(root: Path, path: Path) -> str:
-    try:
-        return path.resolve().relative_to(root).as_posix()
-    except ValueError:
-        return str(path)
+_git_top = labfiles.git_top
+find_root = labfiles.find_root
+all_labs = labfiles.all_labs
+_rel = labfiles.rel_path
 
 
 def resolve_labs(sess: Session, names: Sequence[str]) -> list[Path]:
-    """Paths for LAB arguments: existing files, else unique path substrings."""
-    out: list[Path] = []
-    labs: list[Path] | None = None
-    root = sess.root.resolve()
-    for name in names:
-        # A relative path is resolved against --root first; a CWD-relative or
-        # absolute path is accepted only if it lies under --root, so the lab
-        # written and its state/journal belong to the same tree (review #37).
-        cand = [Path(name)] if Path(name).is_absolute() else [root / name, Path(name)]
-        hit = next((c for c in cand if c.is_file()), None)
-        if hit is not None:
-            if not hit.resolve().is_relative_to(root):
-                raise LocalizeError(
-                    f"{name!r} resolves to {hit.resolve()}, outside --root {root}",
-                    code="LAB_OUTSIDE_ROOT",
-                )
-            out.append(hit.resolve())
-            continue
-        if labs is None:
-            labs = all_labs(sess.root)
-        low = name.lower()
-        matches = [p for p in labs if low in _rel(sess.root, p).lower()]
-        if len(matches) > 1:
-            exact = [p for p in matches if p.stem.lower() == low]
-            matches = exact or matches
-        if not matches:
-            raise LocalizeError(f"no lab matches {name!r}", code="NO_LAB")
-        if len(matches) > 1:
-            listing = ", ".join(_rel(sess.root, p) for p in matches)
-            raise LocalizeError(
-                f"{name!r} matches several labs: {listing}", code="AMBIGUOUS_LAB"
-            )
-        out.append(matches[0].resolve())
-    seen: list[Path] = []
-    for p in out:
-        if p not in seen:
-            seen.append(p)
-    return seen
+    """Paths for LAB arguments (:func:`~evelab.common.labfiles.resolve_lab_names`)."""
+    return labfiles.resolve_lab_names(sess.root, names)
 
 
 def _cloud_count(path: Path) -> int | None:

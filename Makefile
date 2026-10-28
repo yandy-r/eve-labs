@@ -49,6 +49,7 @@ localize:
 localize-check:
 	./scripts/eve-localize check --all --strict
 
+# runs every Python test (common, localize, analyze)
 localize-test:
 	cd python && python3 -I -B -m unittest discover -s tests -t .
 
@@ -57,6 +58,15 @@ localize-sync:
 	@echo "  1) ./scripts/eve-localize revert --all --yes"
 	@echo "  2) git pull --ff-only"
 	@echo "  3) ./scripts/eve-localize apply --all --answers .localize/site.toml --yes"
+
+# eve-analyze (scripts/eve-analyze -> python/src/evelab/analyze; guide: analyze/README.md)
+.PHONY: analyze analyze-scan
+
+analyze:
+	./scripts/eve-analyze
+
+analyze-scan:
+	./scripts/eve-analyze scan
 
 .PHONY: fix-perms fix-perms-dry-run
 

@@ -5,13 +5,14 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "evelab"
 version = "0.1.0"
-description = "Python tooling for the EVE-NG lab repository (eve-localize and friends)."
+description = "Python tooling for the EVE-NG lab repository (eve-localize, eve-analyze)."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = []
 
 [project.scripts]
 eve-localize = "evelab.localize.cli:main"
+eve-analyze = "evelab.analyze.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
