@@ -1,0 +1,232 @@
+{
+  "node": {
+    "template": "bigip",
+    "image": "bigip-17.5.0-0.0.15"
+  },
+  "min_score": 70,
+  "iface_keys": {
+    "1.1": "1.1",
+    "EXT-TENANT1": "ext-tenant1"
+  },
+  "eve_to_config": {
+    "E1.1": [
+      "1.1"
+    ],
+    "Mgmt": [
+      "mgmt"
+    ]
+  },
+  "facts": [
+    {
+      "kind": "label_ref",
+      "value": "EVE-INET-201",
+      "line": 2,
+      "rule": "f5.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_mention",
+      "value": "201",
+      "line": 2,
+      "rule": "f5.comment_vlan",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "cloud_ref",
+      "value": "pnet0",
+      "line": 2,
+      "rule": "f5.comment_cloud",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "alt": "pnet9",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "domain",
+      "value": "dc.example.org",
+      "line": 3,
+      "rule": "f5.hostname_domain",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ntp_server",
+      "value": "10.100.51.11",
+      "line": 4,
+      "rule": "f5.ntp",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ntp_server",
+      "value": "time.example.org",
+      "line": 4,
+      "rule": "f5.ntp",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "10.100.51.11",
+      "line": 5,
+      "rule": "f5.dns",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "search_list",
+      "value": "dc.example.org",
+      "line": 5,
+      "rule": "f5.search",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "search_list",
+      "value": "netlab.local",
+      "line": 5,
+      "rule": "f5.search",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "10.100.0.0",
+      "line": 6,
+      "rule": "f5.mgmt_route_dst",
+      "iface": null,
+      "mask": "/16",
+      "mask_form": "prefix",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.203.1",
+      "line": 6,
+      "rule": "f5.mgmt_route_gw",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_name",
+      "value": "INET-201",
+      "line": 7,
+      "rule": "f5.vlan_name",
+      "iface": "inet-201",
+      "parent": "1.3",
+      "group": "f5vlan:inet-201",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "201",
+      "line": 7,
+      "rule": "f5.vlan_tag",
+      "iface": "inet-201",
+      "parent": "1.3",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-INET-201",
+      "line": 7,
+      "rule": "f5.desc_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.201.38",
+      "line": 8,
+      "rule": "f5.self_ip",
+      "iface": "inet-201",
+      "parent": "1.3",
+      "mask": "/24",
+      "mask_form": "prefix",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_name",
+      "value": "INET-201",
+      "line": 8,
+      "rule": "f5.self_vlan",
+      "iface": "inet-201",
+      "parent": "1.3",
+      "group": "f5vlan:inet-201",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "10.25.0.0",
+      "line": 9,
+      "rule": "f5.route_dst",
+      "iface": null,
+      "mask": "/16",
+      "mask_form": "prefix",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.201.1",
+      "line": 9,
+      "rule": "f5.route_gw",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "secret",
+      "value": "S3cr3t-pw",
+      "line": 10,
+      "rule": "f5tmsh.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ],
+      "confidence": "PROVEN"
+    }
+  ],
+  "ifaces": {
+    "inet-201": {
+      "parent": "1.3",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 201,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false,
+  "secrets": [
+    "S3cr3t-pw"
+  ]
+}

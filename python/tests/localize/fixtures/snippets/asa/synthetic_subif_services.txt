@@ -1,0 +1,31 @@
+: Saved
+ASA Version 9.18(2) 
+!
+hostname asav-9
+domain-name netlab.local
+enable password 8Ry2YjIyt7RRXU24 encrypted
+!
+interface GigabitEthernet0/1
+ no nameif
+ no ip address
+!
+interface GigabitEthernet0/1.203
+ description EVE-MGMT-203 arrives tagged (VLAN 2) via pnet0
+ vlan 2
+ nameif mgmt
+ security-level 100
+ ip address 10.100.203.21 255.255.255.0 
+!
+interface GigabitEthernet0/2
+ nameif outside
+ ip address dhcp setroute 
+!
+dns domain-lookup mgmt
+dns server-group DefaultDNS
+ name-server 1.1.1.1 1.0.0.1 mgmt
+ domain-name netlab.local
+!
+route mgmt 10.100.0.0 255.255.0.0 10.100.203.1 1
+ntp server 10.100.51.11 source mgmt prefer
+username admin password Cisco123 privilege 15
+: end

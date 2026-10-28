@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<lab name="dup_names" id="c6fe67d7-b4b5-51b3-b210-1d66a3faca4a" version="1" scripttimeout="300" countdown="0" linkwidth="2" lock="0" grid="1" author="eve-localize fixtures" sat="-1">
+  <topology>
+    <nodes>
+      <node id="1" name="rtr1" type="iol" template="iol" image="i86bi_linux_l3-adventerprisek9-ms.SPA.157-3.M3.bin" ethernet="1" nvram="1024" ram="1024" serial="0" delay="0" sat="-1" icon="Router.png" config="1" left="300" top="200">
+        <interface id="0" name="e0/0" type="ethernet" network_id="5" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+        <interface id="16" name="e0/1" type="ethernet" network_id="6" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+      </node>
+      <node id="2" name="rtr2" type="iol" template="iol" image="i86bi_linux_l3-adventerprisek9-ms.SPA.157-3.M3.bin" ethernet="1" nvram="1024" ram="1024" serial="0" delay="0" sat="-1" icon="Router.png" config="1" left="500" top="200">
+        <interface id="0" name="e0/0" type="ethernet" network_id="3" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+        <interface id="16" name="e0/1" type="ethernet" network_id="4" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+      </node>
+    </nodes>
+    <networks>
+      <network id="1" smart="-1" native_vlan="1" vlan8021ad="-1" type="pnet0" name="INET-201" left="100" top="100" style="Solid" linkstyle="Straight" color="" label="" visibility="1" icon="cloud_sm.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="2" smart="-1" native_vlan="1" vlan8021ad="-1" type="pnet0" name="INET-201" left="100" top="200" style="Solid" linkstyle="Straight" color="" label="" visibility="1" icon="cloud_sm.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="3" smart="0" native_vlan="1" vlan8021ad="0" type="bridge" name="Net" left="400" top="100" style="Solid" linkstyle="Straight" color="" label="" visibility="0" icon="lan.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="4" smart="0" native_vlan="1" vlan8021ad="0" type="bridge" name="Net-rtr2iface_16" left="500" top="100" style="Solid" linkstyle="Straight" color="" label="" visibility="0" icon="lan.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="5" smart="-1" native_vlan="1" vlan8021ad="-1" type="pnet0" name="Net" left="300" top="100" style="Solid" linkstyle="Straight" color="" label="" visibility="1" icon="cloud_sm.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="6" smart="0" native_vlan="1" vlan8021ad="0" type="bridge" name="Net" left="300" top="300" style="Solid" linkstyle="Straight" color="" label="" visibility="0" icon="lan.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+    </networks>
+  </topology>
+  <objects>
+    <textobjects>
+      <textobject id="1" name="square1" type="square">
+        <data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiB2aWV3Qm94PSIwIDAgMzAwIDIwMCI+PHJlY3QgeD0iMiIgeT0iMiIgd2lkdGg9IjI5NiIgaGVpZ2h0PSIxOTYiIGZpbGw9IiNmZmYiIHN0cm9rZT0iIzIwMyIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+</data>
+      </textobject>
+      <textobject id="2" name="square1" type="square">
+        <data>PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiB2aWV3Qm94PSIwIDAgMzAwIDIwMCI+PHJlY3QgeD0iMiIgeT0iMiIgd2lkdGg9IjI5NiIgaGVpZ2h0PSIxOTYiIGZpbGw9IiNmZmYiIHN0cm9rZT0iIzIwMyIgc3Ryb2tlLXdpZHRoPSIyIi8+PC9zdmc+</data>
+      </textobject>
+      <textobject id="3" name="txt 3" type="text">
+        <data>PHA+RVZFLU1HTVQtMjAzPC9wPg==</data>
+      </textobject>
+    </textobjects>
+    <configs>
+      <config id="1">IQpob3N0bmFtZSBydHIxCiEKaXAgZG9tYWluIG5hbWUgbGFiLmV4YW1wbGUKaXAgbmFtZS1zZXJ2ZXIgMTAuMTAwLjUxLjIKIQppbnRlcmZhY2UgRXRoZXJuZXQwLzAKIGRlc2NyaXB0aW9uIHRvIHN3MQogbm8gc2h1dGRvd24KIQppbnRlcmZhY2UgRXRoZXJuZXQwLzEKIGRlc2NyaXB0aW9uIHVwbGluayBJTkVULTEyNDAKIG5vIGlwIGFkZHJlc3MKIG5vIHNodXRkb3duCiEKaW50ZXJmYWNlIEV0aGVybmV0MC8xLjEyNDAKIGVuY2Fwc3VsYXRpb24gZG90MVEgMTI0MAogaXAgYWRkcmVzcyAxNzIuMzEuMjQwLjExIDI1NS4yNTUuMjU1LjAKIQppcCByb3V0ZSAwLjAuMC4wIDAuMC4wLjAgMTcyLjMxLjI0MC4xCiEKbnRwIHNlcnZlciAxMC4xMDAuNTEuMwohCmVuZAo=</config>
+      <config id="2">IQpob3N0bmFtZSBydHIyCiEKaXAgZG9tYWluIG5hbWUgbGFiLmV4YW1wbGUKaXAgbmFtZS1zZXJ2ZXIgMTAuMTAwLjUxLjIKIQppbnRlcmZhY2UgRXRoZXJuZXQwLzAKIGRlc2NyaXB0aW9uIHRvIHN3MQogbm8gc2h1dGRvd24KIQppbnRlcmZhY2UgRXRoZXJuZXQwLzEKIGRlc2NyaXB0aW9uIHVwbGluayBJTkVULTEyNDAKIG5vIGlwIGFkZHJlc3MKIG5vIHNodXRkb3duCiEKaW50ZXJmYWNlIEV0aGVybmV0MC8xLjEyNDAKIGVuY2Fwc3VsYXRpb24gZG90MVEgMTI0MAogaXAgYWRkcmVzcyAxNzIuMzEuMjQwLjExIDI1NS4yNTUuMjU1LjAKIQppcCByb3V0ZSAwLjAuMC4wIDAuMC4wLjAgMTcyLjMxLjI0MC4xCiEKbnRwIHNlcnZlciAxMC4xMDAuNTEuMwohCmVuZAo=</config>
+    </configs>
+  </objects>
+</lab>

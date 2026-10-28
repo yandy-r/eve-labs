@@ -1,0 +1,228 @@
+{
+  "node": {
+    "template": "asav",
+    "image": "asav-918-2"
+  },
+  "min_score": 70,
+  "iface_keys": {
+    "GigabitEthernet0/1.203": "gi0/1.203",
+    "Gi0/1.203": "gi0/1.203",
+    "Management0/0": "mgmt0/0",
+    "Tunnel1": "tu1"
+  },
+  "eve_to_config": {
+    "Gi0/6": [
+      "GigabitEthernet0/6"
+    ],
+    "Mgmt0/0": [
+      "Management0/0"
+    ]
+  },
+  "facts": [
+    {
+      "kind": "domain",
+      "value": "netlab.local",
+      "line": 5,
+      "rule": "asa.domain",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "secret",
+      "value": "8Ry2YjIyt7RRXU24",
+      "line": 6,
+      "rule": "asa.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "subif_name",
+      "value": "GigabitEthernet0/1.203",
+      "line": 12,
+      "rule": "asa.subif_name",
+      "iface": "gi0/1.203",
+      "parent": "gi0/1",
+      "group": "subif:gi0/1.203",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-MGMT-203",
+      "line": 13,
+      "rule": "asa.desc_label",
+      "iface": "gi0/1.203",
+      "parent": "gi0/1",
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_mention",
+      "value": "2",
+      "line": 13,
+      "rule": "asa.desc_vlan",
+      "iface": "gi0/1.203",
+      "parent": "gi0/1",
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "cloud_ref",
+      "value": "pnet0",
+      "line": 13,
+      "rule": "asa.desc_cloud",
+      "iface": "gi0/1.203",
+      "parent": "gi0/1",
+      "flags": [
+        "cosmetic"
+      ],
+      "alt": "pnet9",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "2",
+      "line": 14,
+      "rule": "asa.vlan",
+      "iface": "gi0/1.203",
+      "parent": "gi0/1",
+      "group": "subif:gi0/1.203",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.203.21",
+      "line": 17,
+      "rule": "asa.ip",
+      "iface": "gi0/1.203",
+      "parent": "gi0/1",
+      "mask": "255.255.255.0",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dhcp",
+      "value": "dhcp",
+      "line": 21,
+      "rule": "asa.dhcp",
+      "iface": "gi0/2",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "1.1.1.1",
+      "line": 25,
+      "rule": "asa.dns",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "1.0.0.1",
+      "line": 25,
+      "rule": "asa.dns",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "domain",
+      "value": "netlab.local",
+      "line": 26,
+      "rule": "asa.domain",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "10.100.0.0",
+      "line": 28,
+      "rule": "asa.route_dst",
+      "iface": null,
+      "mask": "255.255.0.0",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.203.1",
+      "line": 28,
+      "rule": "asa.route_gw",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ntp_server",
+      "value": "10.100.51.11",
+      "line": 29,
+      "rule": "asa.ntp",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "secret",
+      "value": "Cisco123",
+      "line": 30,
+      "rule": "asa.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ],
+      "confidence": "PROVEN"
+    }
+  ],
+  "ifaces": {
+    "gi0/1": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi0/1.203": {
+      "parent": "gi0/1",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 2,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi0/2": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": true,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false,
+  "secrets": [
+    "8Ry2YjIyt7RRXU24",
+    "Cisco123"
+  ]
+}

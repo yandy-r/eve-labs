@@ -38,3 +38,14 @@ Thumbs.db
 
 # Node tooling (lint/format/commitlint)
 node_modules/
+
+# eve-localize: per-host state (answers, backups, journal) and manifest drafts
+/.localize/
+*.localize.toml.draft
+__pycache__/
+
+# Python packaging / tooling caches (python/)
+python/**/*.egg-info/
+.ruff_cache/
+build/
+dist/

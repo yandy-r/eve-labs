@@ -1,0 +1,58 @@
+hostname R27
+ip host www.cnn.com 200.200.150.100
+ip host www.filesdna.com 20.20.20.110
+ip host www.borderlesssecurity.com 200.200.150.100
+interface Loopback0
+ no shutdown
+ ip address 27.27.27.27 255.255.255.255
+!
+interface Ethernet0/0
+ no shutdown
+ ip address 200.200.150.1 255.255.255.0
+ duplex auto
+!
+interface Ethernet0/1
+ no shutdown
+ ip address 100.100.150.1 255.255.255.0
+interface Ethernet1/1
+ no shutdown
+ ip address dhcp
+ ip nat outside
+ ip virtual-reassembly in
+ duplex auto
+!
+router bgp 101
+ bgp router-id 27.27.27.27
+ bgp log-neighbor-changes
+ network 27.27.27.27 mask 255.255.255.255
+ network 100.100.150.0 mask 255.255.255.0
+ network 200.200.150.0
+ neighbor 10.6.14.2 remote-as 600
+ neighbor 10.6.14.2 fall-over bfd
+ neighbor 10.6.14.2 default-originate
+ neighbor 10.6.14.2 route-map INTERNET-ONLY out
+ neighbor 10.6.15.2 remote-as 600
+ neighbor 10.6.15.2 fall-over bfd
+ neighbor 10.6.15.2 default-originate
+ neighbor 10.6.15.2 route-map INTERNET-ONLY out
+ neighbor 10.7.8.2 remote-as 700
+ neighbor 10.7.8.2 default-originate
+ neighbor 10.7.8.2 route-map INTERNET-ONLY out
+ip dns server
+ip nat inside source list 101 interface Ethernet1/1 overload
+!
+!
+ip prefix-list INTERNET-ONLY seq 5 deny 192.168.0.0/16
+ip prefix-list INTERNET-ONLY seq 10 deny 172.16.0.0/16
+ip prefix-list INTERNET-ONLY seq 15 deny 10.0.0.0/8
+ip prefix-list INTERNET-ONLY seq 20 permit 0.0.0.0/0
+ip prefix-list INTERNET-ONLY seq 25 permit 100.100.150.0/24
+ip prefix-list INTERNET-ONLY seq 30 permit 200.200.150.0/24
+ip prefix-list INTERNET-ONLY seq 35 permit 27.27.27.27/32
+access-list 101 permit ip host 30.30.30.1 any
+access-list 101 permit ip host 30.30.30.5 any
+ntp source Loopback0
+ntp master 1
+ntp server 34.202.215.187
+!
+end

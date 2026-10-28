@@ -1,0 +1,93 @@
+
+: 
+: Serial Number: 9AB1FFL4CL4
+: Hardware:   ASAv, 2048 MB RAM, CPU Xeon E5 series 2400 MHz
+: Written by enable_15 at 14:26:47.259 UTC Fri Nov 10 2023
+!
+ASA Version 9.18(2) 
+!
+hostname asav-1
+enable password admin123
+service-module 0 keepalive-timeout 4
+service-module 0 keepalive-counter 6
+names
+no mac-address auto
+
+!
+interface GigabitEthernet0/0
+ nameif outside
+ security-level 0
+ ip address 10.100.105.21 255.255.255.0 
+!
+interface GigabitEthernet0/1
+ nameif outside2
+ security-level 0
+ ip address 169.254.0.1 255.255.255.252 
+!
+interface Tunnel1
+ nameif vti
+ ip address 169.254.21.1 255.255.255.252 
+ tunnel source interface outside
+ tunnel destination 172.173.204.134
+ tunnel mode ipsec ipv4
+ tunnel protection ipsec profile Azure-Ipsec-PROF
+!
+interface Tunnel2
+ nameif vti2
+ ip address 169.254.100.1 255.255.255.252 
+ tunnel source interface outside2
+ tunnel destination 169.254.0.2
+ tunnel mode ipsec ipv4
+ tunnel protection ipsec profile TEST-IPSEC-PROF
+!
+nat (inside,outside) after-auto source dynamic any interface
+nat (inside,mgmt) after-auto source dynamic any interface
+router bgp 65101
+ bgp log-neighbor-changes
+ bgp graceful-restart
+ bgp router-id 169.254.21.1
+ address-family ipv4 unicast
+  neighbor 169.254.100.2 remote-as 65102
+  neighbor 169.254.100.2 ebgp-multihop 255
+  neighbor 169.254.100.2 activate
+  neighbor 10.200.100.254 remote-as 65100
+  neighbor 10.200.100.254 ebgp-multihop 255
+  neighbor 10.200.100.254 activate
+  redistribute connected
+  redistribute static
+  no auto-summary
+  no synchronization
+ exit-address-family
+!
+route outside 0.0.0.0 0.0.0.0 10.100.105.1 1
+route mgmt 10.25.0.0 255.255.0.0 10.100.104.1 1
+route mgmt 10.100.0.0 255.255.0.0 10.100.104.1 1
+route vti 10.200.100.254 255.255.255.255 169.254.21.2 1
+route outside 172.173.204.134 255.255.255.255 10.100.105.1 1
+timeout xlate 3:00:00
+group-policy 172.173.204.134 internal
+group-policy 172.173.204.134 attributes
+ vpn-tunnel-protocol ikev2 
+group-policy 169.254.0.2 internal
+group-policy 169.254.0.2 attributes
+ vpn-tunnel-protocol ikev2 
+dynamic-access-policy-record DfltAccessPolicy
+username cisco password admin123 privilege 15
+tunnel-group 169.254.0.2 type ipsec-l2l
+tunnel-group 169.254.0.2 general-attributes
+ default-group-policy 169.254.0.2
+tunnel-group 169.254.0.2 ipsec-attributes
+ ikev2 remote-authentication pre-shared-key bUtV7fA4btYdA39Q
+ ikev2 local-authentication pre-shared-key bUtV7fA4btYdA39Q
+tunnel-group 172.173.204.134 type ipsec-l2l
+tunnel-group 172.173.204.134 general-attributes
+ default-group-policy 172.173.204.134
+tunnel-group 172.173.204.134 ipsec-attributes
+ ikev2 remote-authentication pre-shared-key 4wmzNmmufPMg277VCDpcsryPHt
+ ikev2 local-authentication pre-shared-key 4wmzNmmufPMg277VCDpcsryPHt
+no tunnel-group-map enable peer-ip
+tunnel-group-map default-group 172.173.204.134
+!
+  subscribe-to-alert-group telemetry periodic daily
+Cryptochecksum:2d4b581fd6ab529f3594e6f2b7b08d3d
+: end

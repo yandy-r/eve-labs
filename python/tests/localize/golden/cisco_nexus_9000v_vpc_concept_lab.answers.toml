@@ -1,0 +1,7 @@
+# Synthetic "site B" answers (golden round-trip, design section 14 item 8).
+schema = 1
+site = "site-b"
+
+[segments."nexus_vpc.internet"]
+bridge = "pnet4"
+label = "WAN-B"

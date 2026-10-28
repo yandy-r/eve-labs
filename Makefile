@@ -35,10 +35,28 @@ format-unstaged:
 
 .PHONY: test check-labs
 
-test: check-labs
+test: check-labs localize-test localize-check
 
 check-labs:
 	./scripts/check-labs.py
+
+# eve-localize (scripts/eve-localize -> python/src/evelab/localize; guide: localize/README.md)
+.PHONY: localize localize-check localize-test localize-sync
+
+localize:
+	./scripts/eve-localize
+
+localize-check:
+	./scripts/eve-localize check --all --strict
+
+localize-test:
+	cd python && python3 -I -B -m unittest discover -s tests -t .
+
+localize-sync:
+	@echo "Upstream sync (run these yourself):"
+	@echo "  1) ./scripts/eve-localize revert --all --yes"
+	@echo "  2) git pull --ff-only"
+	@echo "  3) ./scripts/eve-localize apply --all --answers .localize/site.toml --yes"
 
 .PHONY: fix-perms fix-perms-dry-run
 

@@ -1,0 +1,307 @@
+{
+  "source": "lab1-ei-v01 startup node 13 (R13) lines [(10, 10), (44, 61), (83, 86), (110, 137), (179, 210)]",
+  "node": {
+    "template": "iol",
+    "image": "i86bi_linux_l2-adventerprisek9-ms.SSA.high_iron_20190423.bin"
+  },
+  "min_score": 70,
+  "facts": [
+    {
+      "kind": "secret",
+      "value": "FilesDNA2021",
+      "line": 22,
+      "rule": "ios.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.7.255.13",
+      "line": 26,
+      "rule": "ios.ip",
+      "iface": "lo0",
+      "mask": "255.255.255.255",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "subif_name",
+      "value": "Ethernet0/0.9",
+      "line": 34,
+      "rule": "ios.subif_name",
+      "iface": "et0/0.9",
+      "parent": "et0/0",
+      "group": "subif:et0/0.9"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "9",
+      "line": 36,
+      "rule": "ios.encap_dot1q",
+      "iface": "et0/0.9",
+      "parent": "et0/0",
+      "group": "subif:et0/0.9"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.6.10.2",
+      "line": 38,
+      "rule": "ios.ip",
+      "iface": "et0/0.9",
+      "parent": "et0/0",
+      "mask": "255.255.255.252",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "subif_name",
+      "value": "Ethernet0/0.10",
+      "line": 40,
+      "rule": "ios.subif_name",
+      "iface": "et0/0.10",
+      "parent": "et0/0",
+      "group": "subif:et0/0.10"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "10",
+      "line": 42,
+      "rule": "ios.encap_dot1q",
+      "iface": "et0/0.10",
+      "parent": "et0/0",
+      "group": "subif:et0/0.10"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.6.10.6",
+      "line": 44,
+      "rule": "ios.ip",
+      "iface": "et0/0.10",
+      "parent": "et0/0",
+      "mask": "255.255.255.252",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "subif_name",
+      "value": "Ethernet0/0.11",
+      "line": 46,
+      "rule": "ios.subif_name",
+      "iface": "et0/0.11",
+      "parent": "et0/0",
+      "group": "subif:et0/0.11"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "11",
+      "line": 48,
+      "rule": "ios.encap_dot1q",
+      "iface": "et0/0.11",
+      "parent": "et0/0",
+      "group": "subif:et0/0.11"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.6.10.10",
+      "line": 50,
+      "rule": "ios.ip",
+      "iface": "et0/0.11",
+      "parent": "et0/0",
+      "mask": "255.255.255.252",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "asn",
+      "value": "700",
+      "line": 57,
+      "rule": "ios.bgp_asn",
+      "iface": null
+    },
+    {
+      "kind": "router_id",
+      "value": "10.7.255.13",
+      "line": 58,
+      "rule": "ios.router_id",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.7.255.14",
+      "line": 60,
+      "rule": "ios.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "asn",
+      "value": "700",
+      "line": 60,
+      "rule": "ios.bgp_remote_as",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.7.255.14",
+      "line": 61,
+      "rule": "ios.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.7.255.15",
+      "line": 62,
+      "rule": "ios.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "asn",
+      "value": "700",
+      "line": 62,
+      "rule": "ios.bgp_remote_as",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.7.255.15",
+      "line": 63,
+      "rule": "ios.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.7.255.14",
+      "line": 66,
+      "rule": "ios.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.7.255.15",
+      "line": 67,
+      "rule": "ios.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.7.255.14",
+      "line": 71,
+      "rule": "ios.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.7.255.14",
+      "line": 72,
+      "rule": "ios.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.7.255.15",
+      "line": 73,
+      "rule": "ios.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.7.255.15",
+      "line": 74,
+      "rule": "ios.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.6.10.9",
+      "line": 78,
+      "rule": "ios.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "asn",
+      "value": "600",
+      "line": 78,
+      "rule": "ios.bgp_remote_as",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.6.10.9",
+      "line": 79,
+      "rule": "ios.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.40.11.1",
+      "line": 80,
+      "rule": "ios.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "asn",
+      "value": "400",
+      "line": 80,
+      "rule": "ios.bgp_remote_as",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.40.11.1",
+      "line": 81,
+      "rule": "ios.bgp_neighbor",
+      "iface": null
+    }
+  ],
+  "ifaces": {
+    "lo0": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "et0/0": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "et0/0.9": {
+      "parent": "et0/0",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 9,
+      "dhcp": false,
+      "orphan": false
+    },
+    "et0/0.10": {
+      "parent": "et0/0",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 10,
+      "dhcp": false,
+      "orphan": false
+    },
+    "et0/0.11": {
+      "parent": "et0/0",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 11,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false
+}

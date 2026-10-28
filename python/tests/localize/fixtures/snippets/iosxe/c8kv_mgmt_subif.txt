@@ -1,0 +1,78 @@
+hostname c8kv-75
+!
+no ip domain lookup
+ip domain name netlab.local
+!
+!
+enable secret admin123
+!
+license boot level network-advantage addon dna-advantage
+ip http authentication local
+!
+username admin privilege 15 secret admin123
+username cisco privilege 15 secret admin123
+username ndfc privilege 15 secret admin123
+!
+netconf-yang
+restconf
+!
+vrf definition Mgmt-vrf
+ !
+ address-family ipv4
+ exit-address-family
+!
+!
+interface GigabitEthernet16
+ description to pnet0: EVE-MGMT-203
+ no ip address
+ no ip redirects
+ no ip proxy-arp
+ negotiation auto
+ no mop enabled
+ no mop sysid
+ no shutdown
+!
+interface GigabitEthernet16.2
+ description Mgmt-vrf
+ encapsulation dot1Q 2
+ vrf forwarding Mgmt-vrf
+ ip address 10.100.203.75 255.255.255.0
+ no ip redirects
+ no ip proxy-arp
+ no ipv6 redirects
+ no shutdown
+!
+interface GigabitEthernet1
+ description to dc1-bgw1: E1/7
+!
+no ip http server
+ip http secure-server
+!
+ip http authentication local
+license boot level network-advantage addon dna-advantage
+!
+ip tcp path-mtu-discovery
+!
+ip route vrf Mgmt-vrf 0.0.0.0 0.0.0.0 10.100.203.1
+!
+crypto key generate ec keysize 384
+yes
+crypto key generate rsa general-keys modulus 2048
+ip ssh version 2
+!
+!
+!
+line con 0
+  exec-timeout 0 0
+  privilege level 15
+  logging synchronous
+  no login
+  stopbits 1
+line vty 0 4
+  exec-timeout 60 0
+  privilege level 15
+  logging synchronous
+  login local
+  transport input all
+end
+

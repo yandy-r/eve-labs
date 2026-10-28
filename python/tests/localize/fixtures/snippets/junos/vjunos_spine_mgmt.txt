@@ -1,0 +1,96 @@
+## Last changed: 2024-11-15 15:03:38 UTC
+version 23.2R1.14;
+system {
+    host-name dc1-spine1;
+    root-authentication {
+        encrypted-password "$6$Wpsv.I/oMsVSz6Gu$.gDWDvZKFJZkqA3ESLm2q5t/X9JfO7Fdkpq8nLxgXsdGNLdNrtkLgcaSbt64yVIcjoAFwaQo3GB.wrZyH4TwG.";
+    }
+    commit synchronize;
+    login {
+        idle-timeout 60;
+        user admin {
+            uid 2000;
+            class super-user;
+            authentication {
+                encrypted-password "$6$Wpsv.I/oMsVSz6Gu$.gDWDvZKFJZkqA3ESLm2q5t/X9JfO7Fdkpq8nLxgXsdGNLdNrtkLgcaSbt64yVIcjoAFwaQo3GB.wrZyH4TwG.";
+            }
+        }
+    }
+    services {
+        ssh {
+            protocol-version v2;
+        }
+        netconf {
+            ssh;
+        }
+    }
+    domain-name plsnetlab.local;
+    domain-search plsnetlab.local;
+    arp {
+        aging-timer 5;
+    }
+    management-instance;
+    name-server {
+        10.100.51.11 routing-instance mgmt_junos;
+    }
+    syslog {
+        file interactive-commands {
+            interactive-commands any;
+        }
+        file messages {
+            any notice;
+            authorization info;
+        }
+    }
+    processes {
+        dhcp-service {
+            traceoptions {
+                file dhcp_logfile size 10m;
+                level all;
+                flag packet;
+            }
+        }
+    }
+}
+interfaces {
+    fxp0 {
+        unit 0 {
+            family inet {
+                address 10.100.241.11/20;
+            }
+        }
+    }
+}
+multi-chassis {
+    mc-lag {
+        consistency-check;
+    }
+}
+snmp {
+    community NETBRAIN {
+        authorization read-only;
+    }
+}
+routing-instances {
+    mgmt_junos {
+        routing-options {
+            static {
+                route 0.0.0.0/0 next-hop 10.100.255.254;
+            }
+        }
+        description Management;
+    }
+}
+protocols {
+    router-advertisement {
+        interface fxp0.0 {
+            managed-configuration;
+        }
+    }
+    lldp {
+        interface all;
+    }
+    lldp-med {
+        interface all;
+    }
+}

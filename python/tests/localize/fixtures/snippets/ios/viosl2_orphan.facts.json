@@ -1,0 +1,274 @@
+{
+  "source": "vxlan_evpn_multi-site_with_backbone cs:vxlan-dmvpn-backbone node 9 (b1-sw1) lines [(10, 10), (16, 26), (35, 36), (59, 67), (87, 94), (134, 183), (191, 191), (193, 204), (221, 234)]",
+  "node": {
+    "template": "viosl2",
+    "image": "viosl2-adventerprisek9-m.ssa.high_iron_20200929"
+  },
+  "min_score": 70,
+  "facts": [
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 8,
+      "rule": "ios.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 10,
+      "rule": "ios.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 11,
+      "rule": "ios.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "domain",
+      "value": "netlab.local",
+      "line": 14,
+      "rule": "ios.domain",
+      "iface": null
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.255.255.52",
+      "line": 17,
+      "rule": "ios.ip",
+      "iface": "lo0",
+      "mask": "255.255.255.255",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "label_ref",
+      "value": "b1-fgt1",
+      "line": 21,
+      "rule": "ios.desc_label",
+      "iface": "gi0/0",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "label_ref",
+      "value": "port2",
+      "line": 21,
+      "rule": "ios.desc_label",
+      "iface": "gi0/0",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.26.0.2",
+      "line": 23,
+      "rule": "ios.ip",
+      "iface": "gi0/0",
+      "mask": "255.255.255.252",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "label_ref",
+      "value": "b1-pc1",
+      "line": 26,
+      "rule": "ios.desc_label",
+      "iface": "gi1/0",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "100",
+      "line": 27,
+      "rule": "ios.access_vlan",
+      "iface": "gi1/0"
+    },
+    {
+      "kind": "vlan_list",
+      "value": "203",
+      "line": 40,
+      "rule": "ios.trunk_allowed",
+      "iface": null,
+      "orphan": true,
+      "confidence": "CORRELATED"
+    },
+    {
+      "kind": "svi_name",
+      "value": "Vlan100",
+      "line": 46,
+      "rule": "ios.svi_name",
+      "iface": "vl100",
+      "group": "subif:vl100"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.26.100.1",
+      "line": 49,
+      "rule": "ios.ip",
+      "iface": "vl100",
+      "mask": "255.255.255.0",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "svi_name",
+      "value": "Vlan203",
+      "line": 53,
+      "rule": "ios.svi_name",
+      "iface": "vl203",
+      "group": "subif:vl203"
+    },
+    {
+      "kind": "ip_host",
+      "value": "172.21.203.111",
+      "line": 56,
+      "rule": "ios.ip",
+      "iface": "vl203",
+      "mask": "255.255.255.0",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "asn",
+      "value": "65101",
+      "line": 61,
+      "rule": "ios.bgp_asn",
+      "iface": null
+    },
+    {
+      "kind": "router_id",
+      "value": "169.255.255.52",
+      "line": 62,
+      "rule": "ios.router_id",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.26.0.1",
+      "line": 67,
+      "rule": "ios.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "asn",
+      "value": "64001",
+      "line": 67,
+      "rule": "ios.bgp_remote_as",
+      "iface": null
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.26.0.1",
+      "line": 72,
+      "rule": "ios.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "172.21.203.254",
+      "line": 80,
+      "rule": "ios.route_default",
+      "iface": null
+    },
+    {
+      "kind": "secret",
+      "value": "NETBRAIN",
+      "line": 82,
+      "rule": "ios.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    }
+  ],
+  "ifaces": {
+    "lo0": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi0/0": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi1/0": {
+      "parent": null,
+      "mode": "access",
+      "access_vlan": 100,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi3/2": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "orphan:36": {
+      "parent": null,
+      "mode": "trunk",
+      "access_vlan": null,
+      "trunk_vlans": "203",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": true
+    },
+    "vl100": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "vl203": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [
+    100,
+    203
+  ],
+  "is_switch": true
+}

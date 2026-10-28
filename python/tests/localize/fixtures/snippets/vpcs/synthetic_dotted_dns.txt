@@ -1,0 +1,4 @@
+set pcname VPC1
+ip 10.3.90.100 255.255.255.0 10.3.90.1 8.8.8.8
+ip dns 1.1.1.1
+ip domain plsnetlab.local

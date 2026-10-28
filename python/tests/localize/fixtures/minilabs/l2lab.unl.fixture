@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<lab name="l2lab" id="a9013e9d-a104-546f-8d66-38cb66886083" version="1" scripttimeout="300" countdown="0" linkwidth="2" lock="0" grid="1" author="eve-localize fixtures" sat="-1">
+  <description>L2 trace and segment discovery (T13/T14).</description>
+  <topology>
+    <nodes>
+      <node id="1" name="sw1" type="iol" template="iol" image="i86bi_linux_l2-adventerprisek9-ms.SSA.high_iron_20190423.bin" ethernet="2" nvram="1024" ram="1024" serial="0" delay="0" sat="-1" icon="Switch.png" config="2" left="100" top="200">
+        <interface id="0" name="e0/0" network_id="1" type="ethernet" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+        <interface id="16" name="e0/1" network_id="2" type="ethernet" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+        <interface id="32" name="e0/2" network_id="3" type="ethernet" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+        <interface id="1" name="e1/0" network_id="4" type="ethernet" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+      </node>
+      <node id="2" name="rtr1" type="iol" template="iol" image="i86bi_linux_l3-adventerprisek9-ms.SPA.157-3.M3.bin" ethernet="2" nvram="1024" ram="1024" serial="0" delay="0" sat="-1" icon="Router.png" config="1" left="200" top="200">
+        <interface id="0" name="e0/0" network_id="2" type="ethernet" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+        <interface id="16" name="e0/1" network_id="6" type="ethernet" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+      </node>
+      <node id="3" name="rtr2" type="iol" template="iol" image="i86bi_linux_l3-adventerprisek9-ms.SPA.157-3.M3.bin" ethernet="2" nvram="1024" ram="1024" serial="0" delay="0" sat="-1" icon="Router.png" config="1" left="300" top="200">
+        <interface id="0" name="e0/0" network_id="3" type="ethernet" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+        <interface id="16" name="e0/1" network_id="5" type="ethernet" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+        <interface id="32" name="e0/2" network_id="6" type="ethernet" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+      </node>
+      <node id="4" name="srv1" type="docker" template="docker" image="eve-server-yr:latest" ethernet="1" ram="1024" cpu="1" console="telnet" e0dhcp="0" dock_ipv6="0" delay="0" sat="0" icon="Desktop4.png" width="0" config="1" left="400" top="200">
+        <interface id="0" name="eth0" network_id="4" type="ethernet" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+      </node>
+      <node id="5" name="fw1" type="qemu" template="fortinet" image="fortinet-FGT-v7-build2463" console="telnet" cpu="2" cpulimit="0" ram="2048" ethernet="8" delay="0" sat="0" icon="Forti_FGT.png" width="0" config="0" left="500" top="200">
+        <interface id="0" name="port1" network_id="7" type="ethernet" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+      </node>
+      <node id="6" name="rtr3" type="iol" template="iol" image="i86bi_linux_l3-adventerprisek9-ms.SPA.157-3.M3.bin" ethernet="2" nvram="1024" ram="1024" serial="0" delay="0" sat="-1" icon="Router.png" config="1" left="600" top="200">
+        <interface id="0" name="e0/0" network_id="8" type="ethernet" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+      </node>
+      <node id="7" name="rtr4" type="iol" template="iol" image="i86bi_linux_l3-adventerprisek9-ms.SPA.157-3.M3.bin" ethernet="2" nvram="1024" ram="1024" serial="0" delay="0" sat="-1" icon="Router.png" config="2" left="700" top="200">
+        <interface id="0" name="e0/0" network_id="9" type="ethernet" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+      </node>
+      <node id="8" name="rtr5" type="iol" template="iol" image="i86bi_linux_l3-adventerprisek9-ms.SPA.157-3.M3.bin" ethernet="2" nvram="1024" ram="1024" serial="0" delay="0" sat="-1" icon="Router.png" config="1" left="800" top="200">
+        <interface id="0" name="e0/0" network_id="9" type="ethernet" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+      </node>
+      <node id="9" name="fw2" type="qemu" template="fortinet" image="fortinet-FGT-v7-build2463" console="telnet" cpu="2" cpulimit="0" ram="2048" ethernet="8" delay="0" sat="0" icon="Forti_FGT.png" width="0" config="0" left="900" top="200">
+        <interface id="0" name="port1" network_id="10" type="ethernet" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+      </node>
+      <node id="10" name="fw3" type="qemu" template="fortinet" image="fortinet-FGT-v7-build2463" console="telnet" cpu="2" cpulimit="0" ram="2048" ethernet="8" delay="0" sat="0" icon="Forti_FGT.png" width="0" config="0" left="1000" top="200">
+        <interface id="0" name="port1" network_id="11" type="ethernet" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+      </node>
+    </nodes>
+    <networks>
+      <network id="1" smart="-1" native_vlan="1" vlan8021ad="-1" type="pnet0" name="EVE-TRUNK" left="80" top="300" style="Solid" linkstyle="Straight" color="" label="" visibility="1" icon="cloud_sm.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="2" smart="0" native_vlan="1" vlan8021ad="0" type="bridge" name="Net-sw1iface_16" left="160" top="300" style="Solid" linkstyle="Straight" color="" label="" visibility="0" icon="lan.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="3" smart="0" native_vlan="1" vlan8021ad="0" type="bridge" name="Net-sw1iface_32" left="240" top="300" style="Solid" linkstyle="Straight" color="" label="" visibility="0" icon="lan.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="4" smart="0" native_vlan="1" vlan8021ad="0" type="bridge" name="Net-sw1iface_1" left="320" top="300" style="Solid" linkstyle="Straight" color="" label="" visibility="0" icon="lan.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="5" smart="-1" native_vlan="1" vlan8021ad="-1" type="pnet0" name="INET-500" left="400" top="300" style="Solid" linkstyle="Straight" color="" label="" visibility="1" icon="cloud_sm.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="6" smart="0" native_vlan="1" vlan8021ad="0" type="bridge" name="Net-rtr1iface_16" left="480" top="300" style="Solid" linkstyle="Straight" color="" label="" visibility="0" icon="lan.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="7" smart="-1" native_vlan="1" vlan8021ad="-1" type="pnet0" name="EXT-LABEL" left="560" top="300" style="Solid" linkstyle="Straight" color="" label="" visibility="1" icon="cloud_sm.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="8" smart="-1" native_vlan="1" vlan8021ad="-1" type="nat0" name="Internet" left="640" top="300" style="Solid" linkstyle="Straight" color="" label="" visibility="1" icon="cloud_sm.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="9" smart="-1" native_vlan="1" vlan8021ad="-1" type="pnet0" name="EXT-MGMT" left="720" top="300" style="Solid" linkstyle="Straight" color="" label="" visibility="1" icon="cloud_sm.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="10" smart="-1" native_vlan="1" vlan8021ad="-1" type="pnet0" name="lab-20" left="800" top="300" style="Solid" linkstyle="Straight" color="" label="" visibility="1" icon="cloud_sm.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="11" smart="-1" native_vlan="1" vlan8021ad="-1" type="pnet0" name="SRV-NET" left="880" top="300" style="Solid" linkstyle="Straight" color="" label="" visibility="1" icon="cloud_sm.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+    </networks>
+  </topology>
+  <objects>
+    <configs>
+      <config id="1">aG9zdG5hbWUgc3cxCiEKdmxhbiAxMAogbmFtZSBFWFQtTUdNVAohCnZsYW4gMzAKIG5hbWUgU1JWLU5FVAohCmludGVyZmFjZSBFdGhlcm5ldDAvMAogZGVzY3JpcHRpb24gdG8gcG5ldDAgdHJ1bmsKIHN3aXRjaHBvcnQgdHJ1bmsgZW5jYXBzdWxhdGlvbiBkb3QxcQogc3dpdGNocG9ydCBtb2RlIHRydW5rCiEKaW50ZXJmYWNlIEV0aGVybmV0MC8xCiBzd2l0Y2hwb3J0IG1vZGUgYWNjZXNzCiBzd2l0Y2hwb3J0IGFjY2VzcyB2bGFuIDEwCiEKaW50ZXJmYWNlIEV0aGVybmV0MC8yCiBzd2l0Y2hwb3J0IHRydW5rIGVuY2Fwc3VsYXRpb24gZG90MXEKIHN3aXRjaHBvcnQgbW9kZSB0cnVuawogc3dpdGNocG9ydCB0cnVuayBhbGxvd2VkIHZsYW4gMjAKIQppbnRlcmZhY2UgRXRoZXJuZXQwLzMKIHN3aXRjaHBvcnQgbW9kZSBhY2Nlc3MKIHN3aXRjaHBvcnQgYWNjZXNzIHZsYW4gMTAKIQppbnRlcmZhY2UgRXRoZXJuZXQxLzAKIHN3aXRjaHBvcnQgbW9kZSBhY2Nlc3MKIHN3aXRjaHBvcnQgYWNjZXNzIHZsYW4gMzAKIQppbnRlcmZhY2UgRXRoZXJuZXQxLzEKIHN3aXRjaHBvcnQgbW9kZSBhY2Nlc3MKIHN3aXRjaHBvcnQgYWNjZXNzIHZsYW4gNDAKIQppbnRlcmZhY2UgVmxhbjEwCiBpcCBhZGRyZXNzIDE5Mi4wLjIuMiAyNTUuMjU1LjI1NS4wCiEKaW50ZXJmYWNlIFZsYW40MAogaXAgYWRkcmVzcyAxMC40MC4wLjEgMjU1LjI1NS4yNTUuMAohCmVuZAo=</config>
+      <config id="2">aG9zdG5hbWUgcnRyMQohCmludGVyZmFjZSBFdGhlcm5ldDAvMAogaXAgYWRkcmVzcyAxOTIuMC4yLjExIDI1NS4yNTUuMjU1LjAKIQppbnRlcmZhY2UgRXRoZXJuZXQwLzEKIGlwIGFkZHJlc3MgMTAuNS41LjIgMjU1LjI1NS4yNTUuMjUyCiEKaXAgcm91dGUgMC4wLjAuMCAwLjAuMC4wIDE5Mi4wLjIuMQohCmVuZAo=</config>
+      <config id="3">aG9zdG5hbWUgcnRyMgohCmludGVyZmFjZSBFdGhlcm5ldDAvMAogbm8gaXAgYWRkcmVzcwohCmludGVyZmFjZSBFdGhlcm5ldDAvMC4yMAogZW5jYXBzdWxhdGlvbiBkb3QxUSAyMAogaXAgYWRkcmVzcyAxOTguNTEuMTAwLjEyIDI1NS4yNTUuMjU1LjAKIQppbnRlcmZhY2UgRXRoZXJuZXQwLzAuOTkKIGVuY2Fwc3VsYXRpb24gZG90MVEgOTkKIGlwIGFkZHJlc3MgMTAuOTkuMC4xIDI1NS4yNTUuMjU1LjAKIQppbnRlcmZhY2UgRXRoZXJuZXQwLzEKIGRlc2NyaXB0aW9uIHVwbGluayBwbmV0MCBJTkVULTUwMAogbm8gaXAgYWRkcmVzcwohCmludGVyZmFjZSBFdGhlcm5ldDAvMS41MDAKIGVuY2Fwc3VsYXRpb24gZG90MVEgNTAwCiBpcCBhZGRyZXNzIDEwMC42NC41LjIgMjU1LjI1NS4yNTUuMAohCmludGVyZmFjZSBFdGhlcm5ldDAvMgogbm8gaXAgYWRkcmVzcwohCmludGVyZmFjZSBFdGhlcm5ldDAvMi41MDAKIGVuY2Fwc3VsYXRpb24gZG90MVEgNTAwCiBpcCBhZGRyZXNzIDEwLjUuNS4xIDI1NS4yNTUuMjU1LjI1MgohCnJvdXRlciBiZ3AgNjUwMDEKIG5laWdoYm9yIDEwMC42NC41LjEgcmVtb3RlLWFzIDY1MDAwCiEKaXAgcm91dGUgMC4wLjAuMCAwLjAuMC4wIDEwMC42NC41LjEKIQplbmQK</config>
+      <config id="4">IyEvYmluL3NoCmlwIGFkZHIgYWRkIDIwMy4wLjExMy41LzI0IGRldiBldGgwCmlwIHJvdXRlIGFkZCBkZWZhdWx0IHZpYSAyMDMuMC4xMTMuMQo=</config>
+      <config id="6">aG9zdG5hbWUgcnRyMwohCmludGVyZmFjZSBFdGhlcm5ldDAvMAogaXAgYWRkcmVzcyBkaGNwCiEKZW5kCg==</config>
+      <config id="7">aG9zdG5hbWUgcnRyNAohCmludGVyZmFjZSBFdGhlcm5ldDAvMAogbm8gaXAgYWRkcmVzcwohCmludGVyZmFjZSBFdGhlcm5ldDAvMC4xMAogZW5jYXBzdWxhdGlvbiBkb3QxUSAxMAogaXAgYWRkcmVzcyAxOTIuMC4yLjQgMjU1LjI1NS4yNTUuMAohCmlwIHJvdXRlIDAuMC4wLjAgMC4wLjAuMCAxOTIuMC4yLjEKIQplbmQK</config>
+      <config id="8">aG9zdG5hbWUgcnRyNQohCmludGVyZmFjZSBFdGhlcm5ldDAvMAogbm8gaXAgYWRkcmVzcwohCmludGVyZmFjZSBFdGhlcm5ldDAvMC4xMAogZW5jYXBzdWxhdGlvbiBkb3QxUSAxMAogaXAgYWRkcmVzcyAxOTIuMC4zLjUgMjU1LjI1NS4yNTUuMAohCmVuZAo=</config>
+    </configs>
+    <configsets>
+      <configset id="2" name="alt">
+        <config id="1">aG9zdG5hbWUgc3cxCiEKdmxhbiAxMQogbmFtZSBFWFQtTUdNVAohCnZsYW4gMzAKIG5hbWUgU1JWLU5FVAohCmludGVyZmFjZSBFdGhlcm5ldDAvMAogZGVzY3JpcHRpb24gdG8gcG5ldDAgdHJ1bmsKIHN3aXRjaHBvcnQgdHJ1bmsgZW5jYXBzdWxhdGlvbiBkb3QxcQogc3dpdGNocG9ydCBtb2RlIHRydW5rCiEKaW50ZXJmYWNlIEV0aGVybmV0MC8xCiBzd2l0Y2hwb3J0IG1vZGUgYWNjZXNzCiBzd2l0Y2hwb3J0IGFjY2VzcyB2bGFuIDExCiEKaW50ZXJmYWNlIEV0aGVybmV0MC8yCiBzd2l0Y2hwb3J0IHRydW5rIGVuY2Fwc3VsYXRpb24gZG90MXEKIHN3aXRjaHBvcnQgbW9kZSB0cnVuawogc3dpdGNocG9ydCB0cnVuayBhbGxvd2VkIHZsYW4gMjAKIQppbnRlcmZhY2UgRXRoZXJuZXQwLzMKIHN3aXRjaHBvcnQgbW9kZSBhY2Nlc3MKIHN3aXRjaHBvcnQgYWNjZXNzIHZsYW4gMTEKIQppbnRlcmZhY2UgRXRoZXJuZXQxLzAKIHN3aXRjaHBvcnQgbW9kZSBhY2Nlc3MKIHN3aXRjaHBvcnQgYWNjZXNzIHZsYW4gMzAKIQppbnRlcmZhY2UgRXRoZXJuZXQxLzEKIHN3aXRjaHBvcnQgbW9kZSBhY2Nlc3MKIHN3aXRjaHBvcnQgYWNjZXNzIHZsYW4gNDAKIQppbnRlcmZhY2UgVmxhbjExCiBpcCBhZGRyZXNzIDE5Mi4wLjIuMiAyNTUuMjU1LjI1NS4wCiEKaW50ZXJmYWNlIFZsYW40MAogaXAgYWRkcmVzcyAxMC40MC4wLjEgMjU1LjI1NS4yNTUuMAohCmVuZAo=</config>
+        <config id="7">aG9zdG5hbWUgcnRyNAohCmludGVyZmFjZSBFdGhlcm5ldDAvMAogbm8gaXAgYWRkcmVzcwohCmludGVyZmFjZSBFdGhlcm5ldDAvMC4xMQogZW5jYXBzdWxhdGlvbiBkb3QxUSAxMQogaXAgYWRkcmVzcyAxOTIuMC4yLjQgMjU1LjI1NS4yNTUuMAohCmlwIHJvdXRlIDAuMC4wLjAgMC4wLjAuMCAxOTIuMC4yLjEKIQplbmQK</config>
+      </configset>
+    </configsets>
+  </objects>
+</lab>

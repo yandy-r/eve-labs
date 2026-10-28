@@ -1,0 +1,195 @@
+{
+  "source": "vxlan_evpn_multi-site_sdwan_only startup node 48 (sw-48) lines [(10, 10), (16, 26), (35, 36), (59, 74), (151, 209)]",
+  "node": {
+    "template": "viosl2",
+    "image": "viosl2-adventerprisek9-m.ssa.high_iron_20200929"
+  },
+  "min_score": 70,
+  "facts": [
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 8,
+      "rule": "ios.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 10,
+      "rule": "ios.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 11,
+      "rule": "ios.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "domain",
+      "value": "plsnetlab.local",
+      "line": 14,
+      "rule": "ios.domain",
+      "iface": null
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.254.48.48",
+      "line": 17,
+      "rule": "ios.ip",
+      "iface": "lo0",
+      "mask": "255.255.255.255",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "label_ref",
+      "value": "c8kv-52",
+      "line": 20,
+      "rule": "ios.desc_label",
+      "iface": "gi0/0",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.44.0.6",
+      "line": 23,
+      "rule": "ios.ip",
+      "iface": "gi0/0",
+      "mask": "255.255.255.252",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "cloud_ref",
+      "value": "pnet0",
+      "line": 36,
+      "rule": "ios.desc_cloud",
+      "iface": "gi3/3",
+      "flags": [
+        "cosmetic"
+      ],
+      "alt": "pnet9"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-MGMT-203",
+      "line": 36,
+      "rule": "ios.desc_label",
+      "iface": "gi3/3",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "subif_name",
+      "value": "GigabitEthernet3/3.2",
+      "line": 45,
+      "rule": "ios.subif_name",
+      "iface": "gi3/3.2",
+      "parent": "gi3/3",
+      "group": "subif:gi3/3.2"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "2",
+      "line": 47,
+      "rule": "ios.encap_dot1q",
+      "iface": "gi3/3.2",
+      "parent": "gi3/3",
+      "group": "subif:gi3/3.2"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.203.48",
+      "line": 49,
+      "rule": "ios.ip",
+      "iface": "gi3/3.2",
+      "parent": "gi3/3",
+      "mask": "255.255.255.0",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.203.1",
+      "line": 68,
+      "rule": "ios.route_default",
+      "iface": null
+    },
+    {
+      "kind": "secret",
+      "value": "NETBRAIN",
+      "line": 77,
+      "rule": "ios.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    }
+  ],
+  "ifaces": {
+    "lo0": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi0/0": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi3/2": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi3/3": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "gi3/3.2": {
+      "parent": "gi3/3",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 2,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false
+}

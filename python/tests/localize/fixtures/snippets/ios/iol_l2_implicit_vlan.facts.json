@@ -1,0 +1,146 @@
+{
+  "source": "vxlan_evpn_multi-site_with_backbone cs:vxlan-dmvpn-backbone node 79 (mgmt-79) lines [(11, 11), (17, 19), (29, 30), (36, 38), (54, 67), (89, 103)]",
+  "node": {
+    "template": "iol",
+    "image": ""
+  },
+  "min_score": 70,
+  "facts": [
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 2,
+      "rule": "ios.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 4,
+      "rule": "ios.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "domain",
+      "value": "netlab.local",
+      "line": 6,
+      "rule": "ios.domain",
+      "iface": null
+    },
+    {
+      "kind": "label_ref",
+      "value": "real-world",
+      "line": 12,
+      "rule": "ios.desc_label",
+      "iface": "et0/0",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "label_ref",
+      "value": "dc1-spine1",
+      "line": 19,
+      "rule": "ios.desc_label",
+      "iface": "et0/1",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "203",
+      "line": 20,
+      "rule": "ios.access_vlan",
+      "iface": "et0/1"
+    },
+    {
+      "kind": "label_ref",
+      "value": "dc1-fgt1",
+      "line": 26,
+      "rule": "ios.desc_label",
+      "iface": "et1/1",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "label_ref",
+      "value": "port8",
+      "line": 26,
+      "rule": "ios.desc_label",
+      "iface": "et1/1",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "vlan_list",
+      "value": "204",
+      "line": 27,
+      "rule": "ios.trunk_allowed",
+      "iface": "et1/1"
+    },
+    {
+      "kind": "vlan_list",
+      "value": "255",
+      "line": 34,
+      "rule": "ios.trunk_allowed",
+      "iface": "et1/2"
+    }
+  ],
+  "ifaces": {
+    "et0/0": {
+      "parent": null,
+      "mode": "trunk",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "et0/1": {
+      "parent": null,
+      "mode": "access",
+      "access_vlan": 203,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "et1/1": {
+      "parent": null,
+      "mode": "trunk",
+      "access_vlan": null,
+      "trunk_vlans": "204",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "et1/2": {
+      "parent": null,
+      "mode": "trunk",
+      "access_vlan": null,
+      "trunk_vlans": "255",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [
+    203,
+    204,
+    255
+  ],
+  "is_switch": true
+}

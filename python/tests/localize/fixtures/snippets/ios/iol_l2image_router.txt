@@ -1,0 +1,83 @@
+hostname R13
+ip vrf bs
+ rd 701:13
+ route-target export 701:13
+ route-target import 701:13
+ route-target import 701:14
+ route-target import 701:16
+ route-target import 701:17
+ route-target import 701:18
+!
+ip vrf fd
+ rd 700:13
+ route-target export 700:13
+ route-target import 700:13
+ route-target import 700:14
+ route-target import 700:16
+ route-target import 700:17
+ route-target import 700:18
+!
+key chain CCIE
+ key 70
+  key-string FilesDNA2021
+!
+interface Loopback0
+ no shutdown
+ ip address 10.7.255.13 255.255.255.255
+ ip router isis 
+!
+interface Ethernet0/0
+ no shutdown
+ no ip address
+ duplex auto
+!
+interface Ethernet0/0.9
+ no shutdown
+ encapsulation dot1Q 9
+ ip vrf forwarding in
+ ip address 10.6.10.2 255.255.255.252
+!
+interface Ethernet0/0.10
+ no shutdown
+ encapsulation dot1Q 10
+ ip vrf forwarding fd
+ ip address 10.6.10.6 255.255.255.252
+!
+interface Ethernet0/0.11
+ no shutdown
+ encapsulation dot1Q 11
+ ip vrf forwarding bs
+ ip address 10.6.10.10 255.255.255.252
+!
+router isis
+ net 70.0000.0100.4444.4444.00
+ is-type level-2-only
+ metric-style wide
+!
+router bgp 700
+ bgp router-id 10.7.255.13
+ bgp log-neighbor-changes
+ neighbor 10.7.255.14 remote-as 700
+ neighbor 10.7.255.14 update-source Loopback0
+ neighbor 10.7.255.15 remote-as 700
+ neighbor 10.7.255.15 update-source Loopback0
+ !
+ address-family ipv4
+  neighbor 10.7.255.14 activate
+  neighbor 10.7.255.15 activate
+ exit-address-family
+ !
+ address-family vpnv4
+  neighbor 10.7.255.14 activate
+  neighbor 10.7.255.14 send-community both
+  neighbor 10.7.255.15 activate
+  neighbor 10.7.255.15 send-community both
+ exit-address-family
+ !
+ address-family ipv4 vrf bs
+  neighbor 10.6.10.9 remote-as 600
+  neighbor 10.6.10.9 activate
+  neighbor 10.40.11.1 remote-as 400
+  neighbor 10.40.11.1 activate
+ exit-address-family
+ !

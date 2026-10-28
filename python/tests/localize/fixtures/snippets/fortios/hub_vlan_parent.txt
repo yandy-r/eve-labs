@@ -1,0 +1,61 @@
+config system interface
+    edit "port1"
+        set mode static
+        set alias "trunk-dc1-bgw1"
+        set description "802.1Q trunk to dc1-bgw1: E1/3"
+    next
+    edit "wan1"
+        set vdom "root"
+        set interface "port1"
+        set vlanid 201
+        set ip 10.100.201.31 255.255.255.0
+        set allowaccess ping
+        set role wan
+        set alias "EVE-INET-201"
+    next
+    edit "t1-bgw1"
+        set vdom "root"
+        set interface "port1"
+        set vlanid 3101
+        set ip 169.13.7.2 255.255.255.252
+        set allowaccess ping
+        set role lan
+        set alias "TENANT1 via dc1-bgw1"
+    next
+end
+config router static
+    edit 1
+        set sdwan-zone "underlay"
+        set comment "internet via ISP VLANs"
+    next
+    edit 2
+        set dst 10.200.0.0 255.255.0.0
+        set blackhole enable
+        set comment "anchor for the SD-WAN loopback summary"
+    next
+    edit 3
+end
+config router bgp
+    set as 64001
+    set router-id 10.200.255.1
+    set keepalive-timer 10
+    set holdtime-timer 30
+    set ibgp-multipath enable
+    set ebgp-multipath enable
+    set recursive-next-hop enable
+    set graceful-restart enable
+    config neighbor
+        edit "169.13.7.1"
+            set description "dc1-bgw1 TENANT1 (VLAN 3101)"
+            set remote-as 65001
+            set capability-default-originate enable
+            set soft-reconfiguration enable
+        next
+        edit "169.15.7.1"
+            set description "dc1-bgw2 TENANT1 (VLAN 3101)"
+            set remote-as 65001
+            set capability-default-originate enable
+            set soft-reconfiguration enable
+        next
+    end
+end

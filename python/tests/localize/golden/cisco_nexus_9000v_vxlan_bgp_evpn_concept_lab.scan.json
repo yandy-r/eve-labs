@@ -1,0 +1,22 @@
+{
+  "lab": "labs/ccie/cisco_nexus_9000v_vxlan_bgp_evpn_concept_lab.unl",
+  "lab_id": "390c1a3d-5da8-4e30-ab15-6f8bfd55b85b",
+  "pinned": false,
+  "manifest": false,
+  "nothing_to_localize": true,
+  "segments": [],
+  "questions": [],
+  "findings": [
+    {
+      "code": "NO_CLOUDS",
+      "severity": "info",
+      "msg": "lab has no cloud network: nothing to localize",
+      "refs": []
+    }
+  ],
+  "protected": {
+    "vlans": {},
+    "prefixes": [],
+    "lookalikes": {}
+  }
+}

@@ -1,0 +1,11 @@
+# fw1 — edge firewall
+config system interface
+    edit "port1"
+        set mode static
+        set ip 10.100.51.21 255.255.255.0
+        set allowaccess ping https ssh
+    next
+end
+config system dns
+    set primary 10.100.51.2
+end

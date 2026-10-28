@@ -1,0 +1,4 @@
+<div id="customText90" class="customShape customText" style="position: absolute; left: 10px; top: 20px;"><p>EVE-MGMT-203 on pnet0 (VLAN 203)</p>
+
+<p>uplink pnet0-trunk 10.100.51.0/24</p>
+</div>

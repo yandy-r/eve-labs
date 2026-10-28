@@ -1,0 +1,51 @@
+# Synthetic "site B" answers (golden round-trip, design section 14 item 8).
+schema = 1
+site = "site-b"
+
+[segments."site.trunk"]
+bridge = "pnet4"
+label = "B-TRUNK"
+
+[segments."site.mgmt_a"]
+bridge = "pnet4"
+vlan = 712
+subnet = "172.30.12.0/24"
+gateway = "172.30.12.254"
+label = "B-MGMT-712"
+
+[segments."site.mgmt_b"]
+bridge = "pnet4"
+vlan = 713
+subnet = "172.30.13.0/24"
+gateway = "172.30.13.254"
+label = "B-MGMT-713"
+
+[segments."site.inet_a"]
+bridge = "pnet4"
+vlan = 721
+subnet = "198.51.100.0/24"
+gateway = "198.51.100.1"
+label = "B-INET-721"
+
+[segments."site.inet_b"]
+bridge = "pnet4"
+vlan = 722
+subnet = "203.0.113.0/24"
+gateway = "203.0.113.1"
+label = "B-INET-722"
+
+[map.dns]
+"1.1.1.1" = "9.9.9.9"
+"1.0.0.1" = "149.112.112.112"
+
+[map.domain]
+"netlab.local" = "siteb.example"
+"plsnetlab.local" = "plssiteb.example"
+"yandy.dev" = "example.org"
+
+[map.ntp]
+"pool.ntp.org" = "time.example.net"
+
+[map.probe]
+"1.1.1.1" = "9.9.9.10"
+"8.8.8.8" = "8.8.4.4"

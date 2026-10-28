@@ -15,6 +15,20 @@ EVE-NG Pro lab files (`/opt/unetlab/labs` on host `eve`, EVE-NG Pro 7.2).
 - Lab files must be owned by `www-data` so EVE can save them.
 - Default device login in startup configs: `admin123`.
 
+## Running the labs on another EVE host
+
+The labs carry this host's cloud bridges, VLANs, management subnets, labels and service addresses.
+`scripts/eve-localize` rewrites them for your site (and reverts them), driven by the committed
+`labs/**/*.localize.toml` manifests:
+
+```bash
+./scripts/eve-localize            # interactive: pick labs, answer, review the diff, apply
+./scripts/eve-localize revert --all --yes
+```
+
+Guide: [`localize/README.md`](localize/README.md). Local answers and backups live in the gitignored
+`.localize/`.
+
 ## Workflow
 
 Commit from the host after changing labs in the UI:
@@ -79,13 +93,15 @@ bash scripts/install-lefthook.sh   # wire pre-commit / pre-push / commit-msg hoo
 git config commit.template .gitmessage
 ```
 
-| Task            | Command                                                       |
-| --------------- | ------------------------------------------------------------- |
-| Test            | `make test` (or `pnpm test`) — `.unl` XML + unique `<lab id>` |
-| Lint            | `make lint` (or `./scripts/style.sh lint`)                    |
-| Lint, auto-fix  | `make lint-fix`                                               |
-| Format          | `make format`                                                 |
-| Commit messages | Conventional Commits, enforced by commitlint and PR-title CI  |
+| Task            | Command                                                               |
+| --------------- | --------------------------------------------------------------------- |
+| Test            | `make test` — check-labs + `localize-test` + `localize-check`         |
+| Check labs only | `make check-labs` (or `pnpm test`) — `.unl` XML + unique `<lab id>`   |
+| Localize checks | `make localize-check` (manifests) / `make localize-test` (unit tests) |
+| Lint            | `make lint` (or `./scripts/style.sh lint`)                            |
+| Lint, auto-fix  | `make lint-fix`                                                       |
+| Format          | `make format`                                                         |
+| Commit messages | Conventional Commits, enforced by commitlint and PR-title CI          |
 
 CI runs `Lint`, `Test`, and `PR title` on every pull request; `Lint autofix` pushes
 formatting fixes back to same-repo PR branches.
@@ -128,7 +144,7 @@ If you cloned this repo fresh and `scripts/style.sh` is missing (it ships manage
 
 - **Docs**: `markdownlint` + `prettier` (`.markdownlint.json`, `.prettierrc`) for Markdown/YAML.
 - **JSON**: `biome` (`biome.json`).
-- **Python**: `ruff` + `black` for `scripts/*.py`.
+- **Python**: `ruff` + `black` for every `*.py` (config: `python/pyproject.toml`; covers `python/`, `scripts/`).
 
 - **Shell**: `shellcheck --severity=warning` on `*.sh`.
 

@@ -1,0 +1,432 @@
+{
+  "lab": "labs/cloud/azure/azure_asa_vpn.unl",
+  "lab_id": "0ca56f43-8e11-44ca-a007-a6dce53df987",
+  "pinned": true,
+  "manifest": true,
+  "nothing_to_localize": false,
+  "segments": [
+    {
+      "key": "INET-105",
+      "site_key": "azure.inet",
+      "role": "inet",
+      "status": "CONFIGURABLE",
+      "networks": [
+        "1"
+      ],
+      "bridge": "pnet0",
+      "labels": {
+        "1": "Internet-105"
+      },
+      "carries": [],
+      "schemes": [
+        {
+          "tag": "untagged",
+          "subnet": "10.100.105.0/24",
+          "gateway": "10.100.105.1",
+          "scopes": [
+            "startup"
+          ],
+          "members": 5,
+          "outliers": 0
+        }
+      ]
+    },
+    {
+      "key": "MGMT-104",
+      "site_key": "azure.mgmt",
+      "role": "mgmt",
+      "status": "CONFIGURABLE",
+      "networks": [
+        "3"
+      ],
+      "bridge": "pnet0",
+      "labels": {
+        "3": "mgmt-104"
+      },
+      "carries": [],
+      "schemes": [
+        {
+          "tag": "untagged",
+          "subnet": "10.100.104.0/24",
+          "gateway": "10.100.104.1",
+          "scopes": [
+            "startup"
+          ],
+          "members": 6,
+          "outliers": 0
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "azure.inet/bridge",
+      "group": "A Clouds",
+      "kind": "bridge",
+      "prompt": "INET-105 bridge",
+      "current": "pnet0",
+      "default": "pnet0",
+      "default_source": "keep",
+      "choices": [
+        "pnet0"
+      ],
+      "depends_on": [],
+      "affects": 0,
+      "segment": "INET-105",
+      "scenario": "bridge",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "azure.mgmt/bridge",
+      "group": "A Clouds",
+      "kind": "bridge",
+      "prompt": "MGMT-104 bridge",
+      "current": "pnet0",
+      "default": "pnet0",
+      "default_source": "keep",
+      "choices": [
+        "pnet0"
+      ],
+      "depends_on": [],
+      "affects": 0,
+      "segment": "MGMT-104",
+      "scenario": "bridge",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "azure.inet/subnet",
+      "group": "C Addressing",
+      "kind": "cidr",
+      "prompt": "INET-105 subnet 10.100.105.0/24",
+      "current": "10.100.105.0/24",
+      "default": "10.100.105.0/24",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [],
+      "affects": 5,
+      "segment": "INET-105",
+      "scenario": "segment_l3",
+      "notes": [
+        "3 baseline host(s)"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "azure.inet/gateway",
+      "group": "C Addressing",
+      "kind": "ip",
+      "prompt": "INET-105 gateway 10.100.105.1",
+      "current": "10.100.105.1",
+      "default": "10.100.105.1",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "azure.inet/subnet"
+      ],
+      "affects": 3,
+      "segment": "INET-105",
+      "scenario": "segment_l3",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "azure.mgmt/subnet",
+      "group": "C Addressing",
+      "kind": "cidr",
+      "prompt": "MGMT-104 subnet 10.100.104.0/24",
+      "current": "10.100.104.0/24",
+      "default": "10.100.104.0/24",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [],
+      "affects": 6,
+      "segment": "MGMT-104",
+      "scenario": "segment_l3",
+      "notes": [
+        "3 baseline host(s)"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "azure.mgmt/gateway",
+      "group": "C Addressing",
+      "kind": "ip",
+      "prompt": "MGMT-104 gateway 10.100.104.1",
+      "current": "10.100.104.1",
+      "default": "10.100.104.1",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "azure.mgmt/subnet"
+      ],
+      "affects": 4,
+      "segment": "MGMT-104",
+      "scenario": "segment_l3",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "azure.inet/label",
+      "group": "D Labels",
+      "kind": "label",
+      "prompt": "Internet-105 (1 network)",
+      "current": "Internet-105",
+      "default": "Internet-105",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "azure.inet/vlan",
+        "azure.inet/subnet"
+      ],
+      "affects": 1,
+      "segment": "INET-105",
+      "scenario": "labels",
+      "notes": [
+        "0 text reference(s) follow the label"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "azure.mgmt/label",
+      "group": "D Labels",
+      "kind": "label",
+      "prompt": "mgmt-104 (1 network)",
+      "current": "mgmt-104",
+      "default": "mgmt-104",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "azure.mgmt/vlan",
+        "azure.mgmt/subnet"
+      ],
+      "affects": 1,
+      "segment": "MGMT-104",
+      "scenario": "labels",
+      "notes": [
+        "0 text reference(s) follow the label"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "azure.mgmt/site_routes",
+      "group": "F Site routes",
+      "kind": "site_routes",
+      "prompt": "MGMT-104 site routes via gw 10.100.104.1: 10.25.0.0/16, 10.100.0.0/16 (2 config(s)) [k]eep / list / [d]elete",
+      "current": "10.25.0.0/16, 10.100.0.0/16",
+      "default": "keep",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [],
+      "affects": 0,
+      "segment": "MGMT-104",
+      "scenario": "site_routes",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "azure_s2s/enabled",
+      "group": "G Scenarios",
+      "kind": "bool",
+      "prompt": "Azure site-to-site VPN on ASAv-1 (peer 172.173.204.134): localize it?",
+      "current": null,
+      "default": "no",
+      "default_source": "gate (default no)",
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "depends_on": [],
+      "affects": 0,
+      "segment": null,
+      "scenario": "azure_s2s",
+      "notes": [
+        "node ASAv-1: Azure VPN gateway 172.173.204.134"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "azure_s2s/peer_ip",
+      "group": "G Scenarios",
+      "kind": "ip",
+      "prompt": "Azure VPN gateway public IP",
+      "current": "172.173.204.134",
+      "default": "172.173.204.134",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "azure_s2s/enabled"
+      ],
+      "affects": 0,
+      "segment": null,
+      "scenario": "azure_s2s",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "azure_s2s/tunnel_ip",
+      "group": "G Scenarios",
+      "kind": "ip",
+      "prompt": "local APIPA tunnel address (169.254.21.0/30)",
+      "current": "169.254.21.1",
+      "default": "169.254.21.1",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "azure_s2s/enabled"
+      ],
+      "affects": 0,
+      "segment": null,
+      "scenario": "azure_s2s",
+      "notes": [
+        "the other addresses of the /30 follow by offset"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "azure_s2s/azure_bgp_ip",
+      "group": "G Scenarios",
+      "kind": "ip",
+      "prompt": "Azure BGP peer address",
+      "current": "10.200.100.254",
+      "default": "10.200.100.254",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "azure_s2s/enabled"
+      ],
+      "affects": 0,
+      "segment": null,
+      "scenario": "azure_s2s",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "azure_s2s/local_asn",
+      "group": "G Scenarios",
+      "kind": "asn",
+      "prompt": "local (ASA) BGP AS",
+      "current": "65101",
+      "default": "65101",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "azure_s2s/enabled"
+      ],
+      "affects": 0,
+      "segment": null,
+      "scenario": "azure_s2s",
+      "notes": [
+        "changed lab-wide (peers of this node follow)"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "azure_s2s/azure_asn",
+      "group": "G Scenarios",
+      "kind": "asn",
+      "prompt": "Azure VPN gateway BGP AS",
+      "current": "65100",
+      "default": "65100",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "azure_s2s/enabled"
+      ],
+      "affects": 0,
+      "segment": null,
+      "scenario": "azure_s2s",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "azure_s2s/psk",
+      "group": "G Scenarios",
+      "kind": "secret",
+      "prompt": "IPsec pre-shared key for 172.173.204.134 (2 span(s))",
+      "current": "****",
+      "default": null,
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "azure_s2s/enabled"
+      ],
+      "affects": 0,
+      "segment": null,
+      "scenario": "azure_s2s",
+      "notes": [
+        "read with getpass or {env=...}; never saved unless --save-secrets"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "secrets/placeholders",
+      "group": "H Secrets",
+      "kind": "choice",
+      "prompt": "committed cleartext secrets (enable x2, psk x6, user x2): replace with CHANGE-ME-<name>?",
+      "current": null,
+      "default": "none",
+      "default_source": "keep",
+      "choices": [
+        "none",
+        "psk",
+        "all"
+      ],
+      "depends_on": [],
+      "affects": 0,
+      "segment": null,
+      "scenario": "secrets",
+      "notes": [
+        "the old value remains in git history; rotate it at the provider (Azure VPN gateway)"
+      ],
+      "answered": false,
+      "answer": null
+    }
+  ],
+  "findings": [
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 1: 6 committed secret(s)",
+      "refs": [
+        "node:1"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 3: 4 committed secret(s)",
+      "refs": [
+        "node:3"
+      ]
+    }
+  ],
+  "protected": {
+    "vlans": {},
+    "prefixes": [
+      "169.254.0.0/30",
+      "169.254.100.0/30",
+      "169.254.21.0/30",
+      "192.168.100.0/24",
+      "192.168.200.0/24"
+    ],
+    "lookalikes": {}
+  }
+}

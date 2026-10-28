@@ -1,0 +1,281 @@
+{
+  "source": "lab1-ei-v01 startup node 38 (SW38) lines [(11, 11), (62, 67), (90, 91)] + synthetic lines",
+  "node": {
+    "template": "iol",
+    "image": "i86bi_linux_l2-adventerprisek9-ms.SSA.high_iron_20190423.bin"
+  },
+  "min_score": 70,
+  "facts": [
+    {
+      "kind": "vlan_list",
+      "value": "201-203",
+      "line": 4,
+      "rule": "ios.trunk_allowed",
+      "iface": "et0/0"
+    },
+    {
+      "kind": "cloud_ref",
+      "value": "pnet2",
+      "line": 12,
+      "rule": "ios.desc_cloud",
+      "iface": "et1/2",
+      "flags": [
+        "cosmetic"
+      ],
+      "alt": "pnet9"
+    },
+    {
+      "kind": "label_ref",
+      "value": "INET-1240",
+      "line": 12,
+      "rule": "ios.desc_label",
+      "iface": "et1/2",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "vlan_mention",
+      "value": "1240",
+      "line": 12,
+      "rule": "ios.desc_vlan",
+      "iface": "et1/2",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "vlan_list",
+      "value": "201,1240",
+      "line": 13,
+      "rule": "ios.trunk_allowed",
+      "iface": "et1/2"
+    },
+    {
+      "kind": "vlan_list",
+      "value": "1241-1243",
+      "line": 14,
+      "rule": "ios.trunk_allowed",
+      "iface": "et1/2"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "99",
+      "line": 15,
+      "rule": "ios.native_vlan",
+      "iface": "et1/2"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "1241",
+      "line": 28,
+      "rule": "ios.access_vlan",
+      "iface": "et2/1"
+    },
+    {
+      "kind": "vlan_def",
+      "value": "201-203,1240",
+      "line": 30,
+      "rule": "ios.vlan_def",
+      "iface": null
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.51.1",
+      "line": 32,
+      "rule": "ios.default_gateway",
+      "iface": null
+    },
+    {
+      "kind": "dns_server",
+      "value": "10.100.51.11",
+      "line": 33,
+      "rule": "ios.name_server",
+      "iface": null
+    },
+    {
+      "kind": "dns_server",
+      "value": "10.100.51.12",
+      "line": 33,
+      "rule": "ios.name_server",
+      "iface": null
+    },
+    {
+      "kind": "search_list",
+      "value": "netlab.local",
+      "line": 34,
+      "rule": "ios.domain_list",
+      "iface": null
+    },
+    {
+      "kind": "log_server",
+      "value": "10.100.51.20",
+      "line": 35,
+      "rule": "ios.log_server",
+      "iface": null,
+      "alt": "10.99.99.99"
+    },
+    {
+      "kind": "log_server",
+      "value": "10.100.51.21",
+      "line": 36,
+      "rule": "ios.log_server",
+      "iface": null,
+      "alt": "10.99.99.99"
+    },
+    {
+      "kind": "secret",
+      "value": "0822455D0A16",
+      "line": 38,
+      "rule": "ios.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "peer_ip",
+      "value": "172.173.204.134",
+      "line": 40,
+      "rule": "ios.tunnel_dst",
+      "iface": "tu0"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "10.0.0.0",
+      "line": 42,
+      "rule": "ios.route_dst",
+      "iface": null,
+      "mask": "255.0.0.0",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.51.254",
+      "line": 42,
+      "rule": "ios.route_nexthop",
+      "iface": null,
+      "flags": [
+        "nexthop"
+      ]
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "192.168.0.0",
+      "line": 43,
+      "rule": "ios.route_dst",
+      "iface": null,
+      "mask": "255.255.0.0",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.51.254",
+      "line": 43,
+      "rule": "ios.route_nexthop",
+      "iface": null,
+      "flags": [
+        "nexthop"
+      ]
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.51.1",
+      "line": 44,
+      "rule": "ios.route_default",
+      "iface": null
+    },
+    {
+      "kind": "secret",
+      "value": "060506324F41",
+      "line": 46,
+      "rule": "ios.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    }
+  ],
+  "ifaces": {
+    "et0/0": {
+      "parent": null,
+      "mode": "trunk",
+      "access_vlan": null,
+      "trunk_vlans": "201-203",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "et1/0": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "et1/2": {
+      "parent": null,
+      "mode": "trunk",
+      "access_vlan": null,
+      "trunk_vlans": "201,1240-1243",
+      "native_vlan": 99,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "et1/3": {
+      "parent": null,
+      "mode": "trunk",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "et2/0": {
+      "parent": null,
+      "mode": "trunk",
+      "access_vlan": null,
+      "trunk_vlans": "",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "et2/1": {
+      "parent": null,
+      "mode": "access",
+      "access_vlan": 1241,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "tu0": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [
+    201,
+    202,
+    203,
+    1240,
+    1241,
+    1242,
+    1243
+  ],
+  "is_switch": true
+}

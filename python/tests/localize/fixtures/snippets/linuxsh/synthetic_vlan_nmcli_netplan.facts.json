@@ -1,0 +1,332 @@
+{
+  "facts": [
+    {
+      "kind": "label_ref",
+      "value": "EVE-MGMT-203",
+      "line": 2,
+      "rule": "linuxsh.comment_label",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "subif_name",
+      "value": "eth0.1240",
+      "line": 3,
+      "rule": "linuxsh.vlan_link_name",
+      "iface": "eth0.1240",
+      "parent": "eth0",
+      "group": "subif:eth0.1240",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "1240",
+      "line": 3,
+      "rule": "linuxsh.vlan_link_id",
+      "iface": "eth0.1240",
+      "parent": "eth0",
+      "group": "subif:eth0.1240",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "172.31.240.10",
+      "line": 4,
+      "rule": "linuxsh.ip_addr",
+      "iface": "eth0.1240",
+      "parent": "eth0",
+      "mask": "/30",
+      "mask_form": "prefix",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "10.100.0.0",
+      "line": 5,
+      "rule": "linuxsh.ip_route_dst",
+      "iface": "eth0.1240",
+      "parent": "eth0",
+      "mask": "/16",
+      "mask_form": "prefix",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "172.31.240.9",
+      "line": 5,
+      "rule": "linuxsh.ip_route_gw",
+      "iface": "eth0.1240",
+      "parent": "eth0",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "203",
+      "line": 6,
+      "rule": "linuxsh.vconfig",
+      "iface": "eth1.203",
+      "parent": "eth1",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.51.50",
+      "line": 7,
+      "rule": "linuxsh.ifconfig_prefix",
+      "iface": "eth1.203",
+      "parent": "eth1",
+      "mask": "/24",
+      "mask_form": "prefix",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "10.200.0.0",
+      "line": 8,
+      "rule": "linuxsh.route_net_netmask",
+      "iface": null,
+      "mask": "255.255.0.0",
+      "mask_form": "netmask",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.51.1",
+      "line": 8,
+      "rule": "linuxsh.route_gw",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "10.201.0.0",
+      "line": 9,
+      "rule": "linuxsh.route_net_prefix",
+      "iface": null,
+      "mask": "/16",
+      "mask_form": "prefix",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.51.1",
+      "line": 9,
+      "rule": "linuxsh.route_gw",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "204",
+      "line": 10,
+      "rule": "linuxsh.nmcli_vlan",
+      "iface": "eth2.204",
+      "parent": "eth2",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.52.50",
+      "line": 10,
+      "rule": "linuxsh.nmcli_addr",
+      "iface": "eth2.204",
+      "parent": "eth2",
+      "mask": "/24",
+      "mask_form": "prefix",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.52.1",
+      "line": 10,
+      "rule": "linuxsh.nmcli_gw",
+      "iface": "eth2.204",
+      "parent": "eth2",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "1.1.1.1",
+      "line": 11,
+      "rule": "linuxsh.nmcli_dns",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "1.0.0.1",
+      "line": 11,
+      "rule": "linuxsh.nmcli_dns",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "9.9.9.9",
+      "line": 12,
+      "rule": "linuxsh.nameserver",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.1.100.16",
+      "line": 13,
+      "rule": "linuxsh.hosts_echo",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.53.50",
+      "line": 18,
+      "rule": "linuxsh.netplan_addr_list",
+      "iface": null,
+      "mask": "/24",
+      "mask_form": "prefix",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "10.0.0.0",
+      "line": 20,
+      "rule": "linuxsh.netplan_to",
+      "iface": null,
+      "mask": "/8",
+      "mask_form": "prefix",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.53.1",
+      "line": 21,
+      "rule": "linuxsh.netplan_gw",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "8.8.8.8",
+      "line": 23,
+      "rule": "linuxsh.netplan_dns_list",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "8.8.4.4",
+      "line": 23,
+      "rule": "linuxsh.netplan_dns_list",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "search_list",
+      "value": "netlab.local",
+      "line": 24,
+      "rule": "linuxsh.netplan_search",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "search_list",
+      "value": "yandy.dev",
+      "line": 24,
+      "rule": "linuxsh.netplan_search",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.54.50",
+      "line": 29,
+      "rule": "linuxsh.ifaces_address",
+      "iface": "eth4",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "mask",
+      "value": "255.255.255.0",
+      "line": 30,
+      "rule": "linuxsh.ifaces_netmask",
+      "iface": "eth4",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.54.1",
+      "line": 31,
+      "rule": "linuxsh.ifaces_gateway",
+      "iface": "eth4",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "1.1.1.1",
+      "line": 32,
+      "rule": "linuxsh.ifaces_dns",
+      "iface": "eth4",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "1.0.0.1",
+      "line": 32,
+      "rule": "linuxsh.ifaces_dns",
+      "iface": "eth4",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "search_list",
+      "value": "plsnetlab.local",
+      "line": 33,
+      "rule": "linuxsh.ifaces_search",
+      "iface": "eth4",
+      "confidence": "PROVEN"
+    }
+  ],
+  "ifaces": {
+    "eth0.1240": {
+      "parent": "eth0",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 1240,
+      "dhcp": false,
+      "orphan": false
+    },
+    "eth1.203": {
+      "parent": "eth1",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 203,
+      "dhcp": false,
+      "orphan": false
+    },
+    "eth2.204": {
+      "parent": "eth2",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 204,
+      "dhcp": false,
+      "orphan": false
+    },
+    "eth4": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false
+}

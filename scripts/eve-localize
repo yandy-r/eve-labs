@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+"""Shim for the eve-localize CLI: adds <repo>/python/src to sys.path, runs evelab.
+
+Runs straight from a checkout (no pip install, stdlib only), so it works on the EVE
+host as is. After ``pip install -e python/`` the ``eve-localize`` console script is
+equivalent.
+"""
+
+import sys
+
+# Checked before importing evelab, which needs 3.11 (tomllib, datetime.UTC);
+# keep this block free of newer syntax so old interpreters reach it.
+if sys.version_info < (3, 11):
+    major, minor = sys.version_info[:2]
+    sys.exit(f"eve-localize needs Python 3.11+ (found {major}.{minor})")
+
+from pathlib import Path  # noqa: E402
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "python" / "src"))
+
+from evelab.localize.cli import main  # noqa: E402
+
+if __name__ == "__main__":
+    sys.exit(main())

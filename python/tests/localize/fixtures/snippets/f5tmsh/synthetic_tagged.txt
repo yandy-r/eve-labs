@@ -1,0 +1,10 @@
+# synthetic: tmsh syntax that the real sidecars do not use (tagged VLAN, route domain, mgmt network route)
+# EVE-INET-201 arrives tagged (VLAN 201) on 1.3 (pnet0 trunk)
+modify sys global-settings hostname lb1.dc.example.org
+modify sys ntp servers replace-all-with { 10.100.51.11 time.example.org }
+modify sys dns name-servers replace-all-with { 10.100.51.11 } search replace-all-with { dc.example.org netlab.local }
+create sys management-route MGMT-NETS network 10.100.0.0/16 gateway 10.100.203.1
+create net vlan INET-201 interfaces replace-all-with { 1.3 { tagged } } tag 201 description '"EVE-INET-201 uplink"'
+create net self INET-201-self address 10.100.201.38%1/24 vlan INET-201 allow-service none
+create net route home network 10.25.0.0/16 gw 10.100.201.1
+modify auth user admin password S3cr3t-pw shell bash

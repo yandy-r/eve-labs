@@ -1,0 +1,38 @@
+hostname mgmt-79
+enable secret admin123
+!
+username cisco privilege 15 secret admin123
+no ip domain-lookup
+ip domain-name netlab.local
+spanning-tree mode pvst
+spanning-tree extend system-id
+spanning-tree vlan 1-4094 priority 61440
+interface Ethernet0/0
+ no shutdown
+ description uplink to real-world
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast edge trunk
+!
+interface Ethernet0/1
+ no shutdown
+ description to dc1-spine1
+ switchport access vlan 203
+ switchport mode access
+ spanning-tree portfast edge
+!
+interface Ethernet1/1
+ no shutdown
+ description to dc1-fgt1: port8
+ switchport trunk allowed vlan 204
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast edge trunk
+!
+interface Ethernet1/2
+ no shutdown
+ switchport trunk allowed vlan 255
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ spanning-tree portfast edge trunk
+!

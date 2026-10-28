@@ -1,0 +1,133 @@
+hostname c8kv-30
+vrf definition ALL
+ rd 1:1
+ !
+ address-family ipv4
+  route-target import 100:100
+  route-target import 100:200
+  route-target import 666:666
+  route-target import 1101:1101
+  route-target import 1102:1102
+ exit-address-family
+!
+crypto pki certificate chain SLA-TrustPoint
+ certificate ca 01
+  30820321 30820209 A0030201 02020101 300D0609 2A864886 F70D0101 0B050030 
+  32310E30 0C060355 040A1305 43697363 6F312030 1E060355 04031317 43697363 
+  	quit
+enable secret admin123
+!
+username admin privilege 15 secret admin123
+username cisco privilege 15 secret admin123
+username ndfc privilege 15 secret admin123
+crypto keyring DMVPN-KEYRING-WAN  
+ pre-shared-key address 0.0.0.0 0.0.0.0 key C1sco123!
+crypto isakmp policy 10
+ encryption aes 256
+ hash sha256
+ authentication pre-share
+ group 14
+crypto isakmp profile DMVPN
+   keyring DMVPN-KEYRING-WAN
+   match identity address 0.0.0.0 
+interface Loopback0
+ ip address 169.254.30.30 255.255.255.255
+!
+interface Loopback100
+ vrf forwarding TENANT1
+ ip address 169.30.30.30 255.255.255.0
+!
+interface Tunnel1001
+ ip address 169.145.145.30 255.255.255.0
+ no ip redirects
+ ip mtu 1400
+ ip nat outside
+ ip nhrp authentication C1sco123
+ ip nhrp map 169.145.145.45 169.67.45.2
+ ip nhrp map 169.145.145.42 169.68.42.2
+ ip nhrp map multicast 169.67.45.2
+ ip nhrp map multicast 169.68.42.2
+ ip nhrp network-id 1001
+ ip nhrp holdtime 300
+ ip nhrp nhs 169.145.145.42
+ ip nhrp nhs 169.145.145.45
+ ip tcp adjust-mss 1360
+ mpls bgp forwarding
+ tunnel source GigabitEthernet3
+ tunnel mode gre multipoint
+ tunnel key 1001
+ tunnel vrf MPLS-ISP-1
+!
+interface GigabitEthernet1
+ description to DC1-BGW1
+ mtu 9000
+ no ip address
+ ip nat outside
+ negotiation auto
+ cdp enable
+ no mop enabled
+ no mop sysid
+ no shutdown
+!
+interface GigabitEthernet1.100
+ encapsulation dot1Q 100
+ vrf forwarding TENANT1
+ ip address 169.13.30.2 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
+ ip nat outside
+ no ipv6 redirects
+!
+interface GigabitEthernet1.200
+ encapsulation dot1Q 200
+ vrf forwarding TENANT2
+ ip address 169.13.30.2 255.255.255.252
+ no ip redirects
+ no ip proxy-arp
+ ip nat outside
+ no ipv6 redirects
+!
+interface GigabitEthernet16
+ description Mgmt-intf
+ no ip address
+ no ip redirects
+ no ip proxy-arp
+ negotiation auto
+ no mop enabled
+ no mop sysid
+ no shutdown
+!
+interface GigabitEthernet16.203
+ description Mgmt-vrf
+ encapsulation dot1Q 203
+ vrf forwarding Mgmt-vrf
+ ip address 172.21.203.30 255.255.255.0
+ no ip redirects
+ no ip proxy-arp
+ no ipv6 redirects
+!
+router bgp 65011
+ template peer-session DC1-PE-TENANTS
+  remote-as 651001
+ exit-peer-session
+ !
+ bgp router-id 169.254.30.30
+ bgp always-compare-med
+ bgp log-neighbor-changes
+ bgp deterministic-med
+ bgp graceful-restart
+ bgp bestpath med missing-as-worst
+ bgp bestpath compare-routerid
+ no bgp default ipv4-unicast
+ neighbor 169.145.145.42 remote-as 65033
+ neighbor 169.145.145.42 inherit peer-session DMVPN-EBGP
+ neighbor 169.145.145.45 remote-as 65033
+ neighbor 169.145.145.45 inherit peer-session DMVPN-EBGP
+ !
+ address-family ipv4 vrf INTERNET
+  redistribute connected route-map INT-CONN-VRF-TO-BGP
+  redistribute static route-map STATIC-VRF-TO-BGP
+  neighbor 169.0.1.1 inherit peer-session DC1-INTERNET
+  neighbor 169.0.1.1 activate
+  neighbor 169.0.1.1 inherit peer-policy DC1-INTERNET
+ exit-address-family

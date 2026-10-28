@@ -1,0 +1,187 @@
+{
+  "source": "lab1-ei-v01 startup node 37 (SW37) lines [(11, 11), (26, 30), (60, 79), (94, 107), (114, 123), (143, 151), (161, 166), (193, 196)]",
+  "node": {
+    "template": "iol",
+    "image": "i86bi_linux_l2-adventerprisek9-ms.SSA.high_iron_20190423.bin"
+  },
+  "min_score": 70,
+  "facts": [
+    {
+      "kind": "vlan_list",
+      "value": "10,20,100,199,200",
+      "line": 9,
+      "rule": "ios.trunk_allowed",
+      "iface": "po1"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "199",
+      "line": 16,
+      "rule": "ios.access_vlan",
+      "iface": "et0/0"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "200",
+      "line": 23,
+      "rule": "ios.access_vlan",
+      "iface": "et0/1"
+    },
+    {
+      "kind": "vlan_list",
+      "value": "10,20",
+      "line": 29,
+      "rule": "ios.trunk_allowed",
+      "iface": "et1/0"
+    },
+    {
+      "kind": "vlan_list",
+      "value": "100",
+      "line": 36,
+      "rule": "ios.trunk_allowed",
+      "iface": "et1/1"
+    },
+    {
+      "kind": "svi_name",
+      "value": "Vlan10",
+      "line": 41,
+      "rule": "ios.svi_name",
+      "iface": "vl10",
+      "group": "subif:vl10"
+    },
+    {
+      "kind": "ip_host",
+      "value": "192.168.10.2",
+      "line": 44,
+      "rule": "ios.ip",
+      "iface": "vl10",
+      "mask": "255.255.255.0",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "ip_host",
+      "value": "192.168.10.1",
+      "line": 47,
+      "rule": "ios.fhrp_vip",
+      "iface": "vl10"
+    },
+    {
+      "kind": "svi_name",
+      "value": "Vlan199",
+      "line": 51,
+      "rule": "ios.svi_name",
+      "iface": "vl199",
+      "group": "subif:vl199"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.40.199.4",
+      "line": 54,
+      "rule": "ios.ip",
+      "iface": "vl199",
+      "mask": "255.255.255.0",
+      "mask_form": "dotted"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.40.199.3",
+      "line": 56,
+      "rule": "ios.fhrp_vip",
+      "iface": "vl199"
+    },
+    {
+      "kind": "router_id",
+      "value": "10.40.199.4",
+      "line": 61,
+      "rule": "ios.router_id",
+      "iface": null
+    },
+    {
+      "kind": "ntp_server",
+      "value": "10.40.40.2",
+      "line": 66,
+      "rule": "ios.ntp_server",
+      "iface": null
+    }
+  ],
+  "ifaces": {
+    "po1": {
+      "parent": null,
+      "mode": "trunk",
+      "access_vlan": null,
+      "trunk_vlans": "10,20,100,199,200",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "et0/0": {
+      "parent": null,
+      "mode": "access",
+      "access_vlan": 199,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "et0/1": {
+      "parent": null,
+      "mode": "access",
+      "access_vlan": 200,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "et1/0": {
+      "parent": null,
+      "mode": "trunk",
+      "access_vlan": null,
+      "trunk_vlans": "10,20",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "et1/1": {
+      "parent": null,
+      "mode": "trunk",
+      "access_vlan": null,
+      "trunk_vlans": "100",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "vl10": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "vl199": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [
+    10,
+    20,
+    100,
+    199,
+    200
+  ],
+  "is_switch": true
+}

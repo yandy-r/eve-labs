@@ -1,0 +1,64 @@
+## Synthetic (no real lab has these stanzas): tagged units, vlans, ntp, bgp.
+system {
+    host-name r1;
+    domain-search [ netlab.local yandy.dev ];
+    name-server [ 1.1.1.1 1.0.0.1 ];
+    name-server 9.9.9.9;
+    ntp {
+        boot-server 10.100.51.11;
+        server 10.100.51.12 prefer;
+    }
+}
+interfaces {
+    ge-0/0/1 {
+        description "to EVE-INET-1240 uplink";
+        vlan-tagging;
+        unit 1240 {
+            vlan-id 1240;
+            family inet {
+                address 172.31.240.2/30;
+            }
+        }
+        inactive: unit 1241 {
+            vlan-id 1241;
+            family inet {
+                dhcp;
+            }
+        }
+    }
+    em0 {
+        unit 0 {
+            family inet {
+                address 10.100.51.40/24;
+            }
+        }
+    }
+}
+vlans {
+    MGMT-203 {
+        vlan-id 203;
+    }
+    TENANT {
+        vlan-id-list 100-200;
+        members 1 2;
+    }
+}
+routing-options {
+    router-id 10.255.0.1;
+    autonomous-system 65011;
+    static {
+        route 10.100.0.0/16 {
+            next-hop 10.100.51.1;
+        }
+        route 0.0.0.0/0 next-hop [ 172.31.240.1 172.31.240.5 ];
+    }
+}
+protocols {
+    bgp {
+        group HOME {
+            peer-as 64001;
+            local-as 65111;
+            neighbor 172.31.240.1;
+        }
+    }
+}

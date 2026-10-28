@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<lab name="missing_sidecar" id="06e30208-9581-58bc-a350-ffc51173d4e0" version="1" scripttimeout="300" countdown="0" linkwidth="2" lock="0" grid="1" author="eve-localize fixtures" sat="-1">
+  <topology>
+    <nodes>
+      <node id="1" name="rtr1" type="iol" template="iol" image="i86bi_linux_l3-adventerprisek9-ms.SPA.157-3.M3.bin" ethernet="1" nvram="1024" ram="1024" serial="0" delay="0" sat="-1" icon="Router.png" config="1" left="300" top="200">
+        <interface id="0" name="e0/0" type="ethernet" network_id="1" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+      </node>
+      <node id="2" name="fw1" type="qemu" template="fortinet" image="fortinet-FGT-v7-build2463" console="telnet" cpu="2" cpulimit="0" ram="2048" ethernet="8" uuid="922a00e0-2be7-50ed-a94d-43dcf3fe7140" qemu_options="-machine type=pc,accel=kvm -serial mon:stdio -nographic -no-user-config -nodefaults -display none -vga std -rtc base=utc" qemu_version="4.1.0" qemu_arch="x86_64" qemu_nic="virtio-net-pci" delay="0" sat="0" icon="Forti_FGT.png" width="0" config="0" left="600" top="200">
+        <interface id="0" name="port1" type="ethernet" network_id="2" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+      </node>
+      <node id="3" name="fw2" type="qemu" template="fortinet" image="fortinet-FGT-v7-build2463" console="telnet" cpu="2" cpulimit="0" ram="2048" ethernet="8" uuid="2d4e160e-eedb-5084-98b6-db37df670930" qemu_options="-machine type=pc,accel=kvm -serial mon:stdio -nographic -no-user-config -nodefaults -display none -vga std -rtc base=utc" qemu_version="4.1.0" qemu_arch="x86_64" qemu_nic="virtio-net-pci" delay="0" sat="0" icon="Forti_FGT.png" width="0" config="0" left="600" top="400">
+        <interface id="0" name="port1" type="ethernet" network_id="3" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+      </node>
+    </nodes>
+    <networks>
+      <network id="1" smart="0" native_vlan="1" vlan8021ad="0" type="bridge" name="Net-rtr1iface_0" left="300" top="300" style="Solid" linkstyle="Straight" color="" label="" visibility="0" icon="lan.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="2" smart="-1" native_vlan="1" vlan8021ad="-1" type="pnet0" name="mgmt-203" left="800" top="300" style="Solid" linkstyle="Straight" color="" label="" visibility="1" icon="cloud_sm.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="3" smart="-1" native_vlan="1" vlan8021ad="-1" type="pnet0" name="mgmt-203" left="800" top="400" style="Solid" linkstyle="Straight" color="" label="" visibility="1" icon="cloud_sm.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+    </networks>
+  </topology>
+  <objects>
+    <configs>
+      <config id="1">IQpob3N0bmFtZSBydHIxCiEKaXAgZG9tYWluIG5hbWUgbGFiLmV4YW1wbGUKaXAgbmFtZS1zZXJ2ZXIgMTAuMTAwLjUxLjIKIQppbnRlcmZhY2UgRXRoZXJuZXQwLzAKIGRlc2NyaXB0aW9uIHRvIHN3MQogbm8gc2h1dGRvd24KIQppbnRlcmZhY2UgRXRoZXJuZXQwLzEKIGRlc2NyaXB0aW9uIHVwbGluayBJTkVULTEyNDAKIG5vIGlwIGFkZHJlc3MKIG5vIHNodXRkb3duCiEKaW50ZXJmYWNlIEV0aGVybmV0MC8xLjEyNDAKIGVuY2Fwc3VsYXRpb24gZG90MVEgMTI0MAogaXAgYWRkcmVzcyAxNzIuMzEuMjQwLjExIDI1NS4yNTUuMjU1LjAKIQppcCByb3V0ZSAwLjAuMC4wIDAuMC4wLjAgMTcyLjMxLjI0MC4xCiEKbnRwIHNlcnZlciAxMC4xMDAuNTEuMwohCmVuZAo=</config>
+    </configs>
+  </objects>
+</lab>

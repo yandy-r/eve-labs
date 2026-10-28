@@ -1,0 +1,292 @@
+{
+  "node": {
+    "template": "vmx",
+    "image": "vmx-23.2"
+  },
+  "min_score": 70,
+  "facts": [
+    {
+      "kind": "search_list",
+      "value": "netlab.local",
+      "line": 4,
+      "rule": "junos.domain_search_list",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "search_list",
+      "value": "yandy.dev",
+      "line": 4,
+      "rule": "junos.domain_search_list",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "1.1.1.1",
+      "line": 5,
+      "rule": "junos.name_server_list",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "1.0.0.1",
+      "line": 5,
+      "rule": "junos.name_server_list",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "9.9.9.9",
+      "line": 6,
+      "rule": "junos.name_server_inline",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ntp_server",
+      "value": "10.100.51.11",
+      "line": 8,
+      "rule": "junos.ntp_server",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ntp_server",
+      "value": "10.100.51.12",
+      "line": 9,
+      "rule": "junos.ntp_server",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-INET-1240",
+      "line": 14,
+      "rule": "junos.description_label",
+      "iface": "ge-0/0/1",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "subif_name",
+      "value": "1240",
+      "line": 16,
+      "rule": "junos.unit",
+      "iface": "ge-0/0/1.1240",
+      "parent": "ge-0/0/1",
+      "group": "subif:ge-0/0/1.1240",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "1240",
+      "line": 17,
+      "rule": "junos.vlan_id",
+      "iface": "ge-0/0/1.1240",
+      "parent": "ge-0/0/1",
+      "group": "subif:ge-0/0/1.1240",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "172.31.240.2",
+      "line": 19,
+      "rule": "junos.address",
+      "iface": "ge-0/0/1.1240",
+      "parent": "ge-0/0/1",
+      "mask": "/30",
+      "mask_form": "prefix",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "subif_name",
+      "value": "1241",
+      "line": 22,
+      "rule": "junos.unit",
+      "iface": "ge-0/0/1.1241",
+      "parent": "ge-0/0/1",
+      "group": "subif:ge-0/0/1.1241",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "1241",
+      "line": 23,
+      "rule": "junos.vlan_id",
+      "iface": "ge-0/0/1.1241",
+      "parent": "ge-0/0/1",
+      "group": "subif:ge-0/0/1.1241",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dhcp",
+      "value": "dhcp",
+      "line": 25,
+      "rule": "junos.dhcp",
+      "iface": "ge-0/0/1.1241",
+      "parent": "ge-0/0/1",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.51.40",
+      "line": 32,
+      "rule": "junos.address",
+      "iface": "em0.0",
+      "parent": "em0",
+      "mask": "/24",
+      "mask_form": "prefix",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_def",
+      "value": "203",
+      "line": 39,
+      "rule": "junos.vlan_def",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "router_id",
+      "value": "10.255.0.1",
+      "line": 47,
+      "rule": "junos.router_id",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "asn",
+      "value": "65011",
+      "line": 48,
+      "rule": "junos.autonomous_system",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "10.100.0.0",
+      "line": 50,
+      "rule": "junos.route_dst",
+      "iface": null,
+      "mask": "/16",
+      "mask_form": "prefix",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.51.1",
+      "line": 51,
+      "rule": "junos.next_hop",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "0.0.0.0",
+      "line": 53,
+      "rule": "junos.route_dst",
+      "iface": null,
+      "mask": "/0",
+      "mask_form": "prefix",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "172.31.240.1",
+      "line": 53,
+      "rule": "junos.next_hop_list",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "172.31.240.5",
+      "line": 53,
+      "rule": "junos.next_hop_list",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "asn",
+      "value": "64001",
+      "line": 59,
+      "rule": "junos.peer_as",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "asn",
+      "value": "65111",
+      "line": 60,
+      "rule": "junos.local_as",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "172.31.240.1",
+      "line": 61,
+      "rule": "junos.neighbor",
+      "iface": null,
+      "confidence": "PROVEN"
+    }
+  ],
+  "ifaces": {
+    "ge-0/0/1": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "ge-0/0/1.1240": {
+      "parent": "ge-0/0/1",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 1240,
+      "dhcp": false,
+      "orphan": false
+    },
+    "ge-0/0/1.1241": {
+      "parent": "ge-0/0/1",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 1241,
+      "dhcp": true,
+      "orphan": false
+    },
+    "em0": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "em0.0": {
+      "parent": "em0",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [
+    203
+  ],
+  "is_switch": false
+}

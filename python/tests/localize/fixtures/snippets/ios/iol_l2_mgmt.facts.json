@@ -1,0 +1,187 @@
+{
+  "source": "vxlan_evpn_multi-site_sdwan_only startup node 80 (mgmt-80) lines [(11, 11), (17, 19), (29, 30), (36, 45), (59, 73), (88, 95), (103, 106)]",
+  "node": {
+    "template": "iol",
+    "image": ""
+  },
+  "min_score": 70,
+  "facts": [
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 2,
+      "rule": "ios.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 4,
+      "rule": "ios.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "domain",
+      "value": "netlab.local",
+      "line": 6,
+      "rule": "ios.domain",
+      "iface": null
+    },
+    {
+      "kind": "vlan_def",
+      "value": "3",
+      "line": 11,
+      "rule": "ios.vlan_def",
+      "iface": null
+    },
+    {
+      "kind": "vlan_name",
+      "value": "EVE-MGMT-204",
+      "line": 12,
+      "rule": "ios.vlan_name",
+      "iface": null
+    },
+    {
+      "kind": "vlan_def",
+      "value": "2",
+      "line": 14,
+      "rule": "ios.vlan_def",
+      "iface": null
+    },
+    {
+      "kind": "vlan_name",
+      "value": "EVE-MGMT-203",
+      "line": 15,
+      "rule": "ios.vlan_name",
+      "iface": null
+    },
+    {
+      "kind": "cloud_ref",
+      "value": "pnet0",
+      "line": 18,
+      "rule": "ios.desc_cloud",
+      "iface": "et0/0",
+      "flags": [
+        "cosmetic"
+      ],
+      "alt": "pnet9"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-TRUNK",
+      "line": 18,
+      "rule": "ios.desc_label",
+      "iface": "et0/0",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "label_ref",
+      "value": "dc1-spine2",
+      "line": 26,
+      "rule": "ios.desc_label",
+      "iface": "et0/1",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "label_ref",
+      "value": "Mgmt0",
+      "line": 26,
+      "rule": "ios.desc_label",
+      "iface": "et0/1",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "2",
+      "line": 28,
+      "rule": "ios.access_vlan",
+      "iface": "et0/1"
+    },
+    {
+      "kind": "label_ref",
+      "value": "dc1-svc-fgt1",
+      "line": 33,
+      "rule": "ios.desc_label",
+      "iface": "et1/0",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "label_ref",
+      "value": "port8",
+      "line": 33,
+      "rule": "ios.desc_label",
+      "iface": "et1/0",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "vlan_list",
+      "value": "3",
+      "line": 35,
+      "rule": "ios.trunk_allowed",
+      "iface": "et1/0"
+    }
+  ],
+  "ifaces": {
+    "et0/0": {
+      "parent": null,
+      "mode": "trunk",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "et0/1": {
+      "parent": null,
+      "mode": "access",
+      "access_vlan": 2,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "et1/0": {
+      "parent": null,
+      "mode": "trunk",
+      "access_vlan": null,
+      "trunk_vlans": "3",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "et1/2": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [
+    2,
+    3
+  ],
+  "is_switch": true
+}

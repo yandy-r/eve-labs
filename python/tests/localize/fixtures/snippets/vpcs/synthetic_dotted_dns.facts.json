@@ -1,0 +1,60 @@
+{
+  "facts": [
+    {
+      "kind": "ip_host",
+      "value": "10.3.90.100",
+      "line": 2,
+      "rule": "vpcs.ip_dotted",
+      "iface": "eth0",
+      "mask": "255.255.255.0",
+      "mask_form": "dotted",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.3.90.1",
+      "line": 2,
+      "rule": "vpcs.gateway",
+      "iface": "eth0",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "8.8.8.8",
+      "line": 2,
+      "rule": "vpcs.dns_inline",
+      "iface": "eth0",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "1.1.1.1",
+      "line": 3,
+      "rule": "vpcs.dns",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "domain",
+      "value": "plsnetlab.local",
+      "line": 4,
+      "rule": "vpcs.domain",
+      "iface": null,
+      "confidence": "PROVEN"
+    }
+  ],
+  "ifaces": {
+    "eth0": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false
+}

@@ -1,0 +1,137 @@
+{
+  "source": "vxlan_evpn_multi-site_sdwan_only startup node 2 (dc1-leaf1) lines [(1, 10000)]",
+  "node": {
+    "template": "nxosv9k",
+    "image": "nxosv9k-9300v-10.3.3.F"
+  },
+  "min_score": 70,
+  "facts": [
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 4,
+      "rule": "nxos.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 5,
+      "rule": "nxos.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 6,
+      "rule": "nxos.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 7,
+      "rule": "nxos.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "domain",
+      "value": "netlab.local",
+      "line": 31,
+      "rule": "nxos.domain",
+      "iface": null
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.203.1",
+      "line": 45,
+      "rule": "nxos.route_default",
+      "iface": null
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.203.13",
+      "line": 50,
+      "rule": "nxos.ip",
+      "iface": "mgmt0",
+      "mask": "/24",
+      "mask_form": "prefix"
+    }
+  ],
+  "ifaces": {
+    "mgmt0": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "eth1/1": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "eth1/2": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "eth1/9": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "eth1/10": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "eth1/11": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false
+}

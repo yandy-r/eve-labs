@@ -5,10 +5,14 @@
 # Role: DC1 SD-WAN hub — dial-up IKEv2 overlays per ISP, ADVPN sender, BGP on loopback, iBGP AS 64001
 # route reflector for the spokes. Loopbacks: "bgp-lo" (BGP peering) and "hc-lo" (spoke SLA target, same IP on both hubs;
 # Fortinet: never share one loopback for BGP and health checks).
-# port1/port2 = 802.1Q trunks to dc1-bgw1/dc1-bgw2 E1/3: the BGWs bridge EVE-INET-201 (VLAN 201) and
-# EVE-INET-202 (VLAN 202) through to the hub and hand off TENANT1 on VLAN 3101 (eBGP AS 65001).
+# Edge order: Internet -> c8kv-75 (internet edge router) -> this hub -> dc1-bgw1/dc1-bgw2 -> fabric.
+# port1/port2 = 802.1Q trunks to dc1-bgw1/dc1-bgw2 E1/3: VLAN 3201/3202 = wan legs into the BGWs' VRFs
+# INET-201/INET-202 (one per provider; c8kv-75 keeps each provider in its own VRF), VLAN 3101 = TENANT1
+# hand-off (eBGP AS 65001). All four wan legs share the root routing table; zones inet1/inet2 group them.
 # Spoke->DC sessions are source-NATed to the hub's TENANT1 address so replies always return through the same hub.
-# INET VLANs on RFAMILY-GW: static addressing; reserve .31 on EVE-INET-202 (it has a DHCP pool). PSK is a lab placeholder.
+# Each provider's IPsec terminates on a loopback (inet1-lo/inet2-lo) that c8kv-75 static-NATs to
+# 10.100.201.31/10.100.202.31, so spokes still dial those addresses (IKE runs NAT-T) and either BGW leg can
+# carry it. Reserve .31 on EVE-INET-202 (it has a DHCP pool). PSK is a lab placeholder.
 #
 
 #### system / management
@@ -51,14 +55,23 @@ config system interface
         set alias "trunk-dc1-bgw1"
         set description "802.1Q trunk to dc1-bgw1: E1/3"
     next
-    edit "wan1"
+    edit "wan1-bgw1"
         set vdom "root"
         set interface "port1"
-        set vlanid 201
-        set ip 10.100.201.31 255.255.255.0
+        set vlanid 3201
+        set ip 169.13.7.6 255.255.255.252
         set allowaccess ping
         set role wan
-        set alias "EVE-INET-201"
+        set alias "INET-201 via dc1-bgw1"
+    next
+    edit "wan2-bgw1"
+        set vdom "root"
+        set interface "port1"
+        set vlanid 3202
+        set ip 169.13.7.10 255.255.255.252
+        set allowaccess ping
+        set role wan
+        set alias "INET-202 via dc1-bgw1"
     next
     edit "t1-bgw1"
         set vdom "root"
@@ -74,14 +87,23 @@ config system interface
         set alias "trunk-dc1-bgw2"
         set description "802.1Q trunk to dc1-bgw2: E1/3"
     next
-    edit "wan2"
+    edit "wan1-bgw2"
         set vdom "root"
         set interface "port2"
-        set vlanid 202
-        set ip 10.100.202.31 255.255.255.0
+        set vlanid 3201
+        set ip 169.15.7.6 255.255.255.252
         set allowaccess ping
         set role wan
-        set alias "EVE-INET-202"
+        set alias "INET-201 via dc1-bgw2"
+    next
+    edit "wan2-bgw2"
+        set vdom "root"
+        set interface "port2"
+        set vlanid 3202
+        set ip 169.15.7.10 255.255.255.252
+        set allowaccess ping
+        set role wan
+        set alias "INET-202 via dc1-bgw2"
     next
     edit "t1-bgw2"
         set vdom "root"
@@ -98,6 +120,20 @@ config system interface
         set ip 10.200.255.1 255.255.255.255
         set allowaccess ping
     next
+    edit "inet1-lo"
+        set vdom "root"
+        set type loopback
+        set ip 169.7.201.31 255.255.255.255
+        set allowaccess ping
+        set alias "IPsec on INET-201 (NAT 10.100.201.31)"
+    next
+    edit "inet2-lo"
+        set vdom "root"
+        set type loopback
+        set ip 169.7.202.31 255.255.255.255
+        set allowaccess ping
+        set alias "IPsec on INET-202 (NAT 10.100.202.31)"
+    next
     edit "hc-lo"
         set vdom "root"
         set type loopback
@@ -110,7 +146,7 @@ end
 config vpn ipsec phase1-interface
     edit "H1_INET1"
         set type dynamic
-        set interface "wan1"
+        set interface "inet1-lo"
         set ike-version 2
         set peertype any
         set proposal aes256gcm-prfsha384 aes256-sha256
@@ -125,11 +161,11 @@ config vpn ipsec phase1-interface
         set auto-discovery-sender enable
         set network-id 11
         set psksecret CHANGE-ME-sdwan-lab-psk
-        set comments "spokes via EVE-INET-201"
+        set comments "spokes via EVE-INET-201 (NAT on c8kv-75)"
     next
     edit "H1_INET2"
         set type dynamic
-        set interface "wan2"
+        set interface "inet2-lo"
         set ike-version 2
         set peertype any
         set proposal aes256gcm-prfsha384 aes256-sha256
@@ -144,7 +180,7 @@ config vpn ipsec phase1-interface
         set auto-discovery-sender enable
         set network-id 12
         set psksecret CHANGE-ME-sdwan-lab-psk
-        set comments "spokes via EVE-INET-202"
+        set comments "spokes via EVE-INET-202 (NAT on c8kv-75)"
     next
 end
 config vpn ipsec phase2-interface
@@ -172,25 +208,37 @@ config system interface
     next
 end
 
-#### SD-WAN (underlay = ISP VLANs, overlay = dial-up tunnels)
+#### SD-WAN (underlay = provider legs toward c8kv-75: zone inet1 = INET-201, inet2 = INET-202)
 config system sdwan
     set status enable
     config zone
-        edit "underlay"
+        edit "inet1"
+        next
+        edit "inet2"
         next
         edit "overlay"
         next
     end
     config members
         edit 1
-            set interface "wan1"
-            set zone "underlay"
-            set gateway 10.100.201.1
+            set interface "wan1-bgw1"
+            set zone "inet1"
+            set gateway 169.13.7.5
         next
         edit 2
-            set interface "wan2"
-            set zone "underlay"
-            set gateway 10.100.202.1
+            set interface "wan1-bgw2"
+            set zone "inet1"
+            set gateway 169.15.7.5
+        next
+        edit 3
+            set interface "wan2-bgw1"
+            set zone "inet2"
+            set gateway 169.13.7.9
+        next
+        edit 4
+            set interface "wan2-bgw2"
+            set zone "inet2"
+            set gateway 169.15.7.9
         next
         edit 11
             set interface "H1_INET1"
@@ -239,8 +287,18 @@ end
 #### routing
 config router static
     edit 1
-        set sdwan-zone "underlay"
-        set comment "internet via ISP VLANs"
+        set sdwan-zone "inet1" "inet2"
+        set comment "internet via c8kv-75 (either provider, either BGW)"
+    next
+    edit 6
+        set dst 10.100.201.0 255.255.255.0
+        set sdwan-zone "inet1"
+        set comment "INET-201 spokes via provider 1 (beats the /16 mgmt route)"
+    next
+    edit 7
+        set dst 10.100.202.0 255.255.255.0
+        set sdwan-zone "inet2"
+        set comment "INET-202 spokes via provider 2 (beats the /16 mgmt route)"
     next
     edit 2
         set dst 10.200.0.0 255.255.0.0
@@ -319,6 +377,18 @@ end
 #### firewall policies
 config firewall policy
     edit 0
+        set name "IKE-to-INET-LOOPBACKS"
+        set srcintf "inet1" "inet2"
+        set dstintf "inet1-lo" "inet2-lo"
+        set srcaddr "all"
+        set dstaddr "all"
+        set action accept
+        set schedule "always"
+        set service "IKE" "PING"
+        set comments "IPsec on loopback needs a policy from the wan legs"
+        set logtraffic all
+    next
+    edit 0
         set name "SPOKE-HEALTH-CHECK"
         set srcintf "overlay"
         set dstintf "hc-lo"
@@ -381,7 +451,7 @@ config firewall policy
     edit 0
         set name "DC-to-INTERNET"
         set srcintf "DC-TENANT1"
-        set dstintf "underlay"
+        set dstintf "inet1" "inet2"
         set srcaddr "DC-NETS"
         set dstaddr "all"
         set action accept

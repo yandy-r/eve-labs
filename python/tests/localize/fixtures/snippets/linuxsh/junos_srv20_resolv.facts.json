@@ -1,0 +1,70 @@
+{
+  "node": {
+    "template": "docker",
+    "image": "yr-linux-srv:latest"
+  },
+  "min_score": 70,
+  "facts": [
+    {
+      "kind": "dns_server",
+      "value": "1.1.1.1",
+      "line": 2,
+      "rule": "linuxsh.nameserver",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "1.0.0.1",
+      "line": 3,
+      "rule": "linuxsh.nameserver",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "search_list",
+      "value": "plsnetlab.local",
+      "line": 5,
+      "rule": "linuxsh.search",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.11.101.20",
+      "line": 9,
+      "rule": "linuxsh.ip_addr",
+      "iface": "eth0",
+      "mask": "/24",
+      "mask_form": "prefix",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "169.11.101.1",
+      "line": 10,
+      "rule": "linuxsh.ip_route_gw",
+      "iface": null,
+      "confidence": "PROVEN"
+    }
+  ],
+  "ifaces": {
+    "eth0": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false,
+  "eve_to_config": {
+    "eth0": [
+      "eth0"
+    ]
+  }
+}

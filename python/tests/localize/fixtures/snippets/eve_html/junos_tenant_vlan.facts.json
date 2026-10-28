@@ -1,0 +1,33 @@
+{
+  "facts": [
+    {
+      "kind": "label_ref",
+      "value": "TENANT-1",
+      "line": 1,
+      "rule": "eve_html.text_label",
+      "iface": null,
+      "confidence": "HEURISTIC"
+    },
+    {
+      "kind": "label_ref",
+      "value": "VNI-100011",
+      "line": 1,
+      "rule": "eve_html.text_label",
+      "iface": null,
+      "confidence": "HEURISTIC"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.11.101.0",
+      "line": 3,
+      "rule": "eve_html.ipv4",
+      "iface": null,
+      "mask": "/24",
+      "mask_form": "prefix",
+      "confidence": "HEURISTIC"
+    }
+  ],
+  "ifaces": {},
+  "vlan_db": [],
+  "is_switch": false
+}

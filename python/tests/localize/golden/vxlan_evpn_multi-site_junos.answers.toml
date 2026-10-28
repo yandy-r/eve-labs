@@ -1,0 +1,34 @@
+# Synthetic "site B" answers (golden round-trip, design section 14 item 8).
+schema = 1
+site = "site-b"
+
+[segments."junos.mgmt"]
+bridge = "pnet4"
+subnet = "10.60.40.0/24"
+gateway = "10.60.40.254"
+label = "oob"
+
+[segments."junos.mgmt".split]
+"10.100.241.0/24" = "10.60.40.0/25"
+"10.100.243.0/24" = "10.60.40.128/25"
+
+[segments."junos.inet_a"]
+bridge = "pnet6"
+vlan = 1250
+subnet = "100.64.40.0/24"
+label = "WAN-1250"
+
+[segments."junos.inet_b"]
+bridge = "pnet6"
+vlan = 1252
+subnet = "100.64.42.0/24"
+label = "WAN-1252"
+
+[map.dns]
+"1.1.1.1" = "9.9.9.9"
+"1.0.0.1" = "149.112.112.112"
+"10.100.51.11" = "10.60.0.53"
+
+[map.domain]
+"netlab.local" = "siteb.example"
+"plsnetlab.local" = "plssiteb.example"

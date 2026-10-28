@@ -1,0 +1,28 @@
+cat << EOF > /etc/resolv.conf
+nameserver 1.1.1.1
+nameserver 1.0.0.1
+
+search plsnetlab.local
+EOF
+
+ip addr add 169.44.100.60/24 dev eth0
+ip route add default via 169.44.100.1
+
+cat << EOF >> /etc/hosts
+169.1.100.16 dc2-srv16
+169.1.100.17 dc2-srv17
+169.1.100.27 dc1-srv27
+169.1.100.35 dc1-srv35
+169.1.101.18 dc2-srv18
+169.1.101.19 dc2-srv19
+169.1.101.34 dc1-srv34
+169.1.101.37 dc1-srv37
+169.1.200.33 dc1-srv33
+169.1.200.36 dc1-srv36
+169.26.100.101 b1-pc1
+169.27.100.101 b2-pc1
+169.44.100.60 pc-60
+169.44.100.61 pc-61
+169.44.101.62 pc-62
+169.44.101.63 pc-63
+EOF

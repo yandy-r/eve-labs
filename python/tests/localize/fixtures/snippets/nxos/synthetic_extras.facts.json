@@ -1,0 +1,243 @@
+{
+  "source": "vxlan_evpn_multi-site_sdwan_only startup node 2 (dc1-leaf1) lines [(1, 1), (44, 53)] + synthetic lines",
+  "node": {
+    "template": "nxosv9k",
+    "image": "nxosv9k-9300v-10.3.3.F"
+  },
+  "min_score": 70,
+  "facts": [
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.203.1",
+      "line": 3,
+      "rule": "nxos.route_default",
+      "iface": null
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.203.13",
+      "line": 8,
+      "rule": "nxos.ip",
+      "iface": "mgmt0",
+      "mask": "/24",
+      "mask_form": "prefix"
+    },
+    {
+      "kind": "dns_server",
+      "value": "10.100.51.11",
+      "line": 13,
+      "rule": "nxos.name_server",
+      "iface": null
+    },
+    {
+      "kind": "search_list",
+      "value": "netlab.local",
+      "line": 14,
+      "rule": "nxos.domain_list",
+      "iface": null
+    },
+    {
+      "kind": "ntp_server",
+      "value": "10.100.51.13",
+      "line": 15,
+      "rule": "nxos.ntp_server",
+      "iface": null
+    },
+    {
+      "kind": "log_server",
+      "value": "10.100.51.20",
+      "line": 16,
+      "rule": "nxos.log_server",
+      "iface": null,
+      "alt": "10.99.99.99"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "10.0.0.0",
+      "line": 17,
+      "rule": "nxos.route_dst",
+      "iface": null,
+      "mask": "/8",
+      "mask_form": "prefix"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.203.254",
+      "line": 17,
+      "rule": "nxos.route_nexthop",
+      "iface": null,
+      "flags": [
+        "nexthop"
+      ]
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "99",
+      "line": 21,
+      "rule": "nxos.native_vlan",
+      "iface": "eth1/20"
+    },
+    {
+      "kind": "vlan_list",
+      "value": "201-203,1240",
+      "line": 22,
+      "rule": "nxos.trunk_allowed",
+      "iface": "eth1/20"
+    },
+    {
+      "kind": "vlan_list",
+      "value": "1241",
+      "line": 23,
+      "rule": "nxos.trunk_allowed",
+      "iface": "eth1/20"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "1242",
+      "line": 25,
+      "rule": "nxos.access_vlan",
+      "iface": "eth1/21"
+    },
+    {
+      "kind": "svi_name",
+      "value": "Vlan203",
+      "line": 26,
+      "rule": "nxos.svi_name",
+      "iface": "vl203",
+      "group": "subif:vl203"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.203.254",
+      "line": 28,
+      "rule": "nxos.fhrp_vip",
+      "iface": "vl203"
+    },
+    {
+      "kind": "vlan_mention",
+      "value": "1240",
+      "line": 30,
+      "rule": "nxos.desc_vlan",
+      "iface": "eth1/22",
+      "flags": [
+        "cosmetic"
+      ]
+    },
+    {
+      "kind": "cloud_ref",
+      "value": "pnet2",
+      "line": 30,
+      "rule": "nxos.desc_cloud",
+      "iface": "eth1/22",
+      "flags": [
+        "cosmetic"
+      ],
+      "alt": "pnet9"
+    },
+    {
+      "kind": "dhcp",
+      "value": "dhcp",
+      "line": 32,
+      "rule": "nxos.dhcp",
+      "iface": "eth1/22"
+    },
+    {
+      "kind": "asn",
+      "value": "65001",
+      "line": 33,
+      "rule": "nxos.bgp_asn",
+      "iface": null
+    },
+    {
+      "kind": "router_id",
+      "value": "10.100.203.13",
+      "line": 34,
+      "rule": "nxos.router_id",
+      "iface": null
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "10.100.203.0",
+      "line": 36,
+      "rule": "nxos.bgp_network",
+      "iface": null,
+      "mask": "/24",
+      "mask_form": "prefix"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.100.203.1",
+      "line": 37,
+      "rule": "nxos.bgp_neighbor",
+      "iface": null
+    },
+    {
+      "kind": "asn",
+      "value": "65000",
+      "line": 37,
+      "rule": "nxos.bgp_remote_as",
+      "iface": null
+    }
+  ],
+  "ifaces": {
+    "mgmt0": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "eth1/20": {
+      "parent": null,
+      "mode": "trunk",
+      "access_vlan": null,
+      "trunk_vlans": "201-203,1240-1241",
+      "native_vlan": 99,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "eth1/21": {
+      "parent": null,
+      "mode": "access",
+      "access_vlan": 1242,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "vl203": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "eth1/22": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": true,
+      "orphan": false
+    }
+  },
+  "vlan_db": [
+    201,
+    202,
+    203,
+    1240,
+    1241,
+    1242
+  ],
+  "is_switch": true
+}

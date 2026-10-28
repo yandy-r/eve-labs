@@ -1,0 +1,899 @@
+{
+  "node": {
+    "template": "fortinet",
+    "image": "fortinet-FGT-v7-build3744"
+  },
+  "min_score": 70,
+  "iface_keys": {
+    "port8": "port8",
+    "oob-mgmt": "oob-mgmt"
+  },
+  "eve_to_config": {
+    "port8": [
+      "port8"
+    ]
+  },
+  "facts": [
+    {
+      "kind": "label_ref",
+      "value": "b1-fgt1",
+      "line": 1,
+      "rule": "fortios.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "SD-WAN",
+      "line": 1,
+      "rule": "fortios.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "SD-WAN",
+      "line": 5,
+      "rule": "fortios.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-INET-201",
+      "line": 5,
+      "rule": "fortios.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-INET-202",
+      "line": 5,
+      "rule": "fortios.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "port1",
+      "line": 5,
+      "rule": "fortios.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "port3",
+      "line": 5,
+      "rule": "fortios.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "cloud_ref",
+      "value": "pnet0",
+      "line": 5,
+      "rule": "fortios.comment_cloud",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "alt": "pnet9",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "IP-less",
+      "line": 6,
+      "rule": "fortios.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "advpn-select",
+      "line": 7,
+      "rule": "fortios.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "default-originate",
+      "line": 7,
+      "rule": "fortios.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "DC-APPS",
+      "line": 8,
+      "rule": "fortios.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "tie-break",
+      "line": 8,
+      "rule": "fortios.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "fib-best-match",
+      "line": 8,
+      "rule": "fortios.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-INET-202",
+      "line": 9,
+      "rule": "fortios.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "1.1.1.1",
+      "line": 13,
+      "rule": "fortios.dns",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "1.0.0.1",
+      "line": 14,
+      "rule": "fortios.dns",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "cloud_ref",
+      "value": "pnet0",
+      "line": 19,
+      "rule": "fortios.text_cloud",
+      "iface": "port8",
+      "flags": [
+        "cosmetic"
+      ],
+      "alt": "pnet9",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-MGMT-204",
+      "line": 20,
+      "rule": "fortios.text_label",
+      "iface": "port8",
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_mention",
+      "value": "3",
+      "line": 20,
+      "rule": "fortios.text_vlan",
+      "iface": "port8",
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "3",
+      "line": 25,
+      "rule": "fortios.vlanid",
+      "iface": "oob-mgmt",
+      "parent": "port8",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.204.51",
+      "line": 26,
+      "rule": "fortios.ip",
+      "iface": "oob-mgmt",
+      "parent": "port8",
+      "mask": "255.255.255.0",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-MGMT-204",
+      "line": 29,
+      "rule": "fortios.text_label",
+      "iface": "oob-mgmt",
+      "parent": "port8",
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "cloud_ref",
+      "value": "pnet0",
+      "line": 37,
+      "rule": "fortios.text_cloud",
+      "iface": "port1",
+      "flags": [
+        "cosmetic"
+      ],
+      "alt": "pnet9",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-INET-201",
+      "line": 38,
+      "rule": "fortios.text_label",
+      "iface": "port1",
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_mention",
+      "value": "201",
+      "line": 38,
+      "rule": "fortios.text_vlan",
+      "iface": "port1",
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "201",
+      "line": 43,
+      "rule": "fortios.vlanid",
+      "iface": "wan1",
+      "parent": "port1",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.201.51",
+      "line": 44,
+      "rule": "fortios.ip",
+      "iface": "wan1",
+      "parent": "port1",
+      "mask": "255.255.255.0",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-INET-201",
+      "line": 47,
+      "rule": "fortios.text_label",
+      "iface": "wan1",
+      "parent": "port1",
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "cloud_ref",
+      "value": "pnet0",
+      "line": 51,
+      "rule": "fortios.text_cloud",
+      "iface": "port3",
+      "flags": [
+        "cosmetic"
+      ],
+      "alt": "pnet9",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-INET-202",
+      "line": 52,
+      "rule": "fortios.text_label",
+      "iface": "port3",
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_mention",
+      "value": "202",
+      "line": 52,
+      "rule": "fortios.text_vlan",
+      "iface": "port3",
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "vlan_tag",
+      "value": "202",
+      "line": 57,
+      "rule": "fortios.vlanid",
+      "iface": "wan2",
+      "parent": "port3",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.100.202.51",
+      "line": 58,
+      "rule": "fortios.ip",
+      "iface": "wan2",
+      "parent": "port3",
+      "mask": "255.255.255.0",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-INET-202",
+      "line": 61,
+      "rule": "fortios.text_label",
+      "iface": "wan2",
+      "parent": "port3",
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.26.0.1",
+      "line": 65,
+      "rule": "fortios.ip",
+      "iface": "port2",
+      "mask": "255.255.255.252",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "to-b1-sw1",
+      "line": 68,
+      "rule": "fortios.text_label",
+      "iface": "port2",
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "b1-sw1",
+      "line": 69,
+      "rule": "fortios.text_label",
+      "iface": "port2",
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.200.0.51",
+      "line": 74,
+      "rule": "fortios.ip",
+      "iface": "sdwan-lo",
+      "mask": "255.255.255.255",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "IKEv2",
+      "line": 78,
+      "rule": "fortios.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "sdwan-lo",
+      "line": 78,
+      "rule": "fortios.comment_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.100.201.31",
+      "line": 94,
+      "rule": "fortios.remote_gw",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "secret",
+      "value": "CHANGE-ME-sdwan-lab-psk",
+      "line": 95,
+      "rule": "fortios.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "dc1-fgt1",
+      "line": 96,
+      "rule": "fortios.text_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-INET-201",
+      "line": 96,
+      "rule": "fortios.text_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.201.1",
+      "line": 106,
+      "rule": "fortios.gateway",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.202.1",
+      "line": 111,
+      "rule": "fortios.gateway",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "probe_target",
+      "value": "10.200.255.251",
+      "line": 117,
+      "rule": "fortios.hc_server",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "probe_target",
+      "value": "1.1.1.1",
+      "line": 131,
+      "rule": "fortios.hc_server",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "probe_target",
+      "value": "8.8.8.8",
+      "line": 131,
+      "rule": "fortios.hc_server",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "10.100.0.0",
+      "line": 152,
+      "rule": "fortios.route_dst",
+      "iface": null,
+      "mask": "255.255.0.0",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.204.1",
+      "line": 153,
+      "rule": "fortios.gateway",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "home-lab",
+      "line": 155,
+      "rule": "fortios.text_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-MGMT-204",
+      "line": 155,
+      "rule": "fortios.text_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "10.25.0.0",
+      "line": 158,
+      "rule": "fortios.route_dst",
+      "iface": null,
+      "mask": "255.255.248.0",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.204.1",
+      "line": 159,
+      "rule": "fortios.gateway",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "LAN-WIFI",
+      "line": 161,
+      "rule": "fortios.text_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-MGMT-204",
+      "line": 161,
+      "rule": "fortios.text_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_route_dst",
+      "value": "192.168.0.0",
+      "line": 164,
+      "rule": "fortios.route_dst",
+      "iface": null,
+      "mask": "255.255.255.0",
+      "mask_form": "dotted",
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "10.100.204.1",
+      "line": 165,
+      "rule": "fortios.gateway",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "EVE-MGMT-204",
+      "line": 167,
+      "rule": "fortios.text_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "asn",
+      "value": "64001",
+      "line": 171,
+      "rule": "fortios.bgp_as",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "router_id",
+      "value": "10.200.0.51",
+      "line": 172,
+      "rule": "fortios.router_id",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.200.255.1",
+      "line": 180,
+      "rule": "fortios.bgp_peer",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "dc1-fgt1",
+      "line": 181,
+      "rule": "fortios.text_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "bgp-lo",
+      "line": 181,
+      "rule": "fortios.text_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "asn",
+      "value": "64001",
+      "line": 182,
+      "rule": "fortios.bgp_remote_as",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "10.200.255.2",
+      "line": 191,
+      "rule": "fortios.bgp_peer",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "dc2-fgt1",
+      "line": 192,
+      "rule": "fortios.text_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "bgp-lo",
+      "line": 192,
+      "rule": "fortios.text_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "asn",
+      "value": "64001",
+      "line": 193,
+      "rule": "fortios.bgp_remote_as",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "peer_ip",
+      "value": "169.26.0.2",
+      "line": 202,
+      "rule": "fortios.bgp_peer",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "b1-sw1",
+      "line": 203,
+      "rule": "fortios.text_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "label_ref",
+      "value": "port2",
+      "line": 203,
+      "rule": "fortios.text_label",
+      "iface": null,
+      "flags": [
+        "cosmetic"
+      ],
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "asn",
+      "value": "65101",
+      "line": 204,
+      "rule": "fortios.bgp_remote_as",
+      "iface": null,
+      "flags": [],
+      "confidence": "PROVEN"
+    }
+  ],
+  "ifaces": {
+    "port8": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "oob-mgmt": {
+      "parent": "port8",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 3,
+      "dhcp": false,
+      "orphan": false
+    },
+    "port1": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "wan1": {
+      "parent": "port1",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 201,
+      "dhcp": false,
+      "orphan": false
+    },
+    "port3": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "wan2": {
+      "parent": "port3",
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": 202,
+      "dhcp": false,
+      "orphan": false
+    },
+    "port2": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "sdwan-lo": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false,
+  "secrets": [
+    "CHANGE-ME-sdwan-lab-psk"
+  ]
+}

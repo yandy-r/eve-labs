@@ -1,0 +1,193 @@
+{
+  "node": {
+    "template": "docker",
+    "image": "eve-server-yr:latest"
+  },
+  "min_score": 70,
+  "facts": [
+    {
+      "kind": "dns_server",
+      "value": "1.1.1.1",
+      "line": 2,
+      "rule": "linuxsh.nameserver",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "dns_server",
+      "value": "1.0.0.1",
+      "line": 3,
+      "rule": "linuxsh.nameserver",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "search_list",
+      "value": "plsnetlab.local",
+      "line": 5,
+      "rule": "linuxsh.search",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.44.100.60",
+      "line": 8,
+      "rule": "linuxsh.ip_addr",
+      "iface": "eth0",
+      "mask": "/24",
+      "mask_form": "prefix",
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_gateway",
+      "value": "169.44.100.1",
+      "line": 9,
+      "rule": "linuxsh.ip_route_gw",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.1.100.16",
+      "line": 12,
+      "rule": "linuxsh.hosts",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.1.100.17",
+      "line": 13,
+      "rule": "linuxsh.hosts",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.1.100.27",
+      "line": 14,
+      "rule": "linuxsh.hosts",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.1.100.35",
+      "line": 15,
+      "rule": "linuxsh.hosts",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.1.101.18",
+      "line": 16,
+      "rule": "linuxsh.hosts",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.1.101.19",
+      "line": 17,
+      "rule": "linuxsh.hosts",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.1.101.34",
+      "line": 18,
+      "rule": "linuxsh.hosts",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.1.101.37",
+      "line": 19,
+      "rule": "linuxsh.hosts",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.1.200.33",
+      "line": 20,
+      "rule": "linuxsh.hosts",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.1.200.36",
+      "line": 21,
+      "rule": "linuxsh.hosts",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.26.100.101",
+      "line": 22,
+      "rule": "linuxsh.hosts",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.27.100.101",
+      "line": 23,
+      "rule": "linuxsh.hosts",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.44.100.60",
+      "line": 24,
+      "rule": "linuxsh.hosts",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.44.100.61",
+      "line": 25,
+      "rule": "linuxsh.hosts",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.44.101.62",
+      "line": 26,
+      "rule": "linuxsh.hosts",
+      "iface": null,
+      "confidence": "PROVEN"
+    },
+    {
+      "kind": "ip_host",
+      "value": "169.44.101.63",
+      "line": 27,
+      "rule": "linuxsh.hosts",
+      "iface": null,
+      "confidence": "PROVEN"
+    }
+  ],
+  "ifaces": {
+    "eth0": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [],
+  "is_switch": false
+}

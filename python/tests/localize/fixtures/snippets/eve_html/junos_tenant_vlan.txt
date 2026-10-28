@@ -1,0 +1,4 @@
+<div id="customText16" class="customShape customText context-menu jtk-managed jtk-draggable editable cke_focus jtk-dragged ui-selectee jtk-drag ui-selected jtk-drag-selected free-selected dragstopped" data-path="16" style="position: absolute; left: 219px; top: 1329px; z-index: 1002; cursor: move; height: auto; width: auto;" contenteditable="true" aria-readonly="false"><p><span style="font-size:11px;">TENANT-1 VNI-100011</span></p>
+
+<p><span style="font-size:11px;">VLAN 1101- 169.11.101.0/24</span></p>
+</div>

@@ -1,0 +1,105 @@
+{
+  "source": "cisco_nexus_9000v_vpc_concept_lab startup node 2 (DS-NX1) lines [(3, 9), (23, 27), (34, 40), (171, 184)]",
+  "node": {
+    "template": "nxosv9k",
+    "image": "nxosv9k-9500v-10.3.3.F"
+  },
+  "min_score": 70,
+  "facts": [
+    {
+      "kind": "secret",
+      "value": "admin123",
+      "line": 9,
+      "rule": "nxos.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "0xf139da6d59667828b6f6f3bb6cf4f8d2",
+      "line": 12,
+      "rule": "nxos.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "secret",
+      "value": "0xf139da6d59667828b6f6f3bb6cf4f8d2",
+      "line": 12,
+      "rule": "nxos.secret",
+      "iface": null,
+      "flags": [
+        "secret"
+      ]
+    },
+    {
+      "kind": "vlan_def",
+      "value": "1,100",
+      "line": 13,
+      "rule": "nxos.vlan_def",
+      "iface": null
+    },
+    {
+      "kind": "vlan_def",
+      "value": "100",
+      "line": 14,
+      "rule": "nxos.vlan_def",
+      "iface": null
+    },
+    {
+      "kind": "vlan_name",
+      "value": "servers",
+      "line": 15,
+      "rule": "nxos.vlan_name",
+      "iface": null
+    },
+    {
+      "kind": "svi_name",
+      "value": "Vlan1",
+      "line": 19,
+      "rule": "nxos.svi_name",
+      "iface": "vl1",
+      "group": "subif:vl1"
+    },
+    {
+      "kind": "ip_host",
+      "value": "10.1.1.1",
+      "line": 22,
+      "rule": "nxos.ip",
+      "iface": "mgmt0",
+      "mask": "/30",
+      "mask_form": "prefix"
+    }
+  ],
+  "ifaces": {
+    "vl1": {
+      "parent": null,
+      "mode": "unknown",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    },
+    "mgmt0": {
+      "parent": null,
+      "mode": "routed",
+      "access_vlan": null,
+      "trunk_vlans": "ALL",
+      "native_vlan": null,
+      "tag": null,
+      "dhcp": false,
+      "orphan": false
+    }
+  },
+  "vlan_db": [
+    1,
+    100
+  ],
+  "is_switch": false
+}
