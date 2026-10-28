@@ -40,8 +40,6 @@ import base64
 import contextlib
 import getpass
 import hashlib
-import importlib.util
-import io
 import json
 import os
 import re
@@ -55,12 +53,11 @@ from collections.abc import Callable, Iterable, Mapping, Sequence
 from dataclasses import dataclass, field, replace
 from datetime import UTC, datetime
 from pathlib import Path
-from types import ModuleType
 from typing import Any, Literal
 
 from evelab.common import hostenv
+from evelab.common.checklabs import CHECK_LABS, run_check_labs
 from evelab.common.codec import apply_text_edits, decode_blob, edit_blob
-from evelab.common.paths import SCRIPTS_DIR
 from evelab.common.unl import (
     RawBlob,
     RawEdit,
@@ -104,7 +101,6 @@ __all__ = [
 ]
 
 JOURNAL_SCHEMA = 1
-CHECK_LABS = SCRIPTS_DIR / "check-labs.py"
 BLOCKING = ("conflict", "blocker", "error")
 _SIDECAR_RE = re.compile(r"^(\d+)_(.+)\.txt$")
 _LAB_TAG = re.compile(rb"<lab(?=[\s/>])[^>]*>")
@@ -690,31 +686,6 @@ def _shape(lab: RawLab) -> dict[str, Any]:
         "textobjects": [b.id for b in lab.textobjects()],
         "objects": lab.objects_count(),
     }
-
-
-_check_labs_cache: dict[Path, ModuleType] = {}
-
-
-def _load_check_labs(script: Path) -> ModuleType:
-    script = Path(script).resolve()
-    mod = _check_labs_cache.get(script)
-    if mod is None:
-        spec = importlib.util.spec_from_file_location("check_labs", script)
-        if spec is None or spec.loader is None:
-            raise LocalizeError(f"cannot load {script}", code="CHECK_LABS")
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-        _check_labs_cache[script] = mod
-    return mod
-
-
-def run_check_labs(paths: Sequence[Path], script: Path = CHECK_LABS) -> tuple[int, str]:
-    """Run ``check-labs.main`` on ``paths`` (each must end in ``.unl``)."""
-    mod = _load_check_labs(script)
-    out = io.StringIO()
-    with contextlib.redirect_stdout(out), contextlib.redirect_stderr(out):
-        rc = mod.main([str(p) for p in paths])
-    return int(rc or 0), out.getvalue()
 
 
 def validate_written(

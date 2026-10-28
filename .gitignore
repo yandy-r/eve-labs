@@ -39,8 +39,9 @@ Thumbs.db
 # Node tooling (lint/format/commitlint)
 node_modules/
 
-# eve-localize: per-host state (answers, backups, journal) and manifest drafts
+# eve-localize / eve-analyze: per-host state (answers, backups, journal) and manifest drafts
 /.localize/
+/.analyze/
 *.localize.toml.draft
 __pycache__/
 

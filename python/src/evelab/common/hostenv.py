@@ -614,7 +614,7 @@ class Lock:
             holder = self._holder()
             os.close(fd)
             raise PreconditionError(
-                f"another eve-localize run holds the lock{holder}: {self.path}",
+                f"another evelab run holds the lock{holder}: {self.path}",
                 code="LOCK_HELD",
             ) from exc
         os.ftruncate(fd, 0)
@@ -638,7 +638,7 @@ class Lock:
                     "" if alive is not None else f" (delete it if stale: {self.path})"
                 )
                 raise PreconditionError(
-                    f"another eve-localize run holds the lock{self._holder()}: "
+                    f"another evelab run holds the lock{self._holder()}: "
                     f"{self.path}{hint}",
                     code="LOCK_HELD",
                 ) from None
