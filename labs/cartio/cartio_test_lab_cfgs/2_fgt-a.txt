@@ -5,8 +5,9 @@
 # Role: site A edge. port1 = WAN to isp (eBGP AS 65010 to AS 64500, default route learned),
 # port2 = LAN to core-a (OSPF area 0, default originated), port3 = reserved FortiLink port for a
 # physical FortiSwitch or FortiAP bridged in over pnet2. LLDP on port2. Syslog to srv-a.
-# Exercises the FortiGate driver (REST API and SSH fallback) and, in phase 3, the ADR-0009
-# deep-inspection run (policy "coll-a-deep-inspection", disabled until then).
+# Exercises the FortiGate driver (REST API and SSH fallback) and the ADR-0009 transport runs from
+# coll-a to ctrl: deep inspection (policy "coll-a-deep-inspection", disabled until the run) and the
+# explicit proxy on port2 (phase 3 section at the end).
 # The read-only SSH admin, the API key and the SNMPv3 user are added after first boot
 # (labs/cartio/README.md), so no collector credential lives in this file.
 #
@@ -120,6 +121,10 @@ config firewall address
     edit "coll-a"
         set subnet 172.30.20.50 255.255.255.255
     next
+    edit "ctrl"
+        set comment "in-lab dev controller on CLOUD, behind isp"
+        set subnet 203.0.113.10 255.255.255.255
+    next
 end
 
 #### policies
@@ -133,7 +138,7 @@ config firewall policy
         set dstintf "port1"
         set action accept
         set srcaddr "coll-a"
-        set dstaddr "all"
+        set dstaddr "ctrl"
         set schedule "always"
         set service "HTTPS"
         set utm-status enable
@@ -275,4 +280,46 @@ config router bgp
             set description "fgt-b over IPsec"
         next
     end
+end
+
+#### phase 3: explicit web proxy for the ADR-0009 proxy run
+# coll-a sets http://172.30.0.1:8080 (port2) as its proxy. The proxy starts without authentication;
+# the README's proxy run adds a local user and basic auth after first boot, so no password lives in
+# this file. CONNECT to ctrl is tunnelled without inspection; the README says how to add deep
+# inspection to the same policy for the combined run.
+config web-proxy explicit
+    set status enable
+    set http-incoming-port 8080
+end
+config system interface
+    edit "port2"
+        set explicit-web-proxy enable
+    next
+end
+config authentication scheme
+    edit "cartio-basic"
+        set method basic
+        set user-database "local-user-db"
+    next
+end
+config authentication rule
+    edit "cartio-proxy-basic"
+        set srcaddr "coll-a"
+        set dstaddr "ctrl"
+        set ip-based disable
+        set active-auth-method "cartio-basic"
+    next
+end
+config firewall proxy-policy
+    edit 1
+        set name "coll-a-explicit-proxy"
+        set proxy explicit-web
+        set dstintf "port1"
+        set srcaddr "coll-a"
+        set dstaddr "ctrl"
+        set service "webproxy"
+        set action accept
+        set schedule "always"
+        set logtraffic all
+    next
 end
