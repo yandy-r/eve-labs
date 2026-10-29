@@ -202,3 +202,77 @@ config router bgp
         set status enable
     end
 end
+
+#### phase 2: IPsec tunnel to fgt-b (site B), eBGP over the tunnel
+# IKEv2 between the WAN addresses through isp. The PSK is a lab placeholder; change it on both ends
+# if you like, it never leaves the lab. Site-to-site traffic prefers the tunnel because its BGP path
+# (AS 65020) is shorter than the path through isp (AS 64500 65020).
+config vpn ipsec phase1-interface
+    edit "to-site-b"
+        set interface "port1"
+        set ike-version 2
+        set peertype any
+        set net-device disable
+        set proposal aes256-sha256
+        set dhgrp 20
+        set remote-gw 198.51.100.6
+        set psksecret "cartio-lab-psk"
+    next
+end
+config vpn ipsec phase2-interface
+    edit "to-site-b"
+        set phase1name "to-site-b"
+        set proposal aes256-sha256
+        set dhgrp 20
+        set auto-negotiate enable
+    next
+end
+config system interface
+    edit "to-site-b"
+        set vdom "root"
+        set ip 172.30.254.1 255.255.255.255
+        set remote-ip 172.30.254.2 255.255.255.252
+        set allowaccess ping
+    next
+end
+config firewall policy
+    edit 4
+        set name "site-a-to-site-b"
+        set srcintf "port2"
+        set dstintf "to-site-b"
+        set action accept
+        set srcaddr "lab-172-30"
+        set dstaddr "lab-172-30"
+        set schedule "always"
+        set service "ALL"
+        set logtraffic all
+    next
+    edit 5
+        set name "site-b-to-site-a"
+        set srcintf "to-site-b"
+        set dstintf "port2"
+        set action accept
+        set srcaddr "lab-172-30"
+        set dstaddr "lab-172-30"
+        set schedule "always"
+        set service "ALL"
+        set logtraffic all
+    next
+end
+config system api-user
+    edit "cartio-ro-api"
+        config trusthost
+            edit 3
+                set ipv4-trusthost 172.30.120.0 255.255.255.0
+            next
+        end
+    next
+end
+config router bgp
+    config neighbor
+        edit "172.30.254.2"
+            set remote-as 65020
+            set description "fgt-b over IPsec"
+        next
+    end
+end

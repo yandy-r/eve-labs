@@ -7,8 +7,8 @@ bridge = "pnet4"
 label = "Mgmt-B"
 
 [map.dns]
-"1.1.1.1" = "192.0.2.53"
-"1.0.0.1" = "192.0.2.54"
+"1.1.1.1" = "100.64.0.53"
+"1.0.0.1" = "100.64.0.54"
 
 [map.domain]
 "netlab.local" = "lab-b.example"
