@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# store-b-setup.sh: turn store-b (Ubuntu 22.04) into the Cartio lab's on-site store (YAN-1670).
+# store-b-setup.sh: turn store-b (Ubuntu 22.04, 24.04 or 26.04) into the Cartio lab's on-site store (YAN-1670).
 #
 # Sets up both store types the collector can be pointed at, each reachable only from coll-b:
 #   - PostgreSQL: database "cartio", role "cartio", listening on the lab address
@@ -21,6 +21,14 @@ if [[ $EUID -ne 0 ]]; then
   echo "Run as root: sudo $0" >&2
   exit 1
 fi
+
+# Tested on these releases; others probably work, so only warn.
+os_id="$(. /etc/os-release && echo "${ID:-}")"
+os_version="$(. /etc/os-release && echo "${VERSION_ID:-}")"
+case "${os_id} ${os_version}" in
+  "ubuntu 22.04" | "ubuntu 24.04" | "ubuntu 26.04") ;;
+  *) echo "warning: untested OS ${os_id} ${os_version}; expected Ubuntu 22.04, 24.04 or 26.04" >&2 ;;
+esac
 
 if [[ -z "${PG_PASSWORD:-}" ]]; then
   read -rsp "PostgreSQL password for ${STORE_USER}: " PG_PASSWORD
@@ -44,7 +52,15 @@ store_uid="$(id -u "$STORE_USER")"
 store_gid="$(id -g "$STORE_USER")"
 
 #### PostgreSQL
+# The packaged major version differs per release (14 on 22.04, 16 on 24.04, 18 on 26.04);
+# use the newest "main" cluster.
 pg_conf_dir="$(find /etc/postgresql -mindepth 2 -maxdepth 2 -type d -name main | sort -V | tail -n 1)"
+if [[ -z "$pg_conf_dir" ]]; then
+  echo "No PostgreSQL 'main' cluster under /etc/postgresql" >&2
+  exit 1
+fi
+pg_version="$(basename "$(dirname "$pg_conf_dir")")"
+install -d -o postgres -g postgres "$pg_conf_dir/conf.d"
 cat >"$pg_conf_dir/conf.d/cartio.conf" <<EOF
 # Cartio lab on-site store
 listen_addresses = 'localhost,${LISTEN_ADDR}'
@@ -54,7 +70,13 @@ EOF
 hba="$pg_conf_dir/pg_hba.conf"
 sed -i '/# cartio-store$/d' "$hba"
 echo "host ${STORE_DB} ${STORE_USER} ${COLLECTOR_ADDR}/32 scram-sha-256 # cartio-store" >>"$hba"
-systemctl restart postgresql
+# Restart the cluster unit itself: the umbrella postgresql.service returns before it is up.
+systemctl restart "postgresql@${pg_version}-main"
+for _ in {1..30}; do
+  runuser -u postgres -- pg_isready -q && break
+  sleep 1
+done
+runuser -u postgres -- pg_isready
 
 # The password reaches psql through the environment, not its command line, so ps can't show it.
 export PG_PASSWORD

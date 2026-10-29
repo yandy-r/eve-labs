@@ -7,6 +7,13 @@ site = "example"
 bridge = "pnet0"
 label = "Mgmt-LAN"
 
+[segments."cartio.oob_mgmt"]
+bridge = "pnet2"
+vlan = 1240
+subnet = "172.31.240.0/24"
+gateway = "172.31.240.1"
+label = "mgmt-1240"
+
 [segments."site.sdwan_ctrl"]
 bridge = "pnet0"
 label = "Net"

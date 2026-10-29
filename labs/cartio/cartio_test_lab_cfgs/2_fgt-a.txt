@@ -4,7 +4,8 @@
 #
 # Role: site A edge. port1 = WAN to isp (eBGP AS 65010 to AS 64500, default route learned),
 # port2 = LAN to core-a (OSPF area 0, default originated), port3 = reserved FortiLink port for a
-# physical FortiSwitch or FortiAP bridged in over pnet2. LLDP on port2. Syslog to srv-a.
+# physical FortiSwitch or FortiAP bridged in over pnet2, port8 VLAN 1240 = out-of-band management
+# (VRF 240, see the section below). LLDP on port2. Syslog to srv-a.
 # Exercises the FortiGate driver (REST API and SSH fallback) and the ADR-0009 transport runs from
 # coll-a to ctrl: deep inspection (policy "coll-a-deep-inspection", disabled until the run) and the
 # explicit proxy on port2 (phase 3 section at the end).
@@ -35,6 +36,43 @@ config system ntp
             set server "198.51.100.254"
         next
     end
+end
+
+#### out-of-band management: port8 VLAN 1240 in VRF 240 (paste first, then upload the license)
+# port8 is on the pnet2 trunk; VLAN 1240 is the management subnet. VRF 240 keeps this default
+# route out of the main table (VRF 0), so the BGP default from isp still carries lab traffic.
+# FortiGuard (licensing) and DNS are pinned to this interface. No firewall policy uses it.
+config system interface
+    edit "port8"
+        set alias "mgmt-trunk"
+        set description "pnet2 trunk, carries VLAN 1240 (out-of-band management)"
+    next
+    edit "mgmt-1240"
+        set vdom "root"
+        set interface "port8"
+        set vlanid 1240
+        set vrf 240
+        set mode static
+        set ip 172.31.240.11 255.255.255.0
+        set allowaccess ping https ssh
+        set alias "oob-mgmt"
+        set description "out-of-band management, VRF 240"
+    next
+end
+config router static
+    edit 240
+        set gateway 172.31.240.1
+        set device "mgmt-1240"
+        set comment "out-of-band management default (VRF 240 via mgmt-1240)"
+    next
+end
+config system fortiguard
+    set interface-select-method specify
+    set interface "mgmt-1240"
+end
+config system dns
+    set interface-select-method specify
+    set interface "mgmt-1240"
 end
 
 #### interfaces

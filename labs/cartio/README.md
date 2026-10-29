@@ -50,6 +50,7 @@ About 39 GB of RAM in total.
 | Site B servers VLAN 120 | 172.30.120.0/24 | rtr-b .1, srv-b .21, coll-b .50, store-b .60 |
 | CLOUD (controller)      | 203.0.113.0/24  | isp .1, ctrl .10                             |
 | Site B guest VLAN 130   | 172.30.130.0/24 | fgt-b port3 .1 (guest VDOM, isolated)        |
+| FortiGate OOB mgmt      | 172.31.240.0/24 | gateway .1, fgt-a .11, fgt-b .12             |
 | Loopbacks               | 172.30.255.0/24 | core-a .1, rtr-b .11, leg-b .12              |
 
 Routing: OSPF area 0 inside each site (each FortiGate originates the default), EIGRP 100 between
@@ -79,9 +80,11 @@ the `mgmt-lan` address, the API trusthosts and the `cartio-ro` admin's trusthost
 
 1. Start fgt-a, fgt-b, core-a and rtr-b first; they take a few minutes to boot. srv-b (vEOS) is
    also slow.
-2. On each FortiGate, set the admin password at the console prompt, apply the VM license, then
-   paste its file from `cartio_test_lab_cfgs/` section by section. fgt-b logs you out after it
-   switches to multi-VDOM mode; log back in and continue with the next section.
+2. On each FortiGate, set the admin password at the console prompt and paste the first section of
+   its file from `cartio_test_lab_cfgs/` (out-of-band management: port8 VLAN 1240 on the pnet2
+   trunk, `https://172.31.240.11` for fgt-a, `.12` for fgt-b). Upload the VM license over that
+   address, then paste the rest section by section. fgt-b logs you out after it switches to
+   multi-VDOM mode; log back in and continue with the next section.
 3. On isp, core-a, acc-a, rtr-b, leg-b and sw-b, generate SSH keys once:
    `crypto key generate rsa modulus 2048`, then `write memory`.
 4. Check the tunnel: `get vpn ipsec tunnel summary` and `get router info bgp summary` on either
@@ -172,9 +175,9 @@ acc-a keeps only SNMPv2c with community `public` on purpose, for the failing che
 
 ## ctrl and store-b (after first boot)
 
-Both are Ubuntu 22.04 VMs with no startup config. Log in on the VNC console with the image's own
-account, give each its address, then do the rest over SSH from the EVE host or your laptop (with the
-routes above):
+Both are Ubuntu server VMs (22.04 today, 24.04 once the new images are in) with no startup config.
+Log in on the VNC console with the image's own account, give each its address, then do the rest over
+SSH from the EVE host or your laptop (with the routes above):
 
 ```bash
 # ctrl console: find the NIC name with "ip -br link", then
@@ -183,8 +186,17 @@ sudo ip addr add 203.0.113.10/24 dev <nic> && sudo ip route add default via 203.
 sudo ip addr add 172.30.120.60/24 dev <nic> && sudo ip route add default via 172.30.120.1
 ```
 
-Make the address permanent with netplan (a static address, gateway as above, DNS 1.1.1.1), and set
-the hostname to `ctrl` or `store-b` so LLDP and logs read well.
+Make the address permanent with the node's netplan file from `cartio_test_lab_cfgs/`
+(`13_ctrl.netplan.yaml`, `14_store-b.netplan.yaml`: static address, gateway as above, DNS 1.1.1.1),
+and set the hostname so LLDP and logs read well. For store-b:
+
+```bash
+scp labs/cartio/cartio_test_lab_cfgs/14_store-b.netplan.yaml <user>@172.30.120.60:
+ssh -t <user>@172.30.120.60 'sudo install -m 0600 14_store-b.netplan.yaml /etc/netplan/99-cartio.yaml &&
+  sudo netplan apply && sudo hostnamectl set-hostname store-b'
+```
+
+ctrl is the same with `13_ctrl.netplan.yaml`, 203.0.113.10 and `ctrl`.
 
 **ctrl.** Install the Genius controller from the cartio repository, following its own install
 steps, and serve it on 203.0.113.10:443. Give it a certificate from a lab CA that coll-a, coll-b and
@@ -314,7 +326,8 @@ commit them there:
 - EIGRP on leg-b learns the default route that rtr-b redistributes from OSPF.
 - fgt-a (FortiOS 7.6) takes the explicit proxy section as written: `web-proxy explicit`, the
   authentication scheme and rule, and a `proxy-policy` with no source interface.
-- The Ubuntu image brings up its NIC and SSH server on first boot; if it ships a netplan file with
-  DHCP, remove it before adding the static one.
+- The Ubuntu image brings up its NIC (`ens3`) and SSH server on first boot. The netplan files set
+  `dhcp4: false` on that NIC, which overrides the image's own DHCP file (it sorts earlier), so it can
+  stay in place.
 - PostgreSQL on store-b picks up `conf.d/cartio.conf` (Ubuntu's `postgresql.conf` includes `conf.d`
   by default) and listens on 172.30.120.60.
