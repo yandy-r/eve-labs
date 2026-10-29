@@ -53,6 +53,7 @@ config system interface
         set role lan
         set alias "to-core-a"
         set description "to core-a Gi1 (OSPF area 0)"
+        set device-identification enable
         set lldp-reception enable
         set lldp-transmission enable
     next

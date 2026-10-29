@@ -48,15 +48,16 @@ isp does not NAT traffic to the management LAN, so these flows stay untranslated
 
 The management LAN is assumed to be 10.100.51.0/24. On another EVE host, eve-localize moves the
 bridge and label, but these values are written in device configs and need a manual edit: the
-`NAT-OUT` ACL on isp, the `SNMP-RO` ACL on core-a, and the `mgmt-lan` address and API trusthost on
-fgt-a.
+`NAT-OUT` ACL on isp, the `SNMP-RO` ACL on core-a, and on fgt-a the `mgmt-lan` address, the API
+trusthost and the `cartio-ro` admin's `trusthost2`.
 
 ## Bring-up
 
 1. Start fgt-a and core-a first; they take a few minutes to boot.
 2. On fgt-a, set the admin password at the console prompt, apply the VM license, then paste
    `cartio_test_lab_cfgs/2_fgt-a.txt` section by section.
-3. On core-a, generate SSH keys once: `crypto key generate rsa modulus 2048`, then `write memory`.
+3. On isp, core-a and acc-a, generate SSH keys once: `crypto key generate rsa modulus 2048`, then
+   `write memory`.
 4. Add the collector accounts below.
 5. On coll-a, install the Cartio collector from the cartio repository and enroll it with your dev
    controller.
