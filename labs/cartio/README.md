@@ -187,16 +187,16 @@ Make the address permanent with netplan (a static address, gateway as above, DNS
 the hostname to `ctrl` or `store-b` so LLDP and logs read well.
 
 **ctrl.** Install the Genius controller from the cartio repository, following its own install
-steps, and serve it on 203.0.113.10:443. Give it a certificate the collectors trust (a lab CA added
-to coll-a and coll-b is simplest). Collectors at both sites then enroll against
-`https://203.0.113.10`.
+steps, and serve it on 203.0.113.10:443. Give it a certificate from a lab CA that coll-a, coll-b and
+fgt-a trust, with `IP:203.0.113.10` in its subject alternative names, since collectors enroll by
+address. Collectors at both sites then enroll against `https://203.0.113.10`.
 
 **store-b.** Copy the setup script over and run it. It asks for the PostgreSQL and SMB passwords
 (take them from the password manager) and allows only coll-b (172.30.120.50) to connect:
 
 ```bash
 scp labs/cartio/scripts/store-b-setup.sh <user>@172.30.120.60:
-ssh <user>@172.30.120.60 sudo ./store-b-setup.sh
+ssh -t <user>@172.30.120.60 sudo ./store-b-setup.sh
 ```
 
 It ends by printing the three store addresses to give the site B collector at onboarding:
@@ -227,17 +227,23 @@ inconsistency. acc-a, isp and leg-b fail EoL only if the EoL data file lists the
   but sends none.
 - **Multi-VDOM (YAN-1657):** fgt-b's guest VDOM holds port3 and its own policy; nothing from it
   should appear in root's data or the reverse.
-- **On-site store (YAN-1670):** onboard a test customer as On site with site B's collector, run a
-  job once with the PostgreSQL store and once with the folder store (SMB, then NFS), then capture
-  traffic on ctrl (`tcpdump -i <nic> -w ctrl-onsite.pcap host 172.30.120.50`) and inspect ctrl's
-  database. The network data and credentials should be on store-b only; ctrl should hold collector
-  health and job status and nothing more.
+- **On-site store (YAN-1670):** onboard a test customer as On site with site B's collector. Start a
+  capture on ctrl first (`tcpdump -i <nic> -w ctrl-onsite.pcap host 172.30.120.50`) and leave it
+  running while you run a job once with the PostgreSQL store and once with the folder store (SMB,
+  then NFS). Then stop the capture and inspect it and ctrl's database. The network data and
+  credentials should be on store-b only; ctrl should hold collector health and job status and
+  nothing more.
 
 ## Transport runs (ADR-0009)
 
 CI already covers mitmproxy as a proxy and as a TLS inspector; these are the one-off runs against a
-real FortiGate. coll-b to ctrl through fgt-b is the uninspected baseline throughout. Run each step
-from coll-a and note what the collector reports about its path:
+real FortiGate. coll-b to ctrl through fgt-b is the uninspected baseline throughout.
+
+Before run 2, import the lab CA that signed ctrl's certificate into fgt-a as a trusted CA (System >
+Certificates > Import > CA Certificate). Without it fgt-a can't validate ctrl and re-signs with
+`Fortinet_CA_Untrusted` instead of `Fortinet_CA_SSL`, so run 3 would still fail.
+
+Run each step from coll-a and note what the collector reports about its path:
 
 1. **Direct, uninspected.** Policy `coll-a-deep-inspection` disabled (as shipped). The collector
    connects and reports a direct path.
@@ -290,7 +296,10 @@ commit them there:
   for runs 1, 3, 5 and 7.
 - The certificate chain the collector sees in each mode, from coll-a:
   `openssl s_client -connect 203.0.113.10:443 -showcerts </dev/null` for runs 1 and 3, and with
-  `-proxy 172.30.0.1:8080` added for runs 5 and 7.
+  `-proxy 172.30.0.1:8080` added for run 5. Run 7 keeps run 6's basic auth, so add the proxy
+  account too, with the password read into the environment instead of typed on the command line:
+  `read -rs CARTIO_PROXY_PASS && export CARTIO_PROXY_PASS`, then add
+  `-proxy_user cartio-proxy -proxy_pass env:CARTIO_PROXY_PASS`.
 - fgt-a's forward traffic and proxy logs for the same runs (`execute log filter category 0`, then
   `execute log display`).
 

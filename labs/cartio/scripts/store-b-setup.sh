@@ -7,7 +7,8 @@
 #
 # Run as root on store-b once its address is set (labs/cartio/README.md). Passwords come from the
 # environment (PG_PASSWORD, SMB_PASSWORD) or a prompt and are never written to this repository
-# (ADR-0003). Safe to run again: it re-applies the config and resets the two passwords.
+# (ADR-0003). Safe to run again: it rewrites the access rules it manages, so only the current
+# COLLECTOR_ADDR keeps access, and resets the two passwords.
 set -euo pipefail
 
 LISTEN_ADDR="${LISTEN_ADDR:-172.30.120.60}"
@@ -49,13 +50,16 @@ cat >"$pg_conf_dir/conf.d/cartio.conf" <<EOF
 listen_addresses = 'localhost,${LISTEN_ADDR}'
 password_encryption = scram-sha-256
 EOF
+# The rule this script manages carries a marker, so a rerun replaces it instead of adding another.
 hba="$pg_conf_dir/pg_hba.conf"
-hba_line="host ${STORE_DB} ${STORE_USER} ${COLLECTOR_ADDR}/32 scram-sha-256"
-grep -qxF "$hba_line" "$hba" || echo "$hba_line" >>"$hba"
+sed -i '/# cartio-store$/d' "$hba"
+echo "host ${STORE_DB} ${STORE_USER} ${COLLECTOR_ADDR}/32 scram-sha-256 # cartio-store" >>"$hba"
 systemctl restart postgresql
 
-runuser -u postgres -- psql -v ON_ERROR_STOP=1 -v role="$STORE_USER" -v db="$STORE_DB" \
-  -v pw="$PG_PASSWORD" <<'SQL'
+# The password reaches psql through the environment, not its command line, so ps can't show it.
+export PG_PASSWORD
+runuser -u postgres -- psql -v ON_ERROR_STOP=1 -v role="$STORE_USER" -v db="$STORE_DB" <<'SQL'
+\set pw `printenv PG_PASSWORD`
 SELECT format('CREATE ROLE %I LOGIN', :'role')
   WHERE NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = :'role') \gexec
 ALTER ROLE :"role" PASSWORD :'pw';
@@ -64,10 +68,11 @@ SELECT format('CREATE DATABASE %I OWNER %I', :'db', :'role')
 SQL
 
 #### SMB share
+# The share lives in its own file, rewritten on every run and included once from smb.conf.
 smb_conf=/etc/samba/smb.conf
-if ! grep -q '^\[cartio\]' "$smb_conf"; then
-  cat >>"$smb_conf" <<EOF
-
+include_line="include = /etc/samba/cartio.conf"
+grep -qxF "$include_line" "$smb_conf" || printf '\n%s\n' "$include_line" >>"$smb_conf"
+cat >/etc/samba/cartio.conf <<EOF
 [cartio]
    comment = Cartio lab on-site store
    path = ${STORE_ROOT}/smb
@@ -78,15 +83,16 @@ if ! grep -q '^\[cartio\]' "$smb_conf"; then
    create mask = 0660
    directory mask = 0770
 EOF
-fi
 printf '%s\n%s\n' "$SMB_PASSWORD" "$SMB_PASSWORD" | smbpasswd -s -a "$STORE_USER"
 smbpasswd -e "$STORE_USER" >/dev/null
 testparm -s >/dev/null
 systemctl restart smbd
 
 #### NFS export
-nfs_line="${STORE_ROOT}/nfs ${COLLECTOR_ADDR}(rw,sync,no_subtree_check,all_squash,anonuid=${store_uid},anongid=${store_gid})"
-grep -qxF "$nfs_line" /etc/exports || echo "$nfs_line" >>/etc/exports
+# Its own exports file, rewritten on every run.
+install -d /etc/exports.d
+echo "${STORE_ROOT}/nfs ${COLLECTOR_ADDR}(rw,sync,no_subtree_check,all_squash,anonuid=${store_uid},anongid=${store_gid})" \
+  >/etc/exports.d/cartio.exports
 exportfs -ra
 systemctl enable --now nfs-server >/dev/null
 

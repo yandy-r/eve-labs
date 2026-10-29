@@ -305,6 +305,7 @@ end
 config authentication rule
     edit "cartio-proxy-basic"
         set srcaddr "coll-a"
+        set dstaddr "ctrl"
         set ip-based disable
         set active-auth-method "cartio-basic"
     next
