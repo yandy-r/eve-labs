@@ -80,7 +80,7 @@
       "id": "services/dns:1.0.0.1",
       "group": "E Services",
       "kind": "host",
-      "prompt": "DNS 1.0.0.1 (fortios sidecar x1, linuxsh startup x2)",
+      "prompt": "DNS 1.0.0.1 (fortios sidecar x2, linuxsh startup x3)",
       "current": "1.0.0.1",
       "default": "1.0.0.1",
       "default_source": "keep",
@@ -97,7 +97,7 @@
       "id": "services/dns:1.1.1.1",
       "group": "E Services",
       "kind": "host",
-      "prompt": "DNS 1.1.1.1 (fortios sidecar x1, linuxsh startup x2)",
+      "prompt": "DNS 1.1.1.1 (fortios sidecar x2, linuxsh startup x3)",
       "current": "1.1.1.1",
       "default": "1.1.1.1",
       "default_source": "keep",
@@ -114,7 +114,7 @@
       "id": "services/domain:netlab.local",
       "group": "E Services",
       "kind": "domain",
-      "prompt": "domain netlab.local (ios startup x2, iosxe startup x1, linuxsh startup x2)",
+      "prompt": "domain netlab.local (ios startup x4, iosxe startup x2, linuxsh startup x3)",
       "current": "netlab.local",
       "default": "netlab.local",
       "default_source": "keep",
@@ -131,12 +131,13 @@
       "id": "secrets/placeholders",
       "group": "H Secrets",
       "kind": "choice",
-      "prompt": "committed cleartext secrets (enable x3, snmp x1, user x3): replace with CHANGE-ME-<name>?",
+      "prompt": "committed cleartext secrets (enable x6, psk x2, snmp x1, user x6): replace with CHANGE-ME-<name>?",
       "current": null,
       "default": "none",
       "default_source": "keep",
       "choices": [
         "none",
+        "psk",
         "all"
       ],
       "depends_on": [],
@@ -183,21 +184,72 @@
       "refs": [
         "node:4"
       ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 8: 2 committed secret(s)",
+      "refs": [
+        "node:8"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 9: 2 committed secret(s)",
+      "refs": [
+        "node:9"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 10: 2 committed secret(s)",
+      "refs": [
+        "node:10"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "sidecar:cartio_test_lab_cfgs/2_fgt-a.txt node 2: 1 committed secret(s)",
+      "refs": [
+        "node:2"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "sidecar:cartio_test_lab_cfgs/7_fgt-b.txt node 7: 1 committed secret(s)",
+      "refs": [
+        "node:7"
+      ]
     }
   ],
   "protected": {
     "vlans": {
-      "startup": "10,20,1002-1005"
+      "startup": "10,20,110,120,130,1002-1005"
     },
     "prefixes": [
       "172.30.0.0/16",
       "172.30.0.0/30",
       "172.30.10.0/24",
+      "172.30.100.0/30",
+      "172.30.100.4/30",
+      "172.30.110.0/24",
+      "172.30.120.0/24",
+      "172.30.130.0/24",
       "172.30.20.0/24",
+      "172.30.254.1/32",
+      "172.30.254.2/32",
       "172.30.255.1/32",
+      "172.30.255.11/32",
+      "172.30.255.12/32",
+      "192.0.2.0/24",
       "198.51.100.0/24",
       "198.51.100.0/30",
       "198.51.100.254/32",
+      "198.51.100.4/30",
       "203.0.113.0/24"
     ],
     "lookalikes": {}

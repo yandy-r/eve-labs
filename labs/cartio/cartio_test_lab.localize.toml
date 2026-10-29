@@ -6,7 +6,7 @@ lab = "cartio_test_lab.unl"
 lab_id = "2bb3bef5-1352-42cd-be04-bd9110f5f2d1"
 generated = "eve-localize 0.1.0 discover --update"
 sidecar_dirs = ["cartio_test_lab_cfgs"]
-protect = ["172.30.0.0/16", "198.51.100.0/24", "203.0.113.0/24"]
+protect = ["172.30.0.0/16", "192.0.2.0/24", "198.51.100.0/24", "203.0.113.0/24"]
 
 [[segment]]
 key = "MGMT-LAN"
@@ -28,7 +28,7 @@ kind = "ipv4_list"
 site_key = "site.dns_public"
 group = "basic"
 baseline = ["1.1.1.1", "1.0.0.1"]
-expect = 6
+expect = 10
 
 [[param]]
 key = "domain"
@@ -36,4 +36,4 @@ kind = "domain"
 site_key = "site.domain"
 group = "basic"
 baseline = ["netlab.local"]
-expect = 5
+expect = 9
