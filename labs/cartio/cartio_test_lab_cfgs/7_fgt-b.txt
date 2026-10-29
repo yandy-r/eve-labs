@@ -8,6 +8,8 @@
 # eBGP over it. VDOM guest: port3 to sw-b VLAN 130, isolated from root, so the driver must keep the
 # two VDOMs' data apart.
 # Deliberately failing checks: HTTP admin access on port2 and no syslog server.
+# ADR-0009: lan-to-wan has no SSL inspection profile, so coll-b reaches ctrl on an uninspected path
+# (the baseline for the deep-inspection and proxy runs through fgt-a).
 # LLDP: receive only on port2 (transmit off), so the rtr-b link is seen from one side.
 # The read-only SSH admin, the API key and the SNMPv3 user are added after first boot
 # (labs/cartio/README.md), so no collector credential lives in this file.
