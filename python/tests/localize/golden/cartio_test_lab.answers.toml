@@ -1,0 +1,14 @@
+# Synthetic "site B" answers (golden round-trip, design section 14 item 8).
+schema = 1
+site = "site-b"
+
+[segments."cartio.mgmt"]
+bridge = "pnet4"
+label = "Mgmt-B"
+
+[map.dns]
+"1.1.1.1" = "192.0.2.53"
+"1.0.0.1" = "192.0.2.54"
+
+[map.domain]
+"netlab.local" = "lab-b.example"
