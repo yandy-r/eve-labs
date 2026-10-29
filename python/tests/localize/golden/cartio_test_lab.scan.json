@@ -1,0 +1,205 @@
+{
+  "lab": "labs/cartio/cartio_test_lab.unl",
+  "lab_id": "2bb3bef5-1352-42cd-be04-bd9110f5f2d1",
+  "pinned": true,
+  "manifest": true,
+  "nothing_to_localize": false,
+  "segments": [
+    {
+      "key": "MGMT-LAN",
+      "site_key": "cartio.mgmt",
+      "role": "mgmt",
+      "status": "DHCP",
+      "networks": [
+        "1"
+      ],
+      "bridge": "pnet0",
+      "labels": {
+        "1": "Mgmt-LAN"
+      },
+      "carries": [],
+      "schemes": [
+        {
+          "tag": "untagged",
+          "subnet": null,
+          "gateway": null,
+          "scopes": [
+            "startup"
+          ],
+          "members": 1,
+          "outliers": 0
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "cartio.mgmt/bridge",
+      "group": "A Clouds",
+      "kind": "bridge",
+      "prompt": "MGMT-LAN bridge",
+      "current": "pnet0",
+      "default": "pnet0",
+      "default_source": "keep",
+      "choices": [
+        "pnet0"
+      ],
+      "depends_on": [],
+      "affects": 0,
+      "segment": "MGMT-LAN",
+      "scenario": "bridge",
+      "notes": [
+        "the target bridge must provide DHCP"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "cartio.mgmt/label",
+      "group": "D Labels",
+      "kind": "label",
+      "prompt": "Mgmt-LAN (1 network)",
+      "current": "Mgmt-LAN",
+      "default": "Mgmt-LAN",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "cartio.mgmt/vlan",
+        "cartio.mgmt/subnet"
+      ],
+      "affects": 1,
+      "segment": "MGMT-LAN",
+      "scenario": "labels",
+      "notes": [
+        "0 text reference(s) follow the label"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "services/dns:1.0.0.1",
+      "group": "E Services",
+      "kind": "host",
+      "prompt": "DNS 1.0.0.1 (fortios sidecar x1, linuxsh startup x2)",
+      "current": "1.0.0.1",
+      "default": "1.0.0.1",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [],
+      "affects": 0,
+      "segment": null,
+      "scenario": "services",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "services/dns:1.1.1.1",
+      "group": "E Services",
+      "kind": "host",
+      "prompt": "DNS 1.1.1.1 (fortios sidecar x1, linuxsh startup x2)",
+      "current": "1.1.1.1",
+      "default": "1.1.1.1",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [],
+      "affects": 0,
+      "segment": null,
+      "scenario": "services",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "services/domain:netlab.local",
+      "group": "E Services",
+      "kind": "domain",
+      "prompt": "domain netlab.local (ios startup x2, iosxe startup x1, linuxsh startup x2)",
+      "current": "netlab.local",
+      "default": "netlab.local",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [],
+      "affects": 0,
+      "segment": null,
+      "scenario": "services",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "secrets/placeholders",
+      "group": "H Secrets",
+      "kind": "choice",
+      "prompt": "committed cleartext secrets (enable x3, snmp x1, user x3): replace with CHANGE-ME-<name>?",
+      "current": null,
+      "default": "none",
+      "default_source": "keep",
+      "choices": [
+        "none",
+        "all"
+      ],
+      "depends_on": [],
+      "affects": 0,
+      "segment": null,
+      "scenario": "secrets",
+      "notes": [
+        "the old value remains in git history; rotate it wherever it is used"
+      ],
+      "answered": false,
+      "answer": null
+    }
+  ],
+  "findings": [
+    {
+      "code": "DHCP_UPLINK",
+      "severity": "info",
+      "msg": "segment MGMT-LAN: DHCP uplink on isp; the target bridge must provide DHCP",
+      "refs": [
+        "segment:MGMT-LAN",
+        "node:1"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 1: 2 committed secret(s)",
+      "refs": [
+        "node:1"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 3: 2 committed secret(s)",
+      "refs": [
+        "node:3"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 4: 3 committed secret(s)",
+      "refs": [
+        "node:4"
+      ]
+    }
+  ],
+  "protected": {
+    "vlans": {
+      "startup": "10,20,1002-1005"
+    },
+    "prefixes": [
+      "172.30.0.0/16",
+      "172.30.0.0/30",
+      "172.30.10.0/24",
+      "172.30.20.0/24",
+      "172.30.255.1/32",
+      "198.51.100.0/24",
+      "198.51.100.0/30",
+      "198.51.100.254/32",
+      "203.0.113.0/24"
+    ],
+    "lookalikes": {}
+  }
+}

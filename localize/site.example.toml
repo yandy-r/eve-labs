@@ -3,6 +3,10 @@
 schema = 1
 site = "example"
 
+[segments."cartio.mgmt"]
+bridge = "pnet0"
+label = "Mgmt-LAN"
+
 [segments."site.sdwan_ctrl"]
 bridge = "pnet0"
 label = "Net"
@@ -104,10 +108,6 @@ vlan = 1242
 subnet = "172.31.242.0/24"
 label = "INET-1242"
 
-[map.ntp]
-"34.202.215.187" = "34.202.215.187"
-"pool.ntp.org" = "pool.ntp.org"
-
 [map.dns]
 "1.1.1.1" = "1.1.1.1"
 "1.0.0.1" = "1.0.0.1"
@@ -117,11 +117,15 @@ label = "INET-1242"
 "10.25.0.52" = "10.25.0.52"
 "10.100.51.11" = "10.100.51.11"
 
-[map.probe]
-"1.1.1.1" = "1.1.1.1"
-"8.8.8.8" = "8.8.8.8"
-
 [map.domain]
 "netlab.local" = "netlab.local"
 "plsnetlab.local" = "plsnetlab.local"
 "yandy.dev" = "yandy.dev"
+
+[map.ntp]
+"34.202.215.187" = "34.202.215.187"
+"pool.ntp.org" = "pool.ntp.org"
+
+[map.probe]
+"1.1.1.1" = "1.1.1.1"
+"8.8.8.8" = "8.8.8.8"
