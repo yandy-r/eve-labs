@@ -11,6 +11,7 @@ readonly LAB_PASSWORD="admin123"
 readonly KEYRINGS=/etc/apt/keyrings
 # shellcheck disable=SC2034  # used by the scripts that source this file
 CODENAME="$(. /etc/os-release && echo "$VERSION_CODENAME")"
+# shellcheck disable=SC2034
 readonly CODENAME
 
 log() { printf '\n--> %s\n' "$*"; }
