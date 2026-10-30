@@ -21,7 +21,7 @@ Setup script for the store: `scripts/store-b-setup.sh`.
 | acc-a   | `viosl2-adventerprisek9-m.ssa.high_iron_20200929` | 1 / 1 GB   | Classic IOS driver, CDP and LLDP, failing checks (Telnet, v2c `public`, no NTP or syslog) |
 | srv-a   | `eve-server-yr:latest` (docker)                   | 1 / 1 GB   | SNMP-only device (net-snmp with lldpd over AgentX), syslog server for the lab             |
 | coll-a  | `eve-server-yr:latest` (docker)                   | 2 / 4 GB   | Site A collector host; its only way out is through fgt-a                                  |
-| fgt-b   | `fortinet-FGT-v7-build2463`                       | 2 / 2 GB   | Older FortiOS (drift), multi-VDOM (root and guest), IPsec, failing checks                 |
+| fgt-b   | `fortinet-FGT-v7-build2463`                       | 2 / 2 GB   | Older FortiOS (drift), guest segment in its own VRF, IPsec, failing checks                |
 | rtr-b   | `c8000v-17.15.01a`                                | 1 / 4 GB   | Same model as core-a on a newer release (drift), OSPF and EIGRP, inconsistent NTP         |
 | leg-b   | `vios-adventerprisek9-m.spa.159-3.m6`             | 1 / 1 GB   | EIGRP neighbor, old IOS release for the EoL check                                         |
 | sw-b    | `viosl2-adventerprisek9-m.ssa.high_iron_20200929` | 1 / 1 GB   | Site B access switch, passing checks                                                      |
@@ -49,7 +49,7 @@ About 39 GB of RAM in total.
 | Site B mgmt VLAN 110    | 172.30.110.0/24 | rtr-b .1, sw-b .11                           |
 | Site B servers VLAN 120 | 172.30.120.0/24 | rtr-b .1, srv-b .21, coll-b .50, store-b .60 |
 | CLOUD (controller)      | 203.0.113.0/24  | isp .1, ctrl .10                             |
-| Site B guest VLAN 130   | 172.30.130.0/24 | fgt-b port3 .1 (guest VDOM, isolated)        |
+| Site B guest VLAN 130   | 172.30.130.0/24 | fgt-b port3 .1 (guest VRF 130, isolated)     |
 | FortiGate OOB mgmt      | 172.31.240.0/24 | gateway .1, fgt-a .11, fgt-b .12             |
 | Loopbacks               | 172.30.255.0/24 | core-a .1, rtr-b .11, leg-b .12              |
 
@@ -83,8 +83,7 @@ the `mgmt-lan` address, the API trusthosts and the `cartio-ro` admin's trusthost
 2. On each FortiGate, set the admin password at the console prompt and paste the first section of
    its file from `cartio_test_lab_cfgs/` (out-of-band management: port8 VLAN 1240 on the pnet2
    trunk, `https://172.31.240.11` for fgt-a, `.12` for fgt-b). Upload the VM license over that
-   address, then paste the rest section by section. fgt-b logs you out after it switches to
-   multi-VDOM mode; log back in and continue with the next section.
+   address, then paste the rest section by section.
 3. On isp, core-a, acc-a, rtr-b, leg-b and sw-b, generate SSH keys once:
    `crypto key generate rsa modulus 2048`, then `write memory`.
 4. Check the tunnel: `get vpn ipsec tunnel summary` and `get router info bgp summary` on either
@@ -133,29 +132,26 @@ end
 ```
 
 ```text
-# fgt-b (FortiOS, multi-VDOM): the same, from the global context, with access to both VDOMs
-config global
-    config system admin
-        edit "cartio-ro"
-            set accprofile "cartio-ro"
-            set vdom "root" "guest"
-            set password <from password manager>
-            set trusthost1 172.30.120.0 255.255.255.0
-            set trusthost2 172.30.20.0 255.255.255.0
-            set trusthost3 10.100.51.0 255.255.255.0
-        next
-    end
-    execute api-user generate-key cartio-ro-api
-    config system snmp user
-        edit "cartio-snmp"
-            set security-level auth-priv
-            set auth-proto sha256
-            set auth-pwd <auth>
-            set priv-proto aes256
-            set priv-pwd <priv>
-            set notify-hosts 172.30.120.50
-        next
-    end
+# fgt-b (FortiOS): the same, with site B's trusthosts first and coll-b for SNMP notifications
+config system admin
+    edit "cartio-ro"
+        set accprofile "cartio-ro"
+        set password <from password manager>
+        set trusthost1 172.30.120.0 255.255.255.0
+        set trusthost2 172.30.20.0 255.255.255.0
+        set trusthost3 10.100.51.0 255.255.255.0
+    next
+end
+execute api-user generate-key cartio-ro-api
+config system snmp user
+    edit "cartio-snmp"
+        set security-level auth-priv
+        set auth-proto sha256
+        set auth-pwd <auth>
+        set priv-proto aes256
+        set priv-pwd <priv>
+        set notify-hosts 172.30.120.50
+    next
 end
 ```
 
@@ -237,8 +233,10 @@ inconsistency. acc-a, isp and leg-b fail EoL only if the EoL data file lists the
   and both FortiGates are seen by both collectors and must merge into one record each.
 - **One-sided links (YAN-1663):** srv-b sends no LLDP to sw-b, and fgt-b receives LLDP from rtr-b
   but sends none.
-- **Multi-VDOM (YAN-1657):** fgt-b's guest VDOM holds port3 and its own policy; nothing from it
-  should appear in root's data or the reverse.
+- **Multi-VRF (YAN-1657):** fgt-b is a single VDOM with three VRFs: 0 (lab), 130 (guest, port3)
+  and 240 (out-of-band management). The guest routes must stay apart from VRF 0's, and VRF 240's
+  default must not be reported as the unit's default route. fgt-b's license covers one VDOM, so
+  the original multi-VDOM test needs a unit with a VDOM license.
 - **On-site store (YAN-1670):** onboard a test customer as On site with site B's collector. Start a
   capture on ctrl first (`tcpdump -i <nic> -w ctrl-onsite.pcap host 172.30.120.50`) and leave it
   running while you run a job once with the PostgreSQL store and once with the folder store (SMB,

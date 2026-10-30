@@ -3,10 +3,10 @@
 # Paste section by section, in order (each section only references objects created above it).
 # Lines starting with # are comments.
 #
-# Role: site B edge in multi-VDOM mode. VDOM root: port1 = WAN to isp (eBGP AS 65020 to AS 64500),
-# port2 = LAN to rtr-b (OSPF area 0, default originated), IPsec tunnel "to-site-a" to fgt-a with
-# eBGP over it. VDOM guest: port3 to sw-b VLAN 130, isolated from root, so the driver must keep the
-# two VDOMs' data apart. port8 VLAN 1240 = out-of-band management (VRF 240, root).
+# Role: site B edge, single VDOM with three VRFs. VRF 0: port1 = WAN to isp (eBGP AS 65020 to
+# AS 64500), port2 = LAN to rtr-b (OSPF area 0, default originated), IPsec tunnel "to-site-a" to
+# fgt-a with eBGP over it. VRF 130: port3 to sw-b VLAN 130, the isolated guest segment, so the
+# driver must keep the two VRFs' routes apart. VRF 240: port8 VLAN 1240 = out-of-band management.
 # Deliberately failing checks: HTTP admin access on port2 and no syslog server.
 # ADR-0009: lan-to-wan has no SSL inspection profile, so coll-b reaches ctrl on an uninspected path
 # (the baseline for the deep-inspection and proxy runs through fgt-a).
@@ -19,10 +19,6 @@
 # port8 is on the pnet2 trunk; VLAN 1240 is the management subnet. VRF 240 keeps this default
 # route out of the main table (VRF 0), so the BGP default from isp still carries lab traffic.
 # FortiGuard (licensing) and DNS are pinned to this interface. No firewall policy uses it.
-# Written for a fresh unit, still in single-VDOM mode: the interface and route stay in VDOM root
-# when the next section switches to multi-VDOM. On a unit already in multi-VDOM mode, wrap the
-# interface, fortiguard and dns blocks in "config global" and the static route in
-# "config vdom / edit root".
 config system interface
     edit "port8"
         set alias "mgmt-trunk"
@@ -56,266 +52,243 @@ config system dns
     set interface "mgmt-1240"
 end
 
-#### system / VDOM mode
+#### system / management (NTP; no syslog, deliberately)
 config system global
     set hostname "fgt-b"
     set admintimeout 30
     set admin-https-redirect disable
     set lldp-transmission enable
     set lldp-reception enable
-    set vdom-mode multi-vdom
 end
-# FortiOS logs you out after switching VDOM mode. Log back in, then carry on.
-config vdom
-    edit "guest"
+config system dns
+    set primary 1.1.1.1
+    set secondary 1.0.0.1
+end
+config system ntp
+    set ntpsync enable
+    set type custom
+    config ntpserver
+        edit 1
+            set server "198.51.100.254"
+        next
+    end
+end
+
+#### interfaces
+# port3 (guest) is in VRF 130: its connected route never enters VRF 0, so OSPF and BGP don't
+# advertise it and nothing in VRF 0 can route to it (or the reverse).
+config system interface
+    edit "port1"
+        set mode static
+        set ip 198.51.100.6 255.255.255.252
+        set allowaccess ping https ssh
+        set role wan
+        set alias "to-isp"
+        set description "to isp Gi0/2 (eBGP 198.51.100.5)"
+    next
+    edit "port2"
+        set mode static
+        set ip 172.30.100.1 255.255.255.252
+        set allowaccess ping http https ssh snmp
+        set role lan
+        set alias "to-rtr-b"
+        set description "to rtr-b Gi1 (OSPF area 0)"
+        set device-identification enable
+        set lldp-reception enable
+        set lldp-transmission disable
+    next
+    edit "port3"
+        set vrf 130
+        set mode static
+        set ip 172.30.130.1 255.255.255.0
+        set allowaccess ping
+        set role lan
+        set alias "guest-lan"
+        set description "to sw-b Gi0/3 (VLAN 130, guest VRF 130)"
     next
 end
 
-#### global: DNS, NTP, interfaces, read-only access, SNMP (no syslog, deliberately)
-config global
-    config system dns
-        set primary 1.1.1.1
-        set secondary 1.0.0.1
-    end
-    config system ntp
-        set ntpsync enable
-        set type custom
-        config ntpserver
-            edit 1
-                set server "198.51.100.254"
-            next
-        end
-    end
-    config system interface
-        edit "port1"
-            set vdom "root"
-            set mode static
-            set ip 198.51.100.6 255.255.255.252
-            set allowaccess ping https ssh
-            set role wan
-            set alias "to-isp"
-            set description "to isp Gi0/2 (eBGP 198.51.100.5)"
-        next
-        edit "port2"
-            set vdom "root"
-            set mode static
-            set ip 172.30.100.1 255.255.255.252
-            set allowaccess ping http https ssh snmp
-            set role lan
-            set alias "to-rtr-b"
-            set description "to rtr-b Gi1 (OSPF area 0)"
-            set device-identification enable
-            set lldp-reception enable
-            set lldp-transmission disable
-        next
-        edit "port3"
-            set vdom "guest"
-            set mode static
-            set ip 172.30.130.1 255.255.255.0
-            set allowaccess ping
-            set role lan
-            set alias "guest-lan"
-            set description "to sw-b Gi0/3 (VLAN 130, guest VDOM)"
-        next
-    end
-    config system accprofile
-        edit "cartio-ro"
-            set scope global
-            set secfabgrp read
-            set ftviewgrp read
-            set authgrp read
-            set sysgrp read
-            set netgrp read
-            set loggrp read
-            set fwgrp read
-            set vpngrp read
-            set utmgrp read
-            set wanoptgrp read
-            set wifi read
-        next
-    end
-    config system api-user
-        edit "cartio-ro-api"
-            set comments "Cartio collector, read-only"
-            set accprofile "cartio-ro"
-            set vdom "root" "guest"
-            config trusthost
-                edit 1
-                    set ipv4-trusthost 172.30.120.0 255.255.255.0
-                next
-                edit 2
-                    set ipv4-trusthost 172.30.20.0 255.255.255.0
-                next
-                edit 3
-                    set ipv4-trusthost 10.100.51.0 255.255.255.0
-                next
-            end
-        next
-    end
-    config system snmp sysinfo
-        set status enable
-        set description "Cartio lab site B edge"
-        set contact-info "cartio-lab"
-        set location "site-b"
-    end
-end
-
-#### VDOM root: IPsec tunnel to fgt-a
-# The PSK is a lab placeholder and must match fgt-a.
-config vdom
-    edit "root"
-        config vpn ipsec phase1-interface
-            edit "to-site-a"
-                set interface "port1"
-                set ike-version 2
-                set peertype any
-                set net-device disable
-                set proposal aes256-sha256
-                set dhgrp 20
-                set remote-gw 198.51.100.2
-                set psksecret "cartio-lab-psk"
-            next
-        end
-        config vpn ipsec phase2-interface
-            edit "to-site-a"
-                set phase1name "to-site-a"
-                set proposal aes256-sha256
-                set dhgrp 20
-                set auto-negotiate enable
-            next
-        end
+#### read-only access for the collector (ADR-0003, ADR-0004)
+config system accprofile
+    edit "cartio-ro"
+        set secfabgrp read
+        set ftviewgrp read
+        set authgrp read
+        set sysgrp read
+        set netgrp read
+        set loggrp read
+        set fwgrp read
+        set vpngrp read
+        set utmgrp read
+        set wanoptgrp read
+        set wifi read
     next
 end
-config global
-    config system interface
-        edit "to-site-a"
-            set ip 172.30.254.2 255.255.255.255
-            set remote-ip 172.30.254.1 255.255.255.252
-            set allowaccess ping
-        next
-    end
-end
-
-#### VDOM root: addresses, policies, routing
-# NAT is off: isp NATs the lab to the management LAN, and leaves traffic to it untranslated.
-config vdom
-    edit "root"
-        config firewall address
-            edit "lab-172-30"
-                set subnet 172.30.0.0 255.255.0.0
-            next
-            edit "mgmt-lan"
-                set comment "EVE management LAN (pnet0): engineer laptop, dev controller"
-                set subnet 10.100.51.0 255.255.255.0
-            next
-        end
-        config firewall policy
+config system api-user
+    edit "cartio-ro-api"
+        set comments "Cartio collector, read-only"
+        set accprofile "cartio-ro"
+        set vdom "root"
+        config trusthost
             edit 1
-                set name "lan-to-wan"
-                set srcintf "port2"
-                set dstintf "port1"
-                set action accept
-                set srcaddr "lab-172-30"
-                set dstaddr "all"
-                set schedule "always"
-                set service "ALL"
-                set logtraffic all
+                set ipv4-trusthost 172.30.120.0 255.255.255.0
             next
             edit 2
-                set name "mgmt-lan-to-lab"
-                set srcintf "port1"
-                set dstintf "port2"
-                set action accept
-                set srcaddr "mgmt-lan"
-                set dstaddr "lab-172-30"
-                set schedule "always"
-                set service "PING" "SSH" "HTTPS" "SNMP"
-                set logtraffic all
+                set ipv4-trusthost 172.30.20.0 255.255.255.0
             next
             edit 3
-                set name "site-b-to-site-a"
-                set srcintf "port2"
-                set dstintf "to-site-a"
-                set action accept
-                set srcaddr "lab-172-30"
-                set dstaddr "lab-172-30"
-                set schedule "always"
-                set service "ALL"
-                set logtraffic all
+                set ipv4-trusthost 10.100.51.0 255.255.255.0
             next
-            edit 4
-                set name "site-a-to-site-b"
-                set srcintf "to-site-a"
-                set dstintf "port2"
-                set action accept
-                set srcaddr "lab-172-30"
-                set dstaddr "lab-172-30"
-                set schedule "always"
-                set service "ALL"
-                set logtraffic all
-            next
-        end
-        config router ospf
-            set router-id 172.30.100.1
-            set default-information-originate enable
-            config area
-                edit 0.0.0.0
-                next
-            end
-            config ospf-interface
-                edit "port2"
-                    set interface "port2"
-                    set network-type point-to-point
-                next
-            end
-            config network
-                edit 1
-                    set prefix 172.30.100.0 255.255.255.252
-                next
-            end
-        end
-        config router bgp
-            set as 65020
-            set router-id 172.30.100.1
-            config neighbor
-                edit "198.51.100.5"
-                    set remote-as 64500
-                    set description "isp"
-                next
-                edit "172.30.254.1"
-                    set remote-as 65010
-                    set description "fgt-a over IPsec"
-                next
-            end
-            config redistribute "connected"
-                set status enable
-            end
-            config redistribute "ospf"
-                set status enable
-            end
         end
     next
 end
+config system snmp sysinfo
+    set status enable
+    set description "Cartio lab site B edge"
+    set contact-info "cartio-lab"
+    set location "site-b"
+end
 
-#### VDOM guest: isolated guest segment
-config vdom
-    edit "guest"
-        config firewall address
-            edit "guest-net"
-                set subnet 172.30.130.0 255.255.255.0
-            next
-        end
-        config firewall policy
-            edit 1
-                set name "guest-local"
-                set srcintf "port3"
-                set dstintf "port3"
-                set action accept
-                set srcaddr "guest-net"
-                set dstaddr "guest-net"
-                set schedule "always"
-                set service "PING"
-            next
-        end
+#### IPsec tunnel to fgt-a
+# The PSK is a lab placeholder and must match fgt-a.
+config vpn ipsec phase1-interface
+    edit "to-site-a"
+        set interface "port1"
+        set ike-version 2
+        set peertype any
+        set net-device disable
+        set proposal aes256-sha256
+        set dhgrp 20
+        set remote-gw 198.51.100.2
+        set psksecret "cartio-lab-psk"
     next
+end
+config vpn ipsec phase2-interface
+    edit "to-site-a"
+        set phase1name "to-site-a"
+        set proposal aes256-sha256
+        set dhgrp 20
+        set auto-negotiate enable
+    next
+end
+config system interface
+    edit "to-site-a"
+        set vdom "root"
+        set ip 172.30.254.2 255.255.255.255
+        set remote-ip 172.30.254.1 255.255.255.252
+        set allowaccess ping
+    next
+end
+
+#### addresses and policies
+# NAT is off: isp NATs the lab to the management LAN, and leaves traffic to it untranslated.
+# The guest segment only gets guest-local (port3 to port3); no policy joins it to anything else.
+config firewall address
+    edit "lab-172-30"
+        set subnet 172.30.0.0 255.255.0.0
+    next
+    edit "mgmt-lan"
+        set comment "EVE management LAN (pnet0): engineer laptop, dev controller"
+        set subnet 10.100.51.0 255.255.255.0
+    next
+    edit "guest-net"
+        set subnet 172.30.130.0 255.255.255.0
+    next
+end
+config firewall policy
+    edit 1
+        set name "lan-to-wan"
+        set srcintf "port2"
+        set dstintf "port1"
+        set action accept
+        set srcaddr "lab-172-30"
+        set dstaddr "all"
+        set schedule "always"
+        set service "ALL"
+        set logtraffic all
+    next
+    edit 2
+        set name "mgmt-lan-to-lab"
+        set srcintf "port1"
+        set dstintf "port2"
+        set action accept
+        set srcaddr "mgmt-lan"
+        set dstaddr "lab-172-30"
+        set schedule "always"
+        set service "PING" "SSH" "HTTPS" "SNMP"
+        set logtraffic all
+    next
+    edit 3
+        set name "site-b-to-site-a"
+        set srcintf "port2"
+        set dstintf "to-site-a"
+        set action accept
+        set srcaddr "lab-172-30"
+        set dstaddr "lab-172-30"
+        set schedule "always"
+        set service "ALL"
+        set logtraffic all
+    next
+    edit 4
+        set name "site-a-to-site-b"
+        set srcintf "to-site-a"
+        set dstintf "port2"
+        set action accept
+        set srcaddr "lab-172-30"
+        set dstaddr "lab-172-30"
+        set schedule "always"
+        set service "ALL"
+        set logtraffic all
+    next
+    edit 5
+        set name "guest-local"
+        set srcintf "port3"
+        set dstintf "port3"
+        set action accept
+        set srcaddr "guest-net"
+        set dstaddr "guest-net"
+        set schedule "always"
+        set service "PING"
+    next
+end
+
+#### routing (VRF 0)
+config router ospf
+    set router-id 172.30.100.1
+    set default-information-originate enable
+    config area
+        edit 0.0.0.0
+        next
+    end
+    config ospf-interface
+        edit "port2"
+            set interface "port2"
+            set network-type point-to-point
+        next
+    end
+    config network
+        edit 1
+            set prefix 172.30.100.0 255.255.255.252
+        next
+    end
+end
+config router bgp
+    set as 65020
+    set router-id 172.30.100.1
+    config neighbor
+        edit "198.51.100.5"
+            set remote-as 64500
+            set description "isp"
+        next
+        edit "172.30.254.1"
+            set remote-as 65010
+            set description "fgt-a over IPsec"
+        next
+    end
+    config redistribute "connected"
+        set status enable
+    end
+    config redistribute "ospf"
+        set status enable
+    end
 end
