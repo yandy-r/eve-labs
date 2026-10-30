@@ -6,8 +6,10 @@ export DEBIAN_FRONTEND=noninteractive
 # virt-customize runs commands with a minimal PATH that lacks /usr/local.
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/go/bin"
 readonly LAB_USER="admin"
+# shellcheck disable=SC2034  # used by the scripts that source this file
 readonly LAB_PASSWORD="admin123"
 readonly KEYRINGS=/etc/apt/keyrings
+# shellcheck disable=SC2034  # used by the scripts that source this file
 CODENAME="$(. /etc/os-release && echo "$VERSION_CODENAME")"
 readonly CODENAME
 
