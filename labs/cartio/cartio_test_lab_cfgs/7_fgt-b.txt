@@ -283,6 +283,8 @@ config router bgp
         edit "172.30.254.1"
             set remote-as 65010
             set description "fgt-a over IPsec"
+            set interface "to-site-a"
+            set update-source "to-site-a"
         next
     end
     config redistribute "connected"
