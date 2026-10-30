@@ -1,0 +1,20 @@
+# store-b — Cartio lab, site B on-site store (VLAN 120, 172.30.120.0/24, gateway rtr-b .1)
+# Netplan for the Ubuntu server images (22.04 now, 24.04 later). Install as
+# /etc/netplan/99-cartio.yaml (mode 0600), then `sudo netplan apply`.
+# dhcp4: false overrides the DHCP that the image's own netplan file turns on for the same NIC,
+# so that file can stay in place.
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    ens3:
+      dhcp4: false
+      dhcp6: false
+      addresses:
+        - 172.30.120.60/24
+      routes:
+        - to: default
+          via: 172.30.120.1
+      nameservers:
+        addresses:
+          - 1.1.1.1

@@ -6,7 +6,7 @@
 # Role: site B edge in multi-VDOM mode. VDOM root: port1 = WAN to isp (eBGP AS 65020 to AS 64500),
 # port2 = LAN to rtr-b (OSPF area 0, default originated), IPsec tunnel "to-site-a" to fgt-a with
 # eBGP over it. VDOM guest: port3 to sw-b VLAN 130, isolated from root, so the driver must keep the
-# two VDOMs' data apart.
+# two VDOMs' data apart. port8 VLAN 1240 = out-of-band management (VRF 240, root).
 # Deliberately failing checks: HTTP admin access on port2 and no syslog server.
 # ADR-0009: lan-to-wan has no SSL inspection profile, so coll-b reaches ctrl on an uninspected path
 # (the baseline for the deep-inspection and proxy runs through fgt-a).
@@ -14,6 +14,47 @@
 # The read-only SSH admin, the API key and the SNMPv3 user are added after first boot
 # (labs/cartio/README.md), so no collector credential lives in this file.
 #
+
+#### out-of-band management: port8 VLAN 1240 in VRF 240 (paste first, then upload the license)
+# port8 is on the pnet2 trunk; VLAN 1240 is the management subnet. VRF 240 keeps this default
+# route out of the main table (VRF 0), so the BGP default from isp still carries lab traffic.
+# FortiGuard (licensing) and DNS are pinned to this interface. No firewall policy uses it.
+# Written for a fresh unit, still in single-VDOM mode: the interface and route stay in VDOM root
+# when the next section switches to multi-VDOM. On a unit already in multi-VDOM mode, wrap the
+# interface, fortiguard and dns blocks in "config global" and the static route in
+# "config vdom / edit root".
+config system interface
+    edit "port8"
+        set alias "mgmt-trunk"
+        set description "pnet2 trunk, carries VLAN 1240 (out-of-band management)"
+    next
+    edit "mgmt-1240"
+        set vdom "root"
+        set interface "port8"
+        set vlanid 1240
+        set vrf 240
+        set mode static
+        set ip 172.31.240.12 255.255.255.0
+        set allowaccess ping https ssh
+        set alias "oob-mgmt"
+        set description "out-of-band management, VRF 240"
+    next
+end
+config router static
+    edit 240
+        set gateway 172.31.240.1
+        set device "mgmt-1240"
+        set comment "out-of-band management default (VRF 240 via mgmt-1240)"
+    next
+end
+config system fortiguard
+    set interface-select-method specify
+    set interface "mgmt-1240"
+end
+config system dns
+    set interface-select-method specify
+    set interface "mgmt-1240"
+end
 
 #### system / VDOM mode
 config system global

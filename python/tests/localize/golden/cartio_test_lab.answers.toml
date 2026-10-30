@@ -12,3 +12,10 @@ label = "Mgmt-B"
 
 [map.domain]
 "netlab.local" = "lab-b.example"
+
+[segments."cartio.oob_mgmt"]
+bridge = "pnet6"
+vlan = 1250
+subnet = "10.61.250.0/24"
+gateway = "10.61.250.254"
+label = "mgmt-1250"

@@ -30,6 +30,34 @@
           "outliers": 0
         }
       ]
+    },
+    {
+      "key": "MGMT-1240",
+      "site_key": "cartio.oob_mgmt",
+      "role": "mgmt",
+      "status": "CONFIGURABLE",
+      "networks": [
+        "16",
+        "17"
+      ],
+      "bridge": "pnet2",
+      "labels": {
+        "16": "mgmt-1240",
+        "17": "mgmt-1240"
+      },
+      "carries": [],
+      "schemes": [
+        {
+          "tag": 1240,
+          "subnet": "172.31.240.0/24",
+          "gateway": "172.31.240.1",
+          "scopes": [
+            "startup"
+          ],
+          "members": 6,
+          "outliers": 0
+        }
+      ]
     }
   ],
   "questions": [
@@ -55,6 +83,80 @@
       "answer": null
     },
     {
+      "id": "cartio.oob_mgmt/bridge",
+      "group": "A Clouds",
+      "kind": "bridge",
+      "prompt": "MGMT-1240 bridge",
+      "current": "pnet2",
+      "default": "pnet2",
+      "default_source": "keep",
+      "choices": [
+        "pnet2"
+      ],
+      "depends_on": [],
+      "affects": 0,
+      "segment": "MGMT-1240",
+      "scenario": "bridge",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "cartio.oob_mgmt/vlan",
+      "group": "B VLAN tags",
+      "kind": "vlan",
+      "prompt": "MGMT-1240 tag 1240",
+      "current": "1240",
+      "default": "1240",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [],
+      "affects": 2,
+      "segment": "MGMT-1240",
+      "scenario": "segment_l2",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "cartio.oob_mgmt/subnet",
+      "group": "C Addressing",
+      "kind": "cidr",
+      "prompt": "MGMT-1240 subnet 172.31.240.0/24",
+      "current": "172.31.240.0/24",
+      "default": "172.31.240.0/24",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [],
+      "affects": 4,
+      "segment": "MGMT-1240",
+      "scenario": "segment_l3",
+      "notes": [
+        "3 baseline host(s)"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "cartio.oob_mgmt/gateway",
+      "group": "C Addressing",
+      "kind": "ip",
+      "prompt": "MGMT-1240 gateway 172.31.240.1",
+      "current": "172.31.240.1",
+      "default": "172.31.240.1",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "cartio.oob_mgmt/subnet"
+      ],
+      "affects": 2,
+      "segment": "MGMT-1240",
+      "scenario": "segment_l3",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
       "id": "cartio.mgmt/label",
       "group": "D Labels",
       "kind": "label",
@@ -72,6 +174,28 @@
       "scenario": "labels",
       "notes": [
         "0 text reference(s) follow the label"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "cartio.oob_mgmt/label",
+      "group": "D Labels",
+      "kind": "label",
+      "prompt": "mgmt-1240 (2 networks)",
+      "current": "mgmt-1240",
+      "default": "mgmt-1240",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "cartio.oob_mgmt/vlan",
+        "cartio.oob_mgmt/subnet"
+      ],
+      "affects": 4,
+      "segment": "MGMT-1240",
+      "scenario": "labels",
+      "notes": [
+        "2 text reference(s) follow the label"
       ],
       "answered": false,
       "answer": null

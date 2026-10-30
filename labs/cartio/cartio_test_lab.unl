@@ -12,6 +12,7 @@
       <node id="2" name="fgt-a" type="qemu" template="fortinet" image="fortinet-FGT-v7-build3744" console="telnet" cpu="2" cpulimit="0" ram="2048" ethernet="8" uuid="0663761e-48f2-53a6-be93-8729d58290e6" firstmac="50:01:00:02:00:00" qemu_options="-machine type=pc,accel=kvm -serial mon:stdio -nographic -no-user-config -nodefaults -display none -vga std -rtc base=utc" qemu_version="4.1.0" qemu_arch="x86_64" qemu_nic="virtio-net-pci" delay="0" sat="0" icon="Forti_FGT.png" width="0" config="0" left="295" top="452">
         <interface id="0" name="port1" type="ethernet" network_id="2" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
         <interface id="1" name="port2" type="ethernet" network_id="3" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+        <interface id="7" name="port8" type="ethernet" network_id="16" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
       </node>
       <node id="3" name="core-a" type="qemu" template="c8000v" image="c8000v-17.11.01a" console="telnet" cpu="1" cpulimit="0" ram="4096" ethernet="4" uuid="8b717295-9b35-5777-b808-3960c1b36104" firstmac="50:01:00:03:00:00" qemu_options="-machine type=pc,accel=kvm -cpu host -serial mon:stdio -nographic -no-user-config -nodefaults -rtc base=utc" qemu_version="4.1.0" qemu_arch="x86_64" qemu_nic="vmxnet3" delay="0" sat="-1" icon="CSRv1000.png" width="0" config="1" left="298" top="608">
         <interface id="0" name="Gi1" type="ethernet" network_id="3" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
@@ -32,6 +33,7 @@
         <interface id="0" name="port1" type="ethernet" network_id="7" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
         <interface id="1" name="port2" type="ethernet" network_id="8" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
         <interface id="2" name="port3" type="ethernet" network_id="13" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+        <interface id="7" name="port8" type="ethernet" network_id="17" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
       </node>
       <node id="8" name="rtr-b" type="qemu" template="c8000v" image="c8000v-17.15.01a" console="telnet" cpu="1" cpulimit="0" ram="4096" ethernet="4" uuid="430ab2d0-7ec9-588e-be26-96d36b6cfe1a" firstmac="50:01:00:08:00:00" qemu_options="-machine type=pc,accel=kvm -cpu host -serial mon:stdio -nographic -no-user-config -nodefaults -rtc base=utc" qemu_version="4.1.0" qemu_arch="x86_64" qemu_nic="vmxnet3" delay="0" sat="-1" icon="CSRv1000.png" width="0" config="1" left="743" top="593">
         <interface id="0" name="Gi1" type="ethernet" network_id="8" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
@@ -77,6 +79,8 @@
       <network id="13" smart="0" native_vlan="1" vlan8021ad="0" type="bridge" name="Net-fgt-b-sw-b" left="0" top="0" style="Solid" linkstyle="Straight" color="" label="" visibility="0" icon="lan.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
       <network id="14" smart="0" native_vlan="1" vlan8021ad="0" type="bridge" name="Cloud" left="0" top="0" style="Solid" linkstyle="Straight" color="" label="" visibility="0" icon="lan.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
       <network id="15" smart="0" native_vlan="1" vlan8021ad="0" type="bridge" name="Net-sw-b-store-b" left="0" top="0" style="Solid" linkstyle="Straight" color="" label="" visibility="0" icon="lan.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="16" smart="-1" native_vlan="1" vlan8021ad="-1" type="pnet2" name="mgmt-1240" left="434" top="466" style="Solid" linkstyle="Straight" color="" label="" visibility="1" icon="01-Cloud-Default.svg" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
+      <network id="17" smart="-1" native_vlan="1" vlan8021ad="-1" type="pnet2" name="mgmt-1240" left="677" top="468" style="Solid" linkstyle="Straight" color="" label="" visibility="1" icon="01-Cloud-Default.svg" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
     </networks>
   </topology>
   <objects>

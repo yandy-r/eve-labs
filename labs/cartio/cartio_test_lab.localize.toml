@@ -22,6 +22,26 @@ label = "Mgmt-LAN"
 [segment.expect]
 label = 1
 
+[[segment]]
+key = "MGMT-1240"
+site_key = "cartio.oob_mgmt"
+role = "mgmt"
+networks = ["16", "17"]
+label_template = "mgmt-{tag}"
+
+[segment.baseline]
+bridge = "pnet2"
+label = "mgmt-1240"
+vlan = 1240
+subnet = "172.31.240.0/24"
+gateway = "172.31.240.1"
+
+[segment.expect]
+label = 4
+vlan = 2
+subnet = 2
+gateway = 2
+
 [[param]]
 key = "dns_public"
 kind = "ipv4_list"
