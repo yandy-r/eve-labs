@@ -316,6 +316,8 @@ config router bgp
         edit "172.30.254.2"
             set remote-as 65020
             set description "fgt-b over IPsec"
+            set interface "to-site-b"
+            set update-source "to-site-b"
         next
     end
 end
