@@ -25,10 +25,10 @@ Setup script for the store: `scripts/store-b-setup.sh`.
 | rtr-b   | `c8000v-17.15.01a`                                | 1 / 4 GB   | Same model as core-a on a newer release (drift), OSPF and EIGRP, inconsistent NTP         |
 | leg-b   | `vios-adventerprisek9-m.spa.159-3.m6`             | 1 / 1 GB   | EIGRP neighbor, old IOS release for the EoL check                                         |
 | sw-b    | `viosl2-adventerprisek9-m.ssa.high_iron_20200929` | 1 / 1 GB   | Site B access switch, passing checks                                                      |
-| srv-b   | `veos-4.30.0F`                                    | 1 / 2 GB   | Second SNMP-only device, a third vendor (Arista); LLDP transmit off, so one-sided link    |
+| srv-b   | `veos-4.36.3M`                                    | 1 / 2 GB   | Second SNMP-only device, a third vendor (Arista); LLDP transmit off, so one-sided link    |
 | coll-b  | `eve-server-yr:latest` (docker)                   | 2 / 4 GB   | Site B collector host, for two collectors producing one merged inventory                  |
-| ctrl    | `linux-ubuntu-22.04.02-server`                    | 4 / 8 GB   | Dev controller on CLOUD, standing in for the hosted controller (ADR-0009 runs)            |
-| store-b | `linux-ubuntu-22.04.02-server`                    | 2 / 4 GB   | On-site store for site B: PostgreSQL, an SMB share and an NFS export (YAN-1670)           |
+| ctrl    | `linux-ubuntu-24.04-server`                       | 4 / 8 GB   | Dev controller on CLOUD, standing in for the hosted controller (ADR-0009 runs)            |
+| store-b | `linux-ubuntu-24.04-server`                       | 2 / 4 GB   | On-site store for site B: PostgreSQL, an SMB share and an NFS export (YAN-1670)           |
 
 About 39 GB of RAM in total.
 
@@ -171,8 +171,8 @@ acc-a keeps only SNMPv2c with community `public` on purpose, for the failing che
 
 ## ctrl and store-b (after first boot)
 
-Both are Ubuntu server VMs (22.04 today, 24.04 once the new images are in) with no startup config.
-Log in on the VNC console with the image's own account, give each its address, then do the rest over
+Both are Ubuntu 24.04 server VMs (`images/linux`) with no startup config.
+Log in on the VNC console as `admin` (password `admin123`), give each its address, then do the rest over
 SSH from the EVE host or your laptop (with the routes above):
 
 ```bash

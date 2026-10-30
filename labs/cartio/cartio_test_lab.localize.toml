@@ -39,7 +39,7 @@ gateway = "172.31.240.1"
 [segment.expect]
 label = 4
 vlan = 2
-subnet = 2
+subnet = 6
 gateway = 2
 
 [[param]]
