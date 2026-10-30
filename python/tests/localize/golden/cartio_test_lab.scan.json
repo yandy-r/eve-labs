@@ -54,7 +54,7 @@
           "scopes": [
             "startup"
           ],
-          "members": 6,
+          "members": 10,
           "outliers": 0
         }
       ]
@@ -128,11 +128,11 @@
       "default_source": "keep",
       "choices": null,
       "depends_on": [],
-      "affects": 4,
+      "affects": 8,
       "segment": "MGMT-1240",
       "scenario": "segment_l3",
       "notes": [
-        "3 baseline host(s)"
+        "4 baseline host(s)"
       ],
       "answered": false,
       "answer": null
