@@ -4,8 +4,23 @@ EVE-NG Pro lab files (`/opt/unetlab/labs` on host `eve`, EVE-NG Pro 7.2).
 
 ## Layout
 
-- `labs/ccie/`, `labs/datacenter/`, `labs/cloud/` – personal labs
+- `labs/ccie/`, `labs/datacenter/`, `labs/cloud/`, `labs/cartio/` – personal labs
 - `Shared/`, `Users/` – EVE default folders
+- [`images/linux/`](images/linux/README.md) – Ubuntu 24.04 server and desktop QEMU images
+  (built on the EVE host; not committed)
+- [`docker/eve-server-yr/`](docker/eve-server-yr/README.md) – headless Ubuntu 24.04 image for EVE docker nodes
+
+## Labs
+
+- [Cartio test lab](labs/cartio/README.md) – collector and driver test network: ISP, two sites,
+  an IPsec tunnel, an in-lab controller, and an on-site store.
+- SD-WAN-only VXLAN EVPN: `labs/datacenter/cisco/vxlan_evpn_multi-site_sdwan_only.unl`,
+  startup config set `sdwan-vxlan-evpn`. FortiGate and BIG-IP nodes have no startup config;
+  paste the files in `labs/datacenter/cisco/vxlan_evpn_multi-site_sdwan_only_cfgs/`. At each DC
+  the internet edge is a CSRv (`c8kv-75` at DC1, `c8kv-77` at DC2) with VRFs `INET-201` and
+  `INET-202`. Each VRF static-NATs the hub IPsec loopback (`10.100.201.31` / `10.100.202.31`
+  on DC1, `.41` on DC2) so spokes still dial those addresses. The FortiGate hub sits behind
+  that CSRv and hands TENANT1 off to the BGWs.
 
 ## Conventions (this host)
 
@@ -105,15 +120,15 @@ bash scripts/install-lefthook.sh   # wire pre-commit / pre-push / commit-msg hoo
 git config commit.template .gitmessage
 ```
 
-| Task            | Command                                                               |
-| --------------- | --------------------------------------------------------------------- |
-| Test            | `make test` — check-labs + `localize-test` + `localize-check`         |
-| Check labs only | `make check-labs` (or `pnpm test`) — `.unl` XML + unique `<lab id>`   |
-| Localize checks | `make localize-check` (manifests) / `make localize-test` (unit tests) |
-| Lint            | `make lint` (or `./scripts/style.sh lint`)                            |
-| Lint, auto-fix  | `make lint-fix`                                                       |
-| Format          | `make format`                                                         |
-| Commit messages | Conventional Commits, enforced by commitlint and PR-title CI          |
+| Task            | Command                                                                                             |
+| --------------- | --------------------------------------------------------------------------------------------------- |
+| Test            | `make test` — check-labs + `localize-test` + `localize-check`                                       |
+| Check labs only | `make check-labs` (or `pnpm test`) — `.unl` XML + unique `<lab id>`                                 |
+| Localize checks | `make localize-check` (manifests) / `make localize-test` (Python unit tests, including eve-analyze) |
+| Lint            | `make lint` (or `./scripts/style.sh lint`)                                                          |
+| Lint, auto-fix  | `make lint-fix`                                                                                     |
+| Format          | `make format`                                                                                       |
+| Commit messages | Conventional Commits, enforced by commitlint and PR-title CI                                        |
 
 CI runs `Lint`, `Test`, and `PR title` on every pull request; `Lint autofix` pushes
 formatting fixes back to same-repo PR branches.

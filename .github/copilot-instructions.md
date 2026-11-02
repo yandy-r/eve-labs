@@ -11,7 +11,7 @@ bash scripts/install-lefthook.sh  # git hooks
 ```
 
 ```bash
-make test                    # validate .unl labs (XML + unique <lab id>); also `pnpm test`
+make test                    # check-labs + Python tests + localize-check (`pnpm test` is check-labs only)
 ```
 
 ```bash
