@@ -255,7 +255,7 @@
       "id": "secrets/placeholders",
       "group": "H Secrets",
       "kind": "choice",
-      "prompt": "committed cleartext secrets (enable x6, psk x2, snmp x1, user x6): replace with CHANGE-ME-<name>?",
+      "prompt": "committed cleartext secrets (psk x2, snmp x1): replace with CHANGE-ME-<name>?",
       "current": null,
       "default": "none",
       "default_source": "keep",
@@ -269,7 +269,8 @@
       "segment": null,
       "scenario": "secrets",
       "notes": [
-        "the old value remains in git history; rotate it wherever it is used"
+        "the old value remains in git history; rotate it wherever it is used",
+        "17 hashed/encrypted value(s) are never replaced"
       ],
       "answered": false,
       "answer": null
@@ -296,7 +297,7 @@
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
-      "msg": "startup:startup node 3: 2 committed secret(s)",
+      "msg": "startup:startup node 3: 3 committed secret(s)",
       "refs": [
         "node:3"
       ]
@@ -304,7 +305,7 @@
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
-      "msg": "startup:startup node 4: 3 committed secret(s)",
+      "msg": "startup:startup node 4: 4 committed secret(s)",
       "refs": [
         "node:4"
       ]
@@ -312,7 +313,7 @@
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
-      "msg": "startup:startup node 8: 2 committed secret(s)",
+      "msg": "startup:startup node 8: 3 committed secret(s)",
       "refs": [
         "node:8"
       ]
@@ -320,7 +321,7 @@
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
-      "msg": "startup:startup node 9: 2 committed secret(s)",
+      "msg": "startup:startup node 9: 3 committed secret(s)",
       "refs": [
         "node:9"
       ]
@@ -328,7 +329,7 @@
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
-      "msg": "startup:startup node 10: 2 committed secret(s)",
+      "msg": "startup:startup node 10: 3 committed secret(s)",
       "refs": [
         "node:10"
       ]
