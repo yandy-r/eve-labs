@@ -4,6 +4,7 @@ site = "site-b"
 
 [segments."cartio.mgmt"]
 bridge = "pnet4"
+subnet = "10.60.51.0/24"
 label = "Mgmt-B"
 
 [map.dns]
