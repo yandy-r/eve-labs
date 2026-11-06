@@ -8,6 +8,8 @@ EVE-NG Pro lab files (`/opt/unetlab/labs` on host `eve`, EVE-NG Pro 7.2).
 - `Shared/`, `Users/` – EVE default folders
 - [`images/linux/`](images/linux/README.md) – Ubuntu 24.04 server and desktop QEMU images
   (built on the EVE host; not committed)
+- [`images/iol/`](images/iol/README.md) – Cisco IOL images from the CML refplat ISO: install
+  steps and the L2 start-abort fix
 - [`docker/eve-server-yr/`](docker/eve-server-yr/README.md) – headless Ubuntu 24.04 image for EVE docker nodes
 
 ## Labs
