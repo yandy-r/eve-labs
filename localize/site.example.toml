@@ -5,6 +5,7 @@ site = "example"
 
 [segments."cartio.mgmt"]
 bridge = "pnet0"
+subnet = "10.100.51.0/24"
 label = "Mgmt-LAN"
 
 [segments."cartio.oob_mgmt"]

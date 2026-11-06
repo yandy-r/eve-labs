@@ -21,12 +21,12 @@
       "schemes": [
         {
           "tag": "untagged",
-          "subnet": null,
+          "subnet": "10.100.51.0/24",
           "gateway": null,
           "scopes": [
             "startup"
           ],
-          "members": 1,
+          "members": 13,
           "outliers": 0
         }
       ]
@@ -204,7 +204,7 @@
       "id": "services/dns:1.0.0.1",
       "group": "E Services",
       "kind": "host",
-      "prompt": "DNS 1.0.0.1 (fortios sidecar x2, linuxsh startup x3)",
+      "prompt": "DNS 1.0.0.1 (fortios sidecar x2, linuxsh startup x1)",
       "current": "1.0.0.1",
       "default": "1.0.0.1",
       "default_source": "keep",
@@ -221,9 +221,43 @@
       "id": "services/dns:1.1.1.1",
       "group": "E Services",
       "kind": "host",
-      "prompt": "DNS 1.1.1.1 (fortios sidecar x2, linuxsh startup x3)",
+      "prompt": "DNS 1.1.1.1 (fortios sidecar x2, linuxsh startup x1)",
       "current": "1.1.1.1",
       "default": "1.1.1.1",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [],
+      "affects": 0,
+      "segment": null,
+      "scenario": "services",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "services/domain:lab.local",
+      "group": "E Services",
+      "kind": "domain",
+      "prompt": "domain lab.local (iosxe startup x1)",
+      "current": "lab.local",
+      "default": "lab.local",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [],
+      "affects": 0,
+      "segment": null,
+      "scenario": "services",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "services/domain:local.lab",
+      "group": "E Services",
+      "kind": "domain",
+      "prompt": "domain local.lab (ios startup x2)",
+      "current": "local.lab",
+      "default": "local.lab",
       "default_source": "keep",
       "choices": null,
       "depends_on": [],
@@ -238,7 +272,7 @@
       "id": "services/domain:netlab.local",
       "group": "E Services",
       "kind": "domain",
-      "prompt": "domain netlab.local (ios startup x4, iosxe startup x2, linuxsh startup x3)",
+      "prompt": "domain netlab.local (ios startup x1, iosxe startup x2, linuxsh startup x1)",
       "current": "netlab.local",
       "default": "netlab.local",
       "default_source": "keep",
@@ -252,10 +286,93 @@
       "answer": null
     },
     {
+      "id": "bgp_upstream/enabled",
+      "group": "G Scenarios",
+      "kind": "bool",
+      "prompt": "Upstream eBGP on isp (peer 10.100.51.1 AS 65299, via MGMT-LAN): localize it?",
+      "current": null,
+      "default": "no",
+      "default_source": "gate (default no)",
+      "choices": [
+        "yes",
+        "no"
+      ],
+      "depends_on": [],
+      "affects": 0,
+      "segment": null,
+      "scenario": "bgp_upstream",
+      "notes": [
+        "replaces a default route toward the home network"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "bgp_upstream/peer:10.100.51.1",
+      "group": "G Scenarios",
+      "kind": "ip",
+      "prompt": "home BGP peer 10.100.51.1 (in MGMT-LAN)",
+      "current": "10.100.51.1",
+      "default": "10.100.51.1",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "bgp_upstream/enabled"
+      ],
+      "affects": 0,
+      "segment": null,
+      "scenario": "bgp_upstream",
+      "notes": [
+        "keeping the current value follows the segment subnet map"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "bgp_upstream/peer_as",
+      "group": "G Scenarios",
+      "kind": "asn",
+      "prompt": "home (peer) AS",
+      "current": "65299",
+      "default": "65299",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "bgp_upstream/enabled"
+      ],
+      "affects": 0,
+      "segment": null,
+      "scenario": "bgp_upstream",
+      "notes": [],
+      "answered": false,
+      "answer": null
+    },
+    {
+      "id": "bgp_upstream/local_as",
+      "group": "G Scenarios",
+      "kind": "asn",
+      "prompt": "lab (local) AS",
+      "current": "64500",
+      "default": "64500",
+      "default_source": "keep",
+      "choices": null,
+      "depends_on": [
+        "bgp_upstream/enabled"
+      ],
+      "affects": 0,
+      "segment": null,
+      "scenario": "bgp_upstream",
+      "notes": [
+        "changed lab-wide; route-map communities follow"
+      ],
+      "answered": false,
+      "answer": null
+    },
+    {
       "id": "secrets/placeholders",
       "group": "H Secrets",
       "kind": "choice",
-      "prompt": "committed cleartext secrets (enable x6, psk x2, snmp x1, user x6): replace with CHANGE-ME-<name>?",
+      "prompt": "committed cleartext secrets (psk x2, snmp x1): replace with CHANGE-ME-<name>?",
       "current": null,
       "default": "none",
       "default_source": "keep",
@@ -269,7 +386,8 @@
       "segment": null,
       "scenario": "secrets",
       "notes": [
-        "the old value remains in git history; rotate it wherever it is used"
+        "the old value remains in git history; rotate it wherever it is used",
+        "18 hashed/encrypted value(s) are never replaced"
       ],
       "answered": false,
       "answer": null
@@ -279,24 +397,15 @@
     {
       "code": "DHCP_UPLINK",
       "severity": "info",
-      "msg": "segment MGMT-LAN: DHCP uplink on isp; the target bridge must provide DHCP",
+      "msg": "segment MGMT-LAN: DHCP uplink on ; the target bridge must provide DHCP",
       "refs": [
-        "segment:MGMT-LAN",
-        "node:1"
+        "segment:MGMT-LAN"
       ]
     },
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
-      "msg": "startup:startup node 1: 2 committed secret(s)",
-      "refs": [
-        "node:1"
-      ]
-    },
-    {
-      "code": "SECRET_COMMITTED",
-      "severity": "warn",
-      "msg": "startup:startup node 3: 2 committed secret(s)",
+      "msg": "startup:startup node 3: 4 committed secret(s)",
       "refs": [
         "node:3"
       ]
@@ -304,7 +413,7 @@
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
-      "msg": "startup:startup node 4: 3 committed secret(s)",
+      "msg": "startup:startup node 4: 4 committed secret(s)",
       "refs": [
         "node:4"
       ]
@@ -312,7 +421,7 @@
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
-      "msg": "startup:startup node 8: 2 committed secret(s)",
+      "msg": "startup:startup node 8: 3 committed secret(s)",
       "refs": [
         "node:8"
       ]
@@ -320,7 +429,15 @@
     {
       "code": "SECRET_COMMITTED",
       "severity": "warn",
-      "msg": "startup:startup node 9: 2 committed secret(s)",
+      "msg": "startup:startup node 15: 3 committed secret(s)",
+      "refs": [
+        "node:15"
+      ]
+    },
+    {
+      "code": "SECRET_COMMITTED",
+      "severity": "warn",
+      "msg": "startup:startup node 9: 3 committed secret(s)",
       "refs": [
         "node:9"
       ]
@@ -364,6 +481,7 @@
       "172.30.120.0/24",
       "172.30.130.0/24",
       "172.30.20.0/24",
+      "172.30.20.50/32",
       "172.30.254.1/32",
       "172.30.254.2/32",
       "172.30.255.1/32",
@@ -374,7 +492,8 @@
       "198.51.100.0/30",
       "198.51.100.254/32",
       "198.51.100.4/30",
-      "203.0.113.0/24"
+      "203.0.113.0/24",
+      "203.0.113.10/32"
     ],
     "lookalikes": {}
   }

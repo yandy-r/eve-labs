@@ -1,7 +1,13 @@
 # eve-server-yr
 
-Headless, prod-like Ubuntu 24.04 server image for EVE-NG docker nodes. It's the image the
-`*-srv*` and `*-pc*` nodes in `labs/datacenter/cisco/vxlan_evpn_multi-site_sdwan_only.unl` use.
+Headless, prod-like Ubuntu 24.04 server image for EVE-NG docker nodes. Labs that use
+`eve-server-yr:latest`:
+
+- `labs/datacenter/cisco/vxlan_evpn_multi-site_sdwan_only.unl` and
+  `labs/datacenter/cisco/vxlan_evpn_multi-site_with_backbone.unl`: the `*-srv*` and `*-pc*` nodes
+- `labs/cloud/azure/azure_asa_vpn.unl`: `srv-1` and `srv-2`
+- `labs/cartio/cartio_test_lab.unl`: `srv-a`, `coll-a`, and `coll-b`
+  ([lab guide](../../labs/cartio/README.md))
 
 ## Build
 
