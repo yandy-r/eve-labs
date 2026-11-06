@@ -54,7 +54,9 @@ The real binary sits beside it as a dot-file, which keeps it out of EVE's image 
 
 ```bash
 cd /opt/unetlab/addons/iol/bin
-mv x86_64_crb_linux_l2-adventerprisek9-ms.17.16.01a.bin .x86_64_crb_linux_l2-adventerprisek9-ms.17.16.01a.real
+# Only move the real binary once: on a second run the .bin is already the launcher.
+[ -e .x86_64_crb_linux_l2-adventerprisek9-ms.17.16.01a.real ] ||
+  mv x86_64_crb_linux_l2-adventerprisek9-ms.17.16.01a.bin .x86_64_crb_linux_l2-adventerprisek9-ms.17.16.01a.real
 cat > x86_64_crb_linux_l2-adventerprisek9-ms.17.16.01a.bin <<'EOF'
 #!/bin/sh
 # IOL L2 17.16.1a aborts ("Abnormal ciscoversion string") when xml.cisco.com resolves.
@@ -66,8 +68,14 @@ chmod 755 x86_64_crb_linux_l2-adventerprisek9-ms.17.16.01a.bin .x86_64_crb_linux
 ```
 
 `LOCALDOMAIN` overrides the glibc resolver's search list, so the lookup gets the real NXDOMAIN.
-To check whether a host needs this, run `getent hosts xml.cisco.com`. If it prints an address, the L2
-image will abort. If it prints nothing, copy the plain `.bin` and skip the launcher.
+It does not bypass `/etc/hosts`, so the launcher only works once any `xml.cisco.com` entry is gone.
+
+To check whether a host needs this:
+
+1. Remove any `xml.cisco.com` line from `/etc/hosts` (`sed -i '/xml\.cisco\.com/d' /etc/hosts`).
+2. Run `getent hosts xml.cisco.com`. If it prints an address, the search domains make it resolve
+   and the L2 image needs the launcher. If it prints nothing, copy the plain `.bin` and skip the
+   launcher.
 
 If a host has no wildcard search domain and no `/etc/hosts` entry, it needs no launcher. The other
 way to fix it is to remove the wildcard search domain from the host.
