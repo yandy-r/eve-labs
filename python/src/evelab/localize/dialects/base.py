@@ -573,11 +573,13 @@ class RuleDialect:
                             )
                             if form != "none":
                                 mk = (Span(m.start("mask"), m.end("mask")), form)
-                        elif gd.get("wildcard"):
+                        elif (
+                            gd.get("wildcard")
                             # declared ACL wildcard: 0.0.0.0 is /32, not /0
-                            if hostmask_to_prefix(m.group("wildcard")) is not None:
-                                ws = Span(m.start("wildcard"), m.end("wildcard"))
-                                mk = (ws, "wildcard")
+                            and hostmask_to_prefix(m.group("wildcard")) is not None
+                        ):
+                            ws = Span(m.start("wildcard"), m.end("wildcard"))
+                            mk = (ws, "wildcard")
                         parent = (
                             self.iface_key(gd["parent"]) if gd.get("parent") else None
                         )

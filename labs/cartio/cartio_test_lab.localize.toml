@@ -18,9 +18,11 @@ networks = ["1"]
 [segment.baseline]
 bridge = "pnet0"
 label = "Mgmt-LAN"
+subnet = "10.100.51.0/24"
 
 [segment.expect]
 label = 1
+subnet = 13
 
 [[segment]]
 key = "MGMT-1240"
@@ -48,7 +50,7 @@ kind = "ipv4_list"
 site_key = "site.dns_public"
 group = "basic"
 baseline = ["1.1.1.1", "1.0.0.1"]
-expect = 10
+expect = 6
 
 [[param]]
 key = "domain"
@@ -56,4 +58,28 @@ kind = "domain"
 site_key = "site.domain"
 group = "basic"
 baseline = ["netlab.local"]
-expect = 9
+expect = 4
+
+[[rule]]
+id = "cartio.acl_std_mgmt"
+kind = "ip_host"
+dialects = ["ios", "iosxe"]
+pattern = "^\\s*\\d+ permit (?P<v>IPV4) (?P<mask>MASK)\\s*$"
+
+[[rule]]
+id = "cartio.acl_ext_dst_mgmt"
+kind = "ip_host"
+dialects = ["ios", "iosxe"]
+pattern = "^\\s*\\d+ (?:permit|deny) ip any (?P<v>IPV4) (?P<mask>MASK)\\s*$"
+
+[[rule]]
+id = "cartio.fgt_trusthost"
+kind = "ip_host"
+dialects = ["fortios"]
+pattern = "^\\s+set ipv4-trusthost (?P<v>IPV4) (?P<mask>MASK)\\s*$"
+
+[[rule]]
+id = "cartio.fgt_address_subnet"
+kind = "ip_host"
+dialects = ["fortios"]
+pattern = "^\\s+set subnet (?P<v>IPV4) (?P<mask>MASK)\\s*$"
