@@ -6,6 +6,8 @@ EVE-NG Pro lab files (`/opt/unetlab/labs` on host `eve`, EVE-NG Pro 7.2).
 
 - `labs/ccie/`, `labs/datacenter/`, `labs/cloud/` – personal labs
 - `Shared/`, `Users/` – EVE default folders
+- `images/` – node image builds and install notes: [`images/linux/`](images/linux/README.md)
+  (Ubuntu QEMU), [`images/iol/`](images/iol/README.md) (Cisco IOL from the CML refplat)
 
 ## Conventions (this host)
 
