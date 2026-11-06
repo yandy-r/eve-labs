@@ -1,7 +1,8 @@
 # Linux lab images
 
 Reproducible builds of the Ubuntu server and desktop QEMU images used in the labs. The images
-themselves are not committed; rebuild them on the EVE host whenever the tools drift.
+themselves are not committed; rebuild them on the EVE host whenever the tools drift. For a short,
+shareable walkthrough, see the [Ubuntu image runbook](../../docs/ubuntu-image-runbook.md).
 
 ```bash
 sudo images/linux/build.sh            # server + desktop
