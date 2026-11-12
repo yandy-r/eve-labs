@@ -12,20 +12,25 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  format-and-push:
-    name: Format and push fixes
+  # The work is split so PR code never shares a job with the App key or token:
+  #   format: checks out and runs the PR branch (formatters, package installs) with a
+  #           read-only GITHUB_TOKEN and no secrets, then uploads the fixes as a patch.
+  #   push:   never checks out or runs PR code. It treats the patch as untrusted input,
+  #           validates it, mints the App token, applies the patch and pushes.
+  format:
+    name: Format (read-only)
     # Fork PRs cannot be pushed back to; the check workflow (lint.yml) still runs authoritatively.
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
-    env:
-      # 'true' once the autofix App is configured for this repository (see the mint step).
-      AUTOFIX_APP_CONFIGURED: ${{ vars.AUTOFIX_APP_CLIENT_ID != '' && secrets.AUTOFIX_APP_PRIVATE_KEY != '' }}
+    permissions:
+      contents: read
+    outputs:
+      has_patch: ${{ steps.patch.outputs.has_patch }}
     steps:
-      - name: Checkout PR head branch
+      - name: Checkout PR head
         uses: actions/checkout@v7
         with:
-          ref: ${{ github.head_ref }}
-          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
 
       - uses: actions/setup-python@v7
@@ -47,14 +52,105 @@ jobs:
         run: ./scripts/style.sh format
 
       - name: Apply auto-fixable lint
-        # Unfixable violations are reported by the check workflow (lint.yml); do not block the push-back here.
+        # Unfixable violations are reported by the check workflow (lint.yml); do not block the autofix here.
         run: ./scripts/style.sh lint --fix
         continue-on-error: true
+
+      - name: Export autofix patch
+        id: patch
+        run: |
+          # The push job refuses changes under .github/ (workflows, local actions and repo
+          # settings; its App token has no Workflows permission), so leave them out here.
+          # lint.yml still reports them. Customize exclusions here, e.g.:
+          #   git add -u -- . ':(exclude).github' ':(exclude)CHANGELOG.md' ':(exclude)docs/internal/**'
+          git add -u -- . ':(exclude).github'
+          if ! git diff --quiet -- .github; then
+            echo "::notice title=Lint autofix skipped .github/ files::Format .github/ locally; autofix does not push files under .github/."
+          fi
+          if git diff --cached --quiet; then
+            echo "No autofix changes."
+            echo "has_patch=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git diff --cached --stat
+          git diff --cached --no-color --no-ext-diff --no-textconv --no-renames --full-index > "$RUNNER_TEMP/autofix.patch"
+          echo "has_patch=true" >> "$GITHUB_OUTPUT"
+
+      - name: Upload autofix patch
+        if: steps.patch.outputs.has_patch == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-autofix-patch
+          path: ${{ runner.temp }}/autofix.patch
+          if-no-files-found: error
+          retention-days: 1
+          overwrite: true
+
+  push:
+    name: Push autofix commit
+    needs: format
+    if: github.event.pull_request.head.repo.full_name == github.repository && needs.format.outputs.has_patch == 'true'
+    # This job holds the App key and token. It never checks out or runs PR code: no
+    # ./scripts/style.sh, no package installs, no hooks, and no PR files written to disk.
+    # Keep it on GitHub-hosted (or ephemeral self-hosted) runners so nothing the format
+    # job started on a runner can outlive that job and reach this one.
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      # 'true' once the autofix App is configured for this repository (see the mint step).
+      AUTOFIX_APP_CONFIGURED: ${{ vars.AUTOFIX_APP_CLIENT_ID != '' && secrets.AUTOFIX_APP_PRIVATE_KEY != '' }}
+    steps:
+      - name: Download autofix patch
+        uses: actions/download-artifact@v4
+        with:
+          name: lint-autofix-patch
+          path: ${{ runner.temp }}/autofix-artifact
+
+      - name: Validate autofix patch
+        # The patch comes from a job that ran PR code, so it is untrusted: copy only the
+        # patch file out of the artifact, run git from an empty directory, and accept only
+        # in-place text edits to existing files outside .github/. Anything else fails
+        # without pushing. The push step re-checks the applied result.
+        run: |
+          refuse() {
+            echo "::error title=Lint autofix refused::$1"
+            exit 1
+          }
+          artifact="$RUNNER_TEMP/autofix-artifact/autofix.patch"
+          patch="$RUNNER_TEMP/autofix.patch"
+          [[ -f "$artifact" && ! -L "$artifact" ]] || refuse "The autofix patch is missing."
+          cp -- "$artifact" "$patch"
+          rm -rf -- "$RUNNER_TEMP/autofix-artifact"
+          [[ -s "$patch" ]] || refuse "The autofix patch is empty."
+          scratch="$(mktemp -d)"
+          cd "$scratch"
+          export GIT_CEILING_DIRECTORIES="${scratch%/*}"
+          summary="$(git apply --summary "$patch")" || refuse "The autofix patch could not be parsed."
+          if [[ -n "$summary" ]]; then
+            refuse "The autofix patch creates, deletes, renames, or changes the mode of a file."
+          fi
+          git apply --numstat -z "$patch" > "$scratch/numstat" || refuse "The autofix patch could not be parsed."
+          files=0
+          while IFS= read -r -d '' record; do
+            added="${record%%$'\t'*}"
+            path="${record#*$'\t'*$'\t'}"
+            [[ -n "$path" && "$path" != "$record" ]] || refuse "The autofix patch has an unexpected file entry."
+            [[ "$path" != *[[:cntrl:]]* ]] || refuse "The autofix patch has a file name with control characters."
+            [[ "$added" != "-" ]] || refuse "The autofix patch changes a binary file: $path"
+            case "/${path,,}/" in
+              /.github/*) refuse "The autofix patch changes a file under .github/: $path" ;;
+              //* | */../* | */./*) refuse "The autofix patch has an unsafe path: $path" ;;
+            esac
+            files=$((files + 1))
+          done < "$scratch/numstat"
+          (( files > 0 )) || refuse "The autofix patch changes no files."
+          echo "Autofix patch accepted: $files file(s)."
 
       - name: Mint autofix App token
         id: app-token
         # A push made with GITHUB_TOKEN leaves every check on the autofix commit waiting for
-        # approval, so the push uses a GitHub App token, minted only after the formatters ran.
+        # approval, so the push uses a GitHub App token with Contents write only.
         # Without the App variable and secret (or if minting fails) the job reports, not pushes.
         if: env.AUTOFIX_APP_CONFIGURED == 'true'
         continue-on-error: true
@@ -63,48 +159,77 @@ jobs:
           client-id: ${{ vars.AUTOFIX_APP_CLIENT_ID }}
           private-key: ${{ secrets.AUTOFIX_APP_PRIVATE_KEY }}
           permission-contents: write
-          # Formatters can touch .github/workflows/*.yml; pushing those needs Workflows write.
-          permission-workflows: write
 
-      - name: Commit and push if changed
+      - name: Report fixes without pushing
+        if: steps.app-token.outputs.token == ''
+        run: |
+          patch="$RUNNER_TEMP/autofix.patch"
+          echo "::warning title=Lint autofix not pushed::Fixes found but not pushed: set the AUTOFIX_APP_CLIENT_ID variable and AUTOFIX_APP_PRIVATE_KEY secret (or check the App installation)."
+          {
+            echo "### Lint autofix: fixes found, not pushed"
+            echo
+            echo "This workflow pushes with a GitHub App token. Set the \`AUTOFIX_APP_CLIENT_ID\` variable and \`AUTOFIX_APP_PRIVATE_KEY\` secret, or run the formatters locally."
+            echo
+            echo '```'
+            (cd "$(mktemp -d)" && git apply --stat "$patch")
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit and push autofix patch
+        if: steps.app-token.outputs.token != ''
         env:
           PR_HEAD_REF: ${{ github.head_ref }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           AUTOFIX_SUBJECT: "chore: apply format + lint --fix (autofix workflow)"
           AUTOFIX_TOKEN: ${{ steps.app-token.outputs.token }}
-          HAS_APP_TOKEN: ${{ steps.app-token.outputs.token != '' }}
         run: |
+          patch="$RUNNER_TEMP/autofix.patch"
+          remote="https://x-access-token:${AUTOFIX_TOKEN}@${GITHUB_SERVER_URL#https://}/${GITHUB_REPOSITORY}.git"
+          # Work in a fresh repository with only the PR head commit in its object store and
+          # index: the PR tree is never written to disk, and hooks are disabled, so nothing
+          # from the PR runs. Only git fetch, apply, commit, and push run here.
+          repo="$RUNNER_TEMP/autofix-repo"
+          git -c core.hooksPath=/dev/null init -q --template= "$repo"
+          cd "$repo"
+          git config core.hooksPath /dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git diff --quiet && git diff --cached --quiet; then
-            echo "No autofix changes."
-            exit 0
-          fi
-          # Customize exclusions here, e.g.:
-          #   git add -u -- . ':(exclude)CHANGELOG.md' ':(exclude)docs/internal/**'
-          git add -u -- .
-          if git diff --cached --quiet; then
-            echo "No autofix changes remain after exclusions."
-            exit 0
-          fi
-          if [[ "$HAS_APP_TOKEN" != "true" ]]; then
-            echo "::warning title=Lint autofix not pushed::Fixes found but not pushed: set the AUTOFIX_APP_CLIENT_ID variable and AUTOFIX_APP_PRIVATE_KEY secret (or check the App installation)."
-            {
-              echo "### Lint autofix: fixes found, not pushed"
-              echo
-              echo "This workflow pushes with a GitHub App token. Set the \`AUTOFIX_APP_CLIENT_ID\` variable and \`AUTOFIX_APP_PRIVATE_KEY\` secret, or run the formatters locally."
-              echo
-              echo '```'
-              git diff --cached --stat
-              echo '```'
-            } >> "$GITHUB_STEP_SUMMARY"
-            exit 0
-          fi
+          git fetch -q --depth=1 --no-tags "$remote" "$PR_HEAD_SHA"
+          git update-ref HEAD "$PR_HEAD_SHA"
+          git read-tree HEAD
           # Loop guard: the App push starts a new run on the autofix commit. If HEAD is already
           # that commit and the fixers still change files, they are not idempotent; stop here.
-          if [[ "$(git log -1 --format=%s)" == "$AUTOFIX_SUBJECT" ]]; then
+          if [[ "$(git log -1 --format=%s HEAD)" == "$AUTOFIX_SUBJECT" ]]; then
             echo "::warning title=Lint autofix stopped::HEAD is already an autofix commit and the fixers still change files; not pushing again."
-            git diff --cached --stat
+            git apply --stat "$patch"
             exit 0
           fi
-          git commit -m "$AUTOFIX_SUBJECT"
-          git push "https://x-access-token:${AUTOFIX_TOKEN}@${GITHUB_SERVER_URL#https://}/${GITHUB_REPOSITORY}.git" "HEAD:${PR_HEAD_REF}"
+          git apply --cached "$patch"
+          # Re-check what actually landed in the index: in-place edits to regular text files
+          # only (a forced-text diff can hide binary content from the validate step), nothing
+          # under .github/.
+          git diff --cached --raw -z --no-renames HEAD > "$RUNNER_TEMP/autofix.raw"
+          while IFS= read -r -d '' meta && IFS= read -r -d '' path; do
+            read -r old_mode new_mode old_blob new_blob status <<< "${meta#:}"
+            case "$old_mode:$new_mode:$status" in
+              100644:100644:M | 100755:100755:M) ;;
+              *) echo "::error title=Lint autofix refused::The autofix patch changes something other than a regular file's contents."; exit 1 ;;
+            esac
+            case "${path,,}" in
+              .github/*) echo "::error title=Lint autofix refused::The autofix patch changes a file under .github/."; exit 1 ;;
+            esac
+            for blob in "$old_blob" "$new_blob"; do
+              nul_bytes="$(git cat-file blob "$blob" | tr -dc '\000' | wc -c)"
+              if (( nul_bytes > 0 )); then
+                echo "::error title=Lint autofix refused::The autofix patch changes a binary file."
+                exit 1
+              fi
+            done
+          done < "$RUNNER_TEMP/autofix.raw"
+          if git diff --cached --quiet HEAD; then
+            echo "No autofix changes after applying the patch."
+            exit 0
+          fi
+          git commit -q --no-verify -m "$AUTOFIX_SUBJECT"
+          git show --stat --format='%h %s' HEAD
+          git push -q --no-verify "$remote" "HEAD:refs/heads/${PR_HEAD_REF}"

@@ -135,7 +135,8 @@ git config commit.template .gitmessage
 CI runs `Lint`, `Test`, and `PR title` on every pull request; `Lint autofix` pushes
 formatting fixes back to same-repo PR branches. It pushes with a GitHub App token
 (`AUTOFIX_APP_CLIENT_ID` variable, `AUTOFIX_APP_PRIVATE_KEY` secret) so the checks on the fix
-commit run without approval; without them it reports the fixes instead of pushing.
+commit run without approval; without them it reports the fixes instead of pushing. It never
+changes files under `.github/`; format those locally.
 
 ## Releasing
 
