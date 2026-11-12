@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: lint-autofix-${{ github.event.pull_request.number || github.ref }}
@@ -17,13 +17,16 @@ jobs:
     # Fork PRs cannot be pushed back to; the check workflow (lint.yml) still runs authoritatively.
     if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
+    env:
+      # 'true' once the autofix App is configured for this repository (see the mint step).
+      AUTOFIX_APP_CONFIGURED: ${{ vars.AUTOFIX_APP_CLIENT_ID != '' && secrets.AUTOFIX_APP_PRIVATE_KEY != '' }}
     steps:
       - name: Checkout PR head branch
         uses: actions/checkout@v7
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
 
       - uses: actions/setup-python@v7
         with:
@@ -48,9 +51,25 @@ jobs:
         run: ./scripts/style.sh lint --fix
         continue-on-error: true
 
+      - name: Mint autofix App token
+        id: app-token
+        # A push made with GITHUB_TOKEN leaves every check on the autofix commit waiting for
+        # approval, so the push uses a GitHub App token, minted only after the formatters ran.
+        # Without the App variable and secret (or if minting fails) the job reports, not pushes.
+        if: env.AUTOFIX_APP_CONFIGURED == 'true'
+        continue-on-error: true
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.AUTOFIX_APP_CLIENT_ID }}
+          private-key: ${{ secrets.AUTOFIX_APP_PRIVATE_KEY }}
+          permission-contents: write
+
       - name: Commit and push if changed
         env:
           PR_HEAD_REF: ${{ github.head_ref }}
+          AUTOFIX_SUBJECT: "chore: apply format + lint --fix (autofix workflow)"
+          AUTOFIX_TOKEN: ${{ steps.app-token.outputs.token }}
+          HAS_APP_TOKEN: ${{ steps.app-token.outputs.token != '' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -65,5 +84,25 @@ jobs:
             echo "No autofix changes remain after exclusions."
             exit 0
           fi
-          git commit -m "chore: apply format + lint --fix (autofix workflow)"
-          git push origin "HEAD:${PR_HEAD_REF}"
+          if [[ "$HAS_APP_TOKEN" != "true" ]]; then
+            echo "::warning title=Lint autofix not pushed::Fixes found but not pushed: set the AUTOFIX_APP_CLIENT_ID variable and AUTOFIX_APP_PRIVATE_KEY secret (or check the App installation)."
+            {
+              echo "### Lint autofix: fixes found, not pushed"
+              echo
+              echo "This workflow pushes with a GitHub App token. Set the \`AUTOFIX_APP_CLIENT_ID\` variable and \`AUTOFIX_APP_PRIVATE_KEY\` secret, or run the formatters locally."
+              echo
+              echo '```'
+              git diff --cached --stat
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          # Loop guard: the App push starts a new run on the autofix commit. If HEAD is already
+          # that commit and the fixers still change files, they are not idempotent; stop here.
+          if [[ "$(git log -1 --format=%s)" == "$AUTOFIX_SUBJECT" ]]; then
+            echo "::warning title=Lint autofix stopped::HEAD is already an autofix commit and the fixers still change files; not pushing again."
+            git diff --cached --stat
+            exit 0
+          fi
+          git commit -m "$AUTOFIX_SUBJECT"
+          git push "https://x-access-token:${AUTOFIX_TOKEN}@${GITHUB_SERVER_URL#https://}/${GITHUB_REPOSITORY}.git" "HEAD:${PR_HEAD_REF}"
