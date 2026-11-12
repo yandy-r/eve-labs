@@ -19,7 +19,7 @@ from pathlib import Path
 
 
 def tracked_labs() -> list[Path]:
-    out=subprocess.run(
+    out = subprocess.run(
         ["git", "ls-files", "-z", "--", "*.unl"],
         check=True,
         capture_output=True,
