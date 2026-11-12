@@ -63,6 +63,8 @@ jobs:
           client-id: ${{ vars.AUTOFIX_APP_CLIENT_ID }}
           private-key: ${{ secrets.AUTOFIX_APP_PRIVATE_KEY }}
           permission-contents: write
+          # Formatters can touch .github/workflows/*.yml; pushing those needs Workflows write.
+          permission-workflows: write
 
       - name: Commit and push if changed
         env:
