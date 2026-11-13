@@ -65,6 +65,9 @@
       <node id="16" name="coll-b-onsite" type="qemu" template="linux" image="linux-ubuntu-24.04-server" console="telnet" cpu="2" cpulimit="0" ram="4096" ethernet="1" uuid="b30334eb-2406-4538-92f7-c4d1cd70154f" shutdown="1" firstmac="50:01:00:10:00:00" qemu_options="-machine type=pc,accel=kvm -vga std -cpu host" qemu_version="4.1.0" qemu_arch="x86_64" qemu_nic="virtio-net-pci" delay="0" sat="0" icon="Server.png" width="0" config="0" left="1037" top="878">
         <interface id="0" name="e0" type="ethernet" network_id="12" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
       </node>
+      <node id="1" name="coll-b-onsite-c4-1" type="qemu" template="linux" image="linux-ubuntu-24.04-server" console="telnet" cpu="2" cpulimit="0" ram="4096" ethernet="1" uuid="1b172771-d88d-4157-8e21-10e27b837a1c" shutdown="1" qemu_options="-machine type=pc,accel=kvm -vga std -cpu host" qemu_version="4.1.0" qemu_arch="x86_64" qemu_nic="virtio-net-pci" delay="0" sat="-1" icon="Server.png" width="0" config="0" left="1110" top="878">
+        <interface id="0" name="e0" type="ethernet" network_id="12" vid="1" labelpos="0.5" stub="0" width="2" curviness="10" beziercurviness="150" round="0" midpoint="0.5" srcpos="0.15" dstpos="0.85"/>
+      </node>
     </nodes>
     <networks>
       <network id="1" smart="-1" native_vlan="1" vlan8021ad="-1" type="pnet0" name="Mgmt-LAN" left="557" top="135" style="Solid" linkstyle="Straight" color="" label="" visibility="1" icon="cloud_sm_green.png" width="0" hideme="0" l2filter_lldp="0" l2filter_stp="0" l2filter_cisco="0" l2filter_lacp="0"/>
