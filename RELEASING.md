@@ -45,7 +45,8 @@ Model: **trunk-only**. Support window: latest-minor.
 5. **No new long-lived branches.** Large work lands on `main` in small PRs. See
    [Unfinished work](#unfinished-work).
 6. **`main` is always releasable.** CI green, and nothing half-built reachable by users.
-7. **Only maintainers cut releases**, following [Releasing](#releasing). Agents never tag.
+7. **A maintainer approves each release once** ("ship x.y.z to prod?"), following
+   [Releasing](#releasing). After that approval, agents may tag, publish and cut the release.
 
 ## Where does my change go?
 
