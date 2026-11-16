@@ -395,6 +395,16 @@
   ],
   "findings": [
     {
+      "code": "UNCONFIGURED",
+      "severity": "info",
+      "msg": "segment MGMT-LAN: no config on lab-ops e0, lab-qa e0 (bridge/label only)",
+      "refs": [
+        "segment:MGMT-LAN",
+        "node:17",
+        "node:18"
+      ]
+    },
+    {
       "code": "DHCP_UPLINK",
       "severity": "info",
       "msg": "segment MGMT-LAN: DHCP uplink on ; the target bridge must provide DHCP",
