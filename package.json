@@ -4,11 +4,11 @@
   "description": "EVE-NG Pro lab topology files",
   "packageManager": "pnpm@10.18.3",
   "devDependencies": {
-    "@biomejs/biome": "^2.6.5",
+    "@biomejs/biome": "^2.6.7",
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
     "markdownlint-cli": "^0.50.0",
-    "prettier": "^3.9.10"
+    "prettier": "^3.10.1"
   },
   "scripts": {
     "lint": "./scripts/style.sh lint",
