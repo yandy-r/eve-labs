@@ -53,18 +53,6 @@ STYLE_EXCLUDES=(
     packages/cursor
     .codex-plugin
     .opencode-plugin
-
-    # Managed formatter bundle assets copied into downstream repos. Keep these
-    # as exact file paths so user-authored files under scripts/templates/ still lint.
-    scripts/templates/biome.json
-    scripts/templates/clippy.toml
-    scripts/templates/markdownlint.json
-    scripts/templates/markdownlintignore
-    scripts/templates/prettierrc.json
-    scripts/templates/prettierignore
-    scripts/templates/python-pyproject.toml
-    scripts/templates/rustfmt.toml
-    scripts/templates/tsconfig.json
 )
 
 # Subset of STYLE_EXCLUDES whose names must NEVER hold first-class source and are

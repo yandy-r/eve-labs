@@ -31,7 +31,6 @@ __pycache__/
 .cursor-plugin/
 .codex-plugin/
 .opencode-plugin/
-scripts/templates/markdownlint.json
 
 # Version control
 .git/

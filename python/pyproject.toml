@@ -19,7 +19,7 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 evelab = ["py.typed"]
-"evelab.localize.dialects" = ["packs/*.toml", "packs/README.md"]
+"evelab.localize.dialects" = ["packs/*.toml"]
 
 [tool.ruff]
 line-length = 88

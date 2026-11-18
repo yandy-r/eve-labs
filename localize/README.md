@@ -272,7 +272,7 @@ label question uses), otherwise the example profile would rename a network.
 ## Adding a vendor dialect
 
 The usual case is data only. Either a TOML pack (no Python), dropped into
-`python/src/evelab/localize/dialects/packs/<name>.toml` (format: `dialects/packs/README.md`):
+`python/src/evelab/localize/dialects/packs/<name>.toml`:
 
 ```toml
 dialect = "eos"

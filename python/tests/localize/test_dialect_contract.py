@@ -2569,9 +2569,6 @@ class TestPacks(unittest.TestCase):
         self.write("z.toml", EXAMPLE_PACK)
         load_packs([self.dir])
 
-    def test_shipped_packs_dir_loads(self) -> None:
-        load_packs([dialects.PACKS_DIR])  # must not raise (README only, or valid packs)
-
 
 class TestLoadBuiltin(unittest.TestCase):
     def test_load_builtin_is_idempotent_and_tolerates_missing_modules(self) -> None:

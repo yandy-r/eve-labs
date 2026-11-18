@@ -39,6 +39,10 @@ Thumbs.db
 # Node tooling (lint/format/commitlint)
 node_modules/
 
+# Repo-local tool installs (scripts/install-shellcheck.sh) and EVE lab backups
+tools/
+*.unl.bak-*
+
 # eve-localize / eve-analyze: per-host state (answers, backups, journal) and manifest drafts
 /.localize/
 /.analyze/

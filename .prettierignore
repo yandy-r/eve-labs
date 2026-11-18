@@ -31,10 +31,6 @@ __pycache__/
 .cursor-plugin/
 .codex-plugin/
 .opencode-plugin/
-scripts/templates/biome.json
-scripts/templates/markdownlint.json
-scripts/templates/prettierrc.json
-scripts/templates/tsconfig.json
 
 # Version control / lockfiles
 .git/

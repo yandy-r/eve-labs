@@ -51,7 +51,11 @@ localize-check:
 
 # runs every Python test (common, localize, analyze)
 localize-test:
-	cd python && python3 -I -B -m unittest discover -s tests -t .
+	# Git hooks export GIT_DIR (and friends) to this process; clear them so tests that
+	# run git in temp dirs cannot write into the checkout's repo, index or config.
+	cd python && env -u GIT_DIR -u GIT_WORK_TREE -u GIT_INDEX_FILE -u GIT_COMMON_DIR \
+	  -u GIT_OBJECT_DIRECTORY -u GIT_ALTERNATE_OBJECT_DIRECTORIES -u GIT_PREFIX \
+	  python3 -I -B -m unittest discover -s tests -t .
 
 localize-sync:
 	@echo "Upstream sync (run these yourself):"
