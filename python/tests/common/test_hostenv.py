@@ -7,7 +7,6 @@ from pathlib import Path
 
 from evelab.common import hostenv
 from evelab.localize.errors import PreconditionError
-from evelab.localize.model import Node
 
 LAB = "2fd99c11-2334-45b3-ac61-ee23ab5c9d38"
 OTHER = "aaaaaaaa-0000-4000-8000-bbbbbbbbbbbb"
@@ -25,8 +24,7 @@ class TempTree(unittest.TestCase):
         self.proc = self.root / "proc"
         self.sys_net = self.root / "sys_net"
         self.tmp = self.root / "unetlab" / "tmp"
-        self.addons = self.root / "unetlab" / "addons"
-        for d in (self.proc, self.sys_net, self.tmp, self.addons):
+        for d in (self.proc, self.sys_net, self.tmp):
             d.mkdir(parents=True)
 
     def add_proc(self, pid: int, argv: list[str], cwd: str | None = None) -> None:
@@ -54,7 +52,6 @@ class BridgeTests(TempTree):
         oper: str = "up",
         ports: tuple[str, ...] = (),
         vlan: str | None = None,
-        pvid: str | None = None,
         bridge: bool = True,
     ) -> None:
         d = self.sys_net / name
@@ -65,8 +62,6 @@ class BridgeTests(TempTree):
             (d / "bridge").mkdir()
             if vlan is not None:
                 (d / "bridge" / "vlan_filtering").write_text(vlan + "\n")
-            if pvid is not None:
-                (d / "bridge" / "default_pvid").write_text(pvid + "\n")
             (d / "brif").mkdir()
             for p in ports:
                 (d / "brif" / p).mkdir()
@@ -85,14 +80,13 @@ class BridgeTests(TempTree):
         self.assertEqual(list(got), ["nat0", "pnet2", "pnet10"])
 
     def test_info_up_down_vlan(self) -> None:
-        self.add_bridge("pnet0", ports=("eth0", "vun1"), vlan="1", pvid="1")
+        self.add_bridge("pnet0", ports=("eth0", "vun1"), vlan="1")
         self.add_bridge("pnet1", flags="0x1002", oper="down")
         self.add_bridge("nat0", flags="0x1003", oper="unknown", vlan="0")
         up = hostenv.bridge_info("pnet0", sys_net=self.sys_net)
         self.assertTrue(up.exists and up.up and up.is_bridge)
         self.assertEqual(up.ports, ("eth0", "vun1"))
         self.assertIs(up.vlan_filtering, True)
-        self.assertEqual(up.default_pvid, 1)
         self.assertEqual(up.state, "up")
         self.assertEqual(up.note, "up, 2 ports, vlan-aware")
         down = hostenv.bridge_info("pnet1", sys_net=self.sys_net)
@@ -131,9 +125,7 @@ class BridgeTests(TempTree):
 
     def test_no_sysfs(self) -> None:
         gone = self.root / "nothing"
-        self.assertFalse(hostenv.sys_net_available(gone))
         self.assertEqual(hostenv.list_bridges(sys_net=gone), {})
-        self.assertTrue(hostenv.sys_net_available(self.sys_net))
 
 
 class RunningNodeTests(TempTree):
@@ -319,64 +311,6 @@ class LeftoverFindingTests(TempTree):
         )
         self.assertEqual([f.code for f in got], ["HOST_PROBE_SKIPPED"])
         self.assertEqual(got[0].severity, "info")
-
-
-class ImageTests(TempTree):
-    def test_qemu_iol_dynamips(self) -> None:
-        (self.addons / "qemu" / "c8000v-17.11.01a").mkdir(parents=True)
-        (self.addons / "iol" / "bin").mkdir(parents=True)
-        (self.addons / "iol" / "bin" / "i86bi_x.bin").write_text("")
-        (self.addons / "dynamips").mkdir()
-        (self.addons / "dynamips" / "c7200.image").write_text("")
-        a = self.addons
-        self.assertIs(
-            hostenv.image_available("qemu", "c8000v-17.11.01a", addons=a), True
-        )
-        self.assertIs(hostenv.image_available("qemu", "nope", addons=a), False)
-        self.assertIs(hostenv.image_available("iol", "i86bi_x.bin", addons=a), True)
-        self.assertIs(hostenv.image_available("iol", "other.bin", addons=a), False)
-        self.assertIs(
-            hostenv.image_available("dynamips", "c7200.image", addons=a), True
-        )
-
-    def test_unknown_cases(self) -> None:
-        a = self.addons
-        self.assertIsNone(hostenv.image_available("qemu", "", addons=a))
-        self.assertIsNone(hostenv.image_available("docker", "x:latest", addons=a))
-        self.assertIsNone(hostenv.image_available("weird", "x", addons=a))
-        self.assertIs(hostenv.image_available("vpcs", "", addons=a), True)
-
-    def test_path_traversal_not_probed(self) -> None:
-        self.assertIsNone(hostenv.image_path("qemu", "../etc", addons=self.addons))
-        self.assertIsNone(hostenv.image_path("qemu", "a/b", addons=self.addons))
-        self.assertIsNone(hostenv.image_path("qemu", "..", addons=self.addons))
-
-    def test_docker_images(self) -> None:
-        have = {"eve-server-yr:latest", "ubuntu:24.04"}
-        f = hostenv.image_available
-        self.assertIs(f("docker", "eve-server-yr:latest", docker_images=have), True)
-        self.assertIs(f("docker", "eve-server-yr", docker_images=have), True)
-        self.assertIs(f("docker", "ubuntu", docker_images=have), False)
-        self.assertIs(f("docker", "ubuntu:22.04", docker_images=have), False)
-
-    def test_missing_images(self) -> None:
-        (self.addons / "qemu" / "have").mkdir(parents=True)
-
-        def node(i: str, t: str, img: str) -> Node:
-            return Node(i, f"n{i}", t, t, img, "0", [])
-
-        nodes = [
-            node("1", "qemu", "have"),
-            node("2", "qemu", "gone"),
-            node("3", "docker", "x:1"),
-            node("4", "vpcs", ""),
-            node("5", "docker", "y:1"),
-        ]
-        got = hostenv.missing_images(nodes, addons=self.addons, docker_images={"y:1"})
-        self.assertEqual([n.id for n in got], ["2", "3"])
-        # docker unknown without a docker image list
-        got = hostenv.missing_images(nodes, addons=self.addons)
-        self.assertEqual([n.id for n in got], ["2"])
 
 
 class LockTests(TempTree):

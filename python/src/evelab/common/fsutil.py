@@ -7,7 +7,7 @@ import os
 import tempfile
 from pathlib import Path
 
-__all__ = ["atomic_write", "is_root"]
+__all__ = ["atomic_write"]
 
 
 def is_root() -> bool:

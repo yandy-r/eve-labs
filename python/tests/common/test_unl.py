@@ -136,22 +136,6 @@ class RealLabTests(unittest.TestCase):
                 blob_edits = [lab.blob_edit(b, b.b64) for b in lab.config_blobs()]
                 self.assertEqual(splice(lab.raw, blob_edits), lab.raw)
 
-    def test_skip_regions_cover_tasks_description_lineobjects(self) -> None:
-        lab1 = read_real(
-            next(p for p in real_lab_paths() if p.name == "lab1-ei-v01.unl")
-        )
-        regions = dict(lab1.skip_regions())
-        self.assertIn("tasks", regions)
-        self.assertIn("lineobjects", regions)
-        self.assertGreater(regions["tasks"].end - regions["tasks"].start, 1_000_000)
-        for blob in [*lab1.config_blobs(), *lab1.textobjects()]:
-            for span in regions.values():
-                self.assertFalse(span.start <= blob.span.start < span.end)
-        ei = read_real(
-            next(p for p in real_lab_paths() if p.name.startswith("ccie_enterprise"))
-        )
-        self.assertIn("description", dict(ei.skip_regions()))
-
     def test_lab1_is_fast(self) -> None:
         path = next(p for p in real_lab_paths() if p.name == "lab1-ei-v01.unl")
         start = time.perf_counter()
@@ -366,9 +350,6 @@ class MinilabTests(unittest.TestCase):
         self.assertEqual(
             [(t.id, t.name, t.type) for t in lab.textobjects()],
             [("1", "txt 1", "text"), ("2", "square2", "square")],
-        )
-        self.assertEqual(
-            {t for t, _ in lab.skip_regions()}, {"description", "tasks", "lineobjects"}
         )
         nodes = lab.node_models()
         self.assertEqual(

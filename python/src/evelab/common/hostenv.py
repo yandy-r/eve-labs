@@ -1,11 +1,10 @@
 """EVE host probes (design 12.1, 15 rows 56/72/73): bridges, running nodes,
-tmp leftovers, image availability and the exclusive lock.
+tmp leftovers and the exclusive lock.
 
 Every probe takes its filesystem roots as keyword arguments so tests can point
 them at fake ``/proc``, ``/sys/class/net`` and ``/opt/unetlab`` trees. On a host
 without those trees (Windows, a laptop) probes return empty results instead of
-failing; use :func:`proc_available` / :func:`sys_net_available` to tell "none"
-from "cannot tell".
+failing; use :func:`proc_available` to distinguish unavailable process data.
 """
 
 from __future__ import annotations
@@ -15,7 +14,7 @@ import os
 import re
 import shutil
 import subprocess
-from collections.abc import Callable, Collection, Iterable, Iterator
+from collections.abc import Callable, Iterable, Iterator
 from dataclasses import dataclass
 from pathlib import Path
 from types import TracebackType
@@ -23,7 +22,6 @@ from typing import Literal
 
 from .errors import PreconditionError
 from .findings import Finding
-from .labmodel import Node
 
 try:  # POSIX only; the O_EXCL lockfile covers everything else
     import fcntl
@@ -71,7 +69,6 @@ class BridgeInfo:
     ports: tuple[str, ...] = ()
     # VLAN-aware info (cheap sysfs reads; None when not reported)
     vlan_filtering: bool | None = None
-    default_pvid: int | None = None
 
     @property
     def state(self) -> str:
@@ -122,11 +119,6 @@ def _read_int(path: Path, base: int = 0) -> int | None:
         return None
 
 
-def sys_net_available(sys_net: Path = SYS_NET) -> bool:
-    """False on hosts without sysfs network info (Windows, containers)."""
-    return sys_net.is_dir()
-
-
 def bridge_info(name: str, *, sys_net: Path = SYS_NET) -> BridgeInfo:
     """Probe one bridge by name; ``exists`` is False when it is absent."""
     base = sys_net / name
@@ -156,7 +148,6 @@ def bridge_info(name: str, *, sys_net: Path = SYS_NET) -> BridgeInfo:
         is_bridge=is_bridge,
         ports=ports,
         vlan_filtering=None if vf is None else bool(vf),
-        default_pvid=_read_int(br / "default_pvid") if is_bridge else None,
     )
 
 
@@ -485,66 +476,6 @@ def runtime_findings(
             )
         )
     return findings
-
-
-# --------------------------------------------------------------------------
-# Images
-# --------------------------------------------------------------------------
-
-
-def image_path(node_type: str, image: str, *, addons: Path = ADDONS) -> Path | None:
-    """Where EVE keeps the image for a node type, or ``None`` when not file-based."""
-    if not image or "/" in image or image in (".", ".."):
-        return None
-    if node_type == "qemu":
-        return addons / "qemu" / image
-    if node_type == "iol":
-        return addons / "iol" / "bin" / image
-    if node_type == "dynamips":
-        return addons / "dynamips" / image
-    return None
-
-
-def image_available(
-    node_type: str,
-    image: str,
-    *,
-    addons: Path = ADDONS,
-    docker_images: Collection[str] | None = None,
-) -> bool | None:
-    """True/False when it can be decided, ``None`` when unknown.
-
-    qemu/iol/dynamips look under ``addons``; docker needs ``docker_images``
-    (see :func:`docker_image_names`; a bare name matches ``name:latest``);
-    vpcs needs no image.
-    """
-    if node_type == "vpcs":
-        return True
-    if node_type == "docker":
-        if docker_images is None or not image:
-            return None
-        return image in docker_images or (
-            ":" not in image and f"{image}:latest" in docker_images
-        )
-    path = image_path(node_type, image, addons=addons)
-    if path is None:
-        return None
-    return path.exists()
-
-
-def missing_images(
-    nodes: Iterable[Node],
-    *,
-    addons: Path = ADDONS,
-    docker_images: Collection[str] | None = None,
-) -> list[Node]:
-    """Nodes whose image is definitely absent on this host (``scan --images``)."""
-    return [
-        n
-        for n in nodes
-        if image_available(n.type, n.image, addons=addons, docker_images=docker_images)
-        is False
-    ]
 
 
 # --------------------------------------------------------------------------

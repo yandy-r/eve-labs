@@ -451,7 +451,7 @@ import Path`.
   `blob_edit` then raise `UnsupportedLayout`. `strict=True` raises `UnsupportedLayout` at read time instead.
   `verify_against_etree() -> list[str]` returns the problems (empty = ok).
 - Added `RawLab.from_bytes(raw, path=None)` (re-read freshly written bytes), `node_models()`/`network_models()` (shared
-  model objects keyed by id), `skip_regions() -> list[tuple[str, Span]]` (`description`, `tasks`, `lineobjects`).
+  model objects keyed by id).
 - Shapes (all in `unl.py`): `RawAttr(name, value, span, quote)`; `RawElem(tag, span, attrs: Mapping[str, RawAttr])` with
   `.id`, `.get(name, default="")`, `.values()`; `RawIface(elem)`; `RawNode(elem, ifaces)` with `.to_model()`;
   `RawBlob(kind, scope, id, node_id, name, type, configset_id, span, b64, elem, self_closing)`
