@@ -59,21 +59,21 @@ class LoadTests(unittest.TestCase):
         self.assertEqual(m.legacy[0].baseline.vlan, 1103)
         self.assertEqual(m.outliers[0].node, "74")
         self.assertEqual(m.label_values[0].fields["subnet"], "192.168.13.0/24")
-        self.assertTrue(m.scenario_enabled("azure_s2s"))
-        self.assertFalse(m.scenario_enabled("bgp_upstream"))
-        self.assertFalse(m.scenario_enabled("nope"))
+        self.assertTrue(m.scenarios["azure_s2s"].enabled)
+        self.assertFalse(m.scenarios["bgp_upstream"].enabled)
+        self.assertNotIn("nope", m.scenarios)
         self.assertEqual(m.scenarios["azure_s2s"].options, {"node": "1"})
         self.assertEqual(m.scenarios["bgp_upstream"].options["peer_group"], "HOME")
-        dns = m.param("dns_public")
-        assert dns is not None
+        dns = next(p for p in m.params if p.key == "dns_public")
         self.assertEqual(dns.baseline, ["1.1.1.1", "1.0.0.1"])
         self.assertEqual(dns.expect, 46)
-        ntp = m.param("ntp_upstream")
-        assert ntp is not None
+        ntp = next(p for p in m.params if p.key == "ntp_upstream")
         self.assertEqual((ntp.baseline, ntp.group), (["34.202.215.187"], "advanced"))
         self.assertEqual(m.rules[0].dialects, ["fortios"])
-        self.assertEqual(m.segment_for_network("25"), m.segment("INET-201"))
-        self.assertIsNone(m.segment_for_network("9999"))
+        self.assertEqual(
+            next(s for s in m.segments if "25" in s.networks), m.segment("INET-201")
+        )
+        self.assertFalse(any("9999" in s.networks for s in m.segments))
 
     def test_minimal_fixture(self) -> None:
         m = manifest.load(FIXTURES / "manifest_minimal.toml")

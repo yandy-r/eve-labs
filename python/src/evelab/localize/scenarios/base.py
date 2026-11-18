@@ -83,19 +83,15 @@ class ParamKind:
     """A value type a question can ask for; the name is the serialisation key.
 
     ``parse`` turns the typed string into the stored value (raises ``ValueError``);
-    ``validate`` returns an error message or ``None``; ``fact_kinds`` documents
-    which facts it drives (documentation only).  ``render`` is RESERVED and never
-    called: edits are always produced by ``Dialect.render`` through
-    :func:`render_fact` inside a scenario's ``plan()`` - a new kind needs a
-    scenario that asks the question and plans the edits (design 13.3; review
+    ``validate`` returns an error message or ``None``.  Edits are never produced by
+    the kind: a new kind needs a scenario that asks the question and plans the
+    edits through :func:`render_fact` inside its ``plan()`` (design 13.3; review
     fix #30).
     """
 
     name: str
     parse: Callable[[str], Any]
     validate: Validator
-    render: Callable[[Fact, str, Any], list[TextEdit]] | None = None
-    fact_kinds: frozenset[str] = frozenset()
 
 
 PARAM_KINDS: dict[str, ParamKind] = {}
@@ -216,35 +212,30 @@ def _parse_route_list(s: str) -> list[IPv4Network]:
 
 
 for _k in (
-    ParamKind("bridge", _parse_bridge, _validate_bridge, fact_kinds=frozenset()),
+    ParamKind("bridge", _parse_bridge, _validate_bridge),
     ParamKind(
         "vlan",
         _parse_vlan,
         _try(_parse_vlan),
-        fact_kinds=frozenset({"vlan_tag", "vlan_list", "vlan_def"}),
     ),
-    ParamKind(
-        "cidr", _parse_cidr, _try(_parse_cidr), fact_kinds=frozenset({"ip_host"})
-    ),
-    ParamKind("ip", _parse_ip, _try(_parse_ip), fact_kinds=frozenset({"ip_gateway"})),
+    ParamKind("cidr", _parse_cidr, _try(_parse_cidr)),
+    ParamKind("ip", _parse_ip, _try(_parse_ip)),
     ParamKind("label", _parse_label, _try(_parse_label)),
     ParamKind(
         "domain",
         _parse_domain,
         _try(_parse_domain),
-        fact_kinds=frozenset({"domain", "search_list"}),
     ),
     ParamKind(
         "host",
         _parse_host,
         _try(_parse_host),
-        fact_kinds=frozenset({"dns_server", "ntp_server", "probe_target"}),
     ),
-    ParamKind("asn", _parse_asn, _try(_parse_asn), fact_kinds=frozenset({"asn"})),
+    ParamKind("asn", _parse_asn, _try(_parse_asn)),
     ParamKind("bool", _parse_bool, _try(_parse_bool)),
     ParamKind("choice", str.strip, lambda v, a: None),
     ParamKind("text", str, lambda v, a: None),
-    ParamKind("secret", str, lambda v, a: None, fact_kinds=frozenset({"secret"})),
+    ParamKind("secret", str, lambda v, a: None),
     ParamKind("routes", _parse_route_list, _try(_parse_route_list)),
 ):
     register_param_kind(_k)
@@ -382,8 +373,6 @@ class ValueMaps:
     seg_exact: dict[str, dict[IPv4Address, IPv4Address]] = field(default_factory=dict)
     # segment key -> canonical old subnet -> answered subnet (mask decisions)
     primary: dict[str, SubnetMap] = field(default_factory=dict)
-    old_labels: dict[str, str] = field(default_factory=dict)  # network id -> old name
-    cloud_text: dict[str, str] = field(default_factory=dict)  # old bridge -> new
     legacy_scopes: dict[str, set[str]] = field(default_factory=dict)  # seg -> scopes
     skipped: set[str] = field(default_factory=set)  # segment keys skipped
     lab_id: str = ""
@@ -391,9 +380,6 @@ class ValueMaps:
     include_outliers: bool = False
     subif_policy: str = "rename"  # rename | keep-name
     cosmetic_text: bool = True
-
-    def tag_for(self, segment: str, old: int) -> int | None:
-        return self.tags.get((segment, old))
 
     def map_ip(self, segment: str | None, ip: IPv4Address) -> IPv4Address | None:
         """exact_ips > per-segment exact > gateway > subnet offset."""
@@ -417,24 +403,6 @@ class ValueMaps:
             if sm.covers(ip):
                 return sm
         return None
-
-    def empty(self) -> bool:
-        return not any(
-            (
-                self.bridges,
-                self.labels,
-                self.text_labels,
-                self.tags,
-                self.subnets,
-                self.exact_ips,
-                self.services,
-                self.asns,
-                self.routes,
-                self.secrets,
-                self.gateways,
-                self.seg_exact,
-            )
-        )
 
 
 # --------------------------------------------------------------------------- #

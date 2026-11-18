@@ -86,9 +86,6 @@ class PlanOptions:
     include_outliers: bool = False
     legacy_scopes: str | None = None  # leave | same (default ans.policy / ask)
     scenarios: Collection[str] | None = None  # restrict to these scenario ids
-    enable_scenarios: Collection[str] = ()  # force-enable gated scenarios
-    extra_groups: Collection[str] = ()  # additionally enabled groups
-    disabled_groups: Collection[str] = ()
     # Labels an earlier apply wrote into device text (state.json
     # ``baseline_text_labels`` keys): their references follow a rename even when
     # the label is not distinctive, so revert undoes exactly what apply wrote.
@@ -206,8 +203,6 @@ def build_value_maps(
         if sa.skip:
             maps.skipped.add(seg.key)
             continue
-        for nid, name in seg.labels.items():
-            maps.old_labels[nid] = name
     for seg in sorted(a.segments, key=lambda s: s.status == "CARRIER"):
         if seg.key in maps.skipped:
             continue
@@ -825,8 +820,6 @@ def _scenario_enabled(sc: Any, a: Analysis, ans: Answers, opts: PlanOptions) -> 
     if not _applies(sc, a, opts):
         return False
     if getattr(sc, "gated", False):
-        if sid in opts.enable_scenarios:
-            return True
         return ans.scenario_enabled(sid, opts.lab_id or a.lab.lab_id) is True
     return True
 
@@ -895,9 +888,7 @@ def build_plan(a: Analysis, ans: Answers, opts: PlanOptions | None = None) -> Pl
         if not (g.endswith(HEURISTIC_SUFFIX) and not include_heur)
         and not (g.startswith(COSMETIC_PREFIX) and not maps.cosmetic_text)
         and not g.startswith(OUTLIER_PREFIX)
-        and g not in opts.disabled_groups
     }
-    enabled |= set(opts.extra_groups) & groups
     lab_path = Path(a.lab.path) if a.lab.path else Path("lab.unl")
     base: dict[str, str] = {}
     if a.lab.path:

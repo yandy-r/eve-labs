@@ -5,23 +5,18 @@ from __future__ import annotations
 import shutil
 import unittest
 from collections import Counter
-from pathlib import Path
 
-from evelab.common.codec import apply_text_edits, decode_blob
+from evelab.common.codec import decode_blob
 from evelab.common.unl import RawLab
 from evelab.localize import dialects
 from evelab.localize.errors import LocalizeError
 from evelab.localize.manifest import Manifest, NodeOverride
-from evelab.localize.model import ConfigText, Node, Store, TextEdit
+from evelab.localize.model import Node, Store
 from evelab.localize.stores import (
     active_scope,
     find_sidecar_dirs,
     is_garbage_text,
     load_texts,
-    mirror_source,
-    mirrors_agree,
-    newline_style,
-    write_sidecar,
 )
 
 from .labfiles import minilab, minilab_path, read_real, real_lab_paths
@@ -43,17 +38,6 @@ def _by(texts, kind, node_id=None):
 
 def _manifest(lab: RawLab, **kw) -> Manifest:
     return Manifest(lab=lab.path.name, lab_id=lab.lab_id or LAB_ID, **kw)
-
-
-def _sidecar_ct(text: str) -> ConfigText:
-    return ConfigText(
-        Store("sidecar", "x_cfgs/1_a.txt", "startup"),
-        "1",
-        text,
-        "generic",
-        None,
-        Path("x_cfgs/1_a.txt"),
-    )
 
 
 class EmbeddedTests(unittest.TestCase):
@@ -332,21 +316,8 @@ class MirrorTests(unittest.TestCase):
         srv = _by(texts, "sidecar", "4")[0]
         self.assertEqual(srv.mirror_of, ("startup", "4"))
         self.assertEqual(srv.store.scope, "startup")
-        src = mirror_source(texts, srv)
-        self.assertIs(src, _by(texts, "startup", "4")[0])
-        self.assertEqual(src.text, srv.text)
-        self.assertIsNone(mirror_source(texts, _by(texts, "sidecar", "3")[0]))
-
-    def test_mirror_edits_agree(self):
-        texts, _ = load_texts(minilab("basic"))
-        srv = _by(texts, "sidecar", "4")[0]
-        src = mirror_source(texts, srv)
-        i = srv.text.index("10.100.51.31")
-        edit = TextEdit(i, i + 12, "10.100.51.31", "10.9.9.31")
-        a = apply_text_edits(srv.text, [edit])
-        b = apply_text_edits(src.text, [edit])
-        self.assertTrue(mirrors_agree(a, b))
-        self.assertFalse(mirrors_agree(a, src.text))
+        self.assertEqual(srv.text, _by(texts, "startup", "4")[0].text)
+        self.assertIsNone(_by(texts, "sidecar", "3")[0].mirror_of)
 
     def test_diverged_sidecar_is_independent(self):
         p = minilab_path("basic")
@@ -383,62 +354,6 @@ class MirrorTests(unittest.TestCase):
         self.assertEqual(active_scope(None, {}), "startup")
 
 
-class NewlineTests(unittest.TestCase):
-    def test_style_detection(self):
-        self.assertEqual(newline_style("a\nb\n"), "lf")
-        self.assertEqual(newline_style("a\r\nb\r\n"), "crlf")
-        self.assertEqual(newline_style("a\r\nb\n"), "mixed")
-        self.assertEqual(newline_style("abc"), "none")
-
-    def test_crlf_sidecar_roundtrip(self):
-        lab = minilab("crlf_sidecar")
-        texts, _ = load_texts(lab)
-        fw1, fw2 = _by(texts, "sidecar", "2")[0], _by(texts, "sidecar", "3")[0]
-        self.assertEqual(newline_style(fw1.text), "crlf")
-        self.assertTrue(fw1.text.endswith("\r\n"))
-        self.assertFalse(fw2.text.endswith("\n"))
-        for ct in (fw1, fw2):
-            self.assertEqual(write_sidecar(ct, ct.text), ct.path.read_bytes())
-
-    def test_crlf_preserved_on_edit(self):
-        texts, _ = load_texts(minilab("crlf_sidecar"))
-        fw1 = _by(texts, "sidecar", "2")[0]
-        new = fw1.text.replace("end\r\n", "end\n# added\n")
-        out = write_sidecar(fw1, new)
-        self.assertNotIn(b"\n", out.replace(b"\r\n", b""))
-        self.assertTrue(out.endswith(b"# added\r\n"))
-        # trailing newline restored when an edit drops it
-        out2 = write_sidecar(fw1, fw1.text.rstrip("\r\n"))
-        self.assertEqual(out2, fw1.path.read_bytes())
-
-    def test_no_trailing_newline_kept(self):
-        texts, _ = load_texts(minilab("crlf_sidecar"))
-        fw2 = _by(texts, "sidecar", "3")[0]
-        out = write_sidecar(fw2, fw2.text + "\n")
-        self.assertEqual(out, fw2.path.read_bytes())
-        self.assertEqual(
-            write_sidecar(fw2, fw2.text.replace("10.100.51.2", "10.9.9.2")),
-            fw2.path.read_bytes().replace(b"10.100.51.2", b"10.9.9.2"),
-        )
-
-    def test_lf_and_utf8_roundtrip(self):
-        texts, _ = load_texts(minilab("basic"))
-        fw = _by(texts, "sidecar", "3")[0]
-        self.assertEqual(write_sidecar(fw, fw.text), fw.path.read_bytes())
-        out = write_sidecar(fw, fw.text.replace("\n", "\r\n"))
-        self.assertEqual(out, fw.path.read_bytes())
-
-    def test_surrogateescape(self):
-        ct = _sidecar_ct("caf\udce9\n")
-        self.assertEqual(write_sidecar(ct, ct.text), b"caf\xe9\n")
-
-    def test_not_sidecar(self):
-        ct = _sidecar_ct("x\n")
-        ct.store = Store("startup", "startup", "startup")
-        with self.assertRaises(LocalizeError):
-            write_sidecar(ct, "y\n")
-
-
 class RealLabTests(unittest.TestCase):
     """Read-only checks on the committed labs (no writes)."""
 
@@ -464,10 +379,6 @@ class RealLabTests(unittest.TestCase):
         self.assertEqual(scopes, {"vxlan-dmvpn-backbone": 61, "startup": 11})
         for t in sc:
             self.assertEqual(t.store.scope, t.mirror_of[0])
-            src = mirror_source(texts, t)
-            self.assertIsNotNone(src)
-            self.assertEqual(src.text, t.text)
-            self.assertEqual(write_sidecar(t, t.text), t.path.read_bytes())
         self.assertFalse(
             [f for f in findings if f.severity in ("warn", "blocker", "error")]
         )
@@ -484,7 +395,6 @@ class RealLabTests(unittest.TestCase):
         for t in sc:
             self.assertIsNone(t.mirror_of)
             self.assertEqual(t.store.scope, active_scope(nodes[t.node_id], cs))
-            self.assertEqual(write_sidecar(t, t.text), t.path.read_bytes())
         self.assertFalse(
             [f for f in findings if f.severity in ("warn", "blocker", "error")]
         )

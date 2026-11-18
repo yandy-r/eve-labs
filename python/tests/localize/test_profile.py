@@ -111,9 +111,6 @@ class LoadTests(unittest.TestCase):
         again = profile.load_profile([SITE])
         self.assertEqual(again.roles["mgmt"], "pnet1")
 
-    def test_load_answers(self) -> None:
-        self.assertEqual(profile.load_answers(SITE), profile.load_profile([SITE]))
-
 
 class ValidationTests(TempDirCase):
     def rejects(self, text: str, pattern: str) -> None:

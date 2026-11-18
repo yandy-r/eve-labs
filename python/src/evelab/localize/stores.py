@@ -18,8 +18,7 @@ node's name (``warn SIDECAR_MISMATCH`` otherwise); the manifest ``[sidecar_map]`
 (``"file" = "node id"``, key = file name or lab-relative path) forces a mapping.
 
 Sidecars are read as bytes and decoded as UTF-8 with ``surrogateescape``; the
-text is **not** newline-normalised, so spans are exact and ``write_sidecar``
-reproduces the original newline style and trailing-newline state.
+text is **not** newline-normalised, so spans are exact.
 
 Mirror detection: a sidecar that is byte-identical to one of its node's decoded
 blobs gets ``mirror_of = (store scope, node_id)`` (scope = ``"startup"`` or the
@@ -35,7 +34,7 @@ Opaque texts (``ConfigText.opaque``) produce no facts: undecodable/binary blobs
 from __future__ import annotations
 
 import re
-from collections.abc import Iterable, Mapping
+from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 from typing import TYPE_CHECKING, Literal
@@ -58,10 +57,6 @@ __all__ = [
     "find_sidecar_dirs",
     "is_garbage_text",
     "load_texts",
-    "mirror_source",
-    "mirrors_agree",
-    "newline_style",
-    "write_sidecar",
 ]
 
 SIDECAR_RE = re.compile(r"^(\d+)_(.+)\.txt$")
@@ -71,7 +66,6 @@ FALLBACK_DIALECT = "generic"
 SIDECAR_ENCODING = "utf-8"
 SIDECAR_ERRORS = "surrogateescape"
 
-NewlineStyle = Literal["lf", "crlf", "mixed", "none"]
 
 # A decodable blob whose stripped text is one short token with no dots (the VPCS
 # config "ff") carries no configuration: it is treated as opaque.
@@ -111,74 +105,8 @@ def is_garbage_text(text: str) -> bool:
     )
 
 
-def newline_style(text: str) -> NewlineStyle:
-    """Line-ending style of ``text``."""
-    lf = text.count("\n")
-    crlf = text.count("\r\n")
-    if lf == 0:
-        return "none"
-    if crlf == 0:
-        return "lf"
-    if crlf == lf:
-        return "crlf"
-    return "mixed"
-
-
-def _ends_with_newline(text: str) -> bool:
-    return text.endswith("\n")
-
-
-def write_sidecar(ct: ConfigText, new_text: str) -> bytes:
-    """Bytes of a sidecar after editing, in ``ct``'s newline style and trailing-nl.
-
-    ``ct.text`` is the original (un-normalised) text.  CRLF files get bare LFs
-    in ``new_text`` converted to CRLF; LF files get CRLFs converted to LF; mixed
-    or single-line files keep ``new_text`` as is.  The trailing-newline state of
-    the original is restored (one newline added or removed).
-    """
-    if ct.store.kind != "sidecar":
-        raise LocalizeError(
-            f"write_sidecar called for a {ct.store.kind} store", code="NOT_SIDECAR"
-        )
-    style = newline_style(ct.text)
-    out = new_text
-    if style == "crlf":
-        out = re.sub(r"(?<!\r)\n", "\r\n", out)
-    elif style == "lf":
-        out = out.replace("\r\n", "\n")
-    eol = "\r\n" if style == "crlf" else "\n"
-    if _ends_with_newline(ct.text):
-        if not _ends_with_newline(out):
-            out += eol
-    elif out.endswith("\r\n"):
-        out = out[:-2]
-    elif out.endswith("\n"):
-        out = out[:-1]
-    return out.encode(SIDECAR_ENCODING, SIDECAR_ERRORS)
-
-
 def _text_bytes(blob: DecodedBlob) -> bytes:
     return blob.text.encode(blob.encoding)
-
-
-def mirror_source(texts: Iterable[ConfigText], ct: ConfigText) -> ConfigText | None:
-    """The embedded ``ConfigText`` a sidecar ``ct`` mirrors (``None`` if none)."""
-    if ct.mirror_of is None:
-        return None
-    scope, node_id = ct.mirror_of
-    for other in texts:
-        if (
-            other.store.kind in ("startup", "configset")
-            and other.store.scope == scope
-            and other.node_id == node_id
-        ):
-            return other
-    return None
-
-
-def mirrors_agree(sidecar_text: str, blob_text: str) -> bool:
-    """Post-edit equality check of a mirror pair (lab aborts when False)."""
-    return sidecar_text == blob_text
 
 
 # ------------------------------------------------------------- dialect pick

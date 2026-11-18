@@ -61,7 +61,6 @@ class Env:
             "tmp_root": self.tmp_root,
             "docker_names": no_docker,
             "check_labs_peers": [],
-            "run_id": None,
         }
         base.update(kw)
         return ap.ApplyOptions(**base)  # type: ignore[arg-type]

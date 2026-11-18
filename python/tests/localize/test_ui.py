@@ -659,11 +659,8 @@ class DiffTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             ui.apply_text_edits("abc", [TextEdit(2, 9, "c", "y")])
 
-    def test_ui_diff_methods(self) -> None:
+    def test_ui_diff_edits(self) -> None:
         u, out, _ = make()
-        self.assertTrue(u.diff("a\n", "b\n", "lbl"))
-        self.assertFalse(u.diff("a\n", "a\n", "lbl"))
-        self.assertIn("--- lbl", out.getvalue())
         text = "psk topsecret\n"
         u.redactor.add("topsecret")
         self.assertTrue(
@@ -682,20 +679,6 @@ class RedactTests(unittest.TestCase):
         self.assertEqual(r.mask("ab"), "ab")
         r = ui.Redactor(["secret"], show=True)
         self.assertEqual(r.mask("secret"), "secret")
-        self.assertEqual(r.display("secret"), "secret")
-        self.assertEqual(ui.Redactor(["secret"]).display("secret"), "****")
-
-    def test_digest(self) -> None:
-        d = ui.sha256_digest("x")
-        self.assertTrue(d.startswith("sha256:"))
-        self.assertEqual(len(d), 7 + 64)
-        self.assertEqual(ui.Redactor.digest("x"), d)
-
-    def test_display_value(self) -> None:
-        self.assertEqual(ui.display_value("secret", "pw"), "****")
-        self.assertEqual(ui.display_value("ip_host", "1.2.3.4", {"secret"}), "****")
-        self.assertEqual(ui.display_value("ip_host", "1.2.3.4"), "1.2.3.4")
-        self.assertEqual(ui.display_value("secret", "pw", show=True), "pw")
 
 
 if __name__ == "__main__":

@@ -30,8 +30,6 @@ class AnalyseOptions:
     """Knobs for :func:`analyse` (all default to the documented behaviour)."""
 
     include_outliers: bool = False  # outlier endpoints join their scheme
-    textobjects: bool = True  # parse canvas textobjects (eve_html)
-    max_depth: int = l2trace.MAX_DEPTH  # L2 trace bridge hops
     canonical_scope: str | None = None  # overrides manifest canonical_scope
 
 
@@ -136,9 +134,7 @@ def discover(
     nodes = lab.node_models()
     networks = lab.network_models()
     topo = topology.build(lab, nodes, networks)
-    texts, findings = stores.load_texts(
-        lab, nodes, manifest, textobjects=opts.textobjects
-    )
+    texts, findings = stores.load_texts(lab, nodes, manifest)
     findings = list(findings) + list(topo.findings)
     extra_rules = manifest_rules(manifest, findings)
     index = topology.ConfigIndex(topo, texts, extra_rules)
@@ -153,7 +149,7 @@ def discover(
         facts.setdefault(f.id, f)
     findings.extend(index.notes[noted:])
 
-    traces = l2trace.trace_all(topo, index, opts.max_depth)
+    traces = l2trace.trace_all(topo, index)
     seen_codes: set[tuple[str, str]] = set()
     for tr in traces.values():
         for fnd in tr.findings:

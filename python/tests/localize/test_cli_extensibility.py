@@ -6,7 +6,6 @@
   revert/check refuse (UNKNOWN_DIALECT) without them; ``$EVE_LOCALIZE_PLUGINS``;
 * #28 real-lab lists are derived from the tree;
 * #29 built-in dialect/scenario modules are auto-discovered;
-* #30 ``ParamKind.render`` is documented as reserved;
 * #31 two pack files declaring the same dialect raise DIALECT_DUPLICATE;
 * #32 duplicate scenario ids raise SCENARIO_DUPLICATE (``override=True`` opts in);
 * #35 a localized bridge never makes the example profile stale;
@@ -39,7 +38,6 @@ from evelab.localize.discover.topology import ConfigIndex
 from evelab.localize.errors import LocalizeError
 from evelab.localize.model import ConfigText, Store
 from evelab.localize.profile import Profile, SegmentAnswer
-from evelab.localize.scenarios.base import ParamKind
 from evelab.localize.ui import UI
 
 from .goldlib import Tree, answers_path, real_stems
@@ -275,9 +273,6 @@ class TestModuleDiscovery(unittest.TestCase):
         tmp = self._tmp_pkg(["syslog.py", "base.py", "extra_common.py"])
         with mock.patch.object(scenarios, "__path__", [tmp]):
             self.assertEqual(scenarios._discover_modules(), ("syslog",))
-
-    def test_param_kind_render_is_reserved(self) -> None:
-        self.assertIn("RESERVED", ParamKind.__doc__ or "")
 
 
 # --------------------------------------------------------------------------- #
