@@ -471,7 +471,6 @@ class RawLab:
         self._textobjects: list[RawBlob] = []
         self._configsets: dict[str, str] = {}
         self._objects_count = 0
-        self._skips: list[tuple[str, Span]] = []
         root = _tokenize(raw)
         if root.tag != "lab":
             raise LabParseError(f"root element is <{root.tag}>, expected <lab>")
@@ -529,17 +528,11 @@ class RawLab:
             nets_el = topo.child("networks")
             if nets_el is not None:
                 self._networks = [self._elem(n) for n in nets_el.kids("network")]
-        desc = root.child("description")
-        if desc is not None:
-            self._skips.append(("description", Span(desc.span.start, desc.end)))
         objects = root.kids("objects")
         self._objects_count = len(objects)
         main = next((o for o in objects if o.children), None)
         if main is None:
             return
-        for tag in ("tasks", "lineobjects"):
-            for el in main.kids(tag):
-                self._skips.append((tag, Span(el.span.start, el.end)))
         configs = main.child("configs")
         if configs is not None:
             self._index_configs(configs, "startup", None)
@@ -640,10 +633,6 @@ class RawLab:
     def objects_count(self) -> int:
         """Number of ``<objects>`` children of ``<lab>``, stray empty ones included."""
         return self._objects_count
-
-    def skip_regions(self) -> list[tuple[str, Span]]:
-        """Regions never decoded: ``description``, ``tasks``, ``lineobjects``."""
-        return list(self._skips)
 
     def network_models(self) -> dict[str, Network]:
         """Networks as the shared model, keyed by id (first wins on duplicates)."""

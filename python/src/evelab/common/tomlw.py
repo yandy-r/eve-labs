@@ -186,13 +186,11 @@ def _same(a: object, b: object) -> bool:
     return type(a) is type(b) and a == b
 
 
-def dumps(
-    data: Mapping[str, object], *, header: str | None = None, verify: bool = True
-) -> str:
+def dumps(data: Mapping[str, object], *, header: str | None = None) -> str:
     """Serialise ``data`` to TOML text.
 
-    ``header`` becomes ``#`` comment lines at the top. With ``verify`` (default) the
-    text is parsed back with ``tomllib`` and must equal the input, else
+    ``header`` becomes ``#`` comment lines at the top. The text is parsed back
+    with ``tomllib`` and must equal the input, else
     ``TomlWriteError`` is raised.
     """
     root = normalize(data)
@@ -203,8 +201,7 @@ def dumps(
     if header:
         comment = "\n".join(f"# {ln}".rstrip() for ln in header.splitlines())
         text = comment + ("\n\n" + text if text else "\n")
-    if verify:
-        verify_roundtrip(text, root)
+    verify_roundtrip(text, root)
     return text
 
 

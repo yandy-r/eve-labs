@@ -119,14 +119,6 @@ class ModeTests(unittest.TestCase):
         self.assertEqual(out.getvalue(), "")
         self.assertIn("bad", err.getvalue())
 
-    def test_debug_only_verbose(self) -> None:
-        u, _, err = make()
-        u.debug("d")
-        self.assertEqual(err.getvalue(), "")
-        u, _, err = make(verbosity=1)
-        u.debug("d")
-        self.assertIn("d", err.getvalue())
-
     def test_unicode_encode_fallback(self) -> None:
         raw = io.BytesIO()
         out = io.TextIOWrapper(raw, encoding="ascii")
@@ -325,11 +317,6 @@ class NonInteractiveTests(unittest.TestCase):
             u.pick_labs([ui.PickerRow("lab")])
         self.assertIsNone(u.secret("psk"))
         self.assertIn("psk", u.unanswered)
-
-    def test_page_prints_everything(self) -> None:
-        u, out = self.mk()
-        u.page("\n".join(f"l{i}" for i in range(500)))
-        self.assertEqual(len(out.getvalue().splitlines()), 500)
 
 
 class YesNoMenuTests(unittest.TestCase):
@@ -709,38 +696,6 @@ class RedactTests(unittest.TestCase):
         self.assertEqual(ui.display_value("ip_host", "1.2.3.4", {"secret"}), "****")
         self.assertEqual(ui.display_value("ip_host", "1.2.3.4"), "1.2.3.4")
         self.assertEqual(ui.display_value("secret", "pw", show=True), "pw")
-
-
-class PagerTests(unittest.TestCase):
-    def test_builtin_pager(self) -> None:
-        text = "\n".join(f"l{i}" for i in range(7))
-        u, out, _ = make("\n\n")
-        u.page(text, page_size=3, force=True, external=False)
-        shown = out.getvalue()
-        self.assertIn("l6", shown)
-        self.assertEqual(shown.count("-- more"), 2)
-
-    def test_builtin_pager_quit(self) -> None:
-        text = "\n".join(f"l{i}" for i in range(7))
-        u, out, _ = make("q\n")
-        u.page(text, page_size=3, force=True, external=False)
-        self.assertNotIn("l3", out.getvalue())
-
-    def test_short_text_printed(self) -> None:
-        u, out, _ = make()
-        u.page("a\nb\n", page_size=10, force=True)
-        self.assertEqual(out.getvalue(), "a\nb\n")
-
-    def test_external_pager_missing_falls_back(self) -> None:
-        u, out, _ = make("\n", env={"PAGER": "definitely-not-a-pager-xyz"})
-        text = "\n".join(f"l{i}" for i in range(5))
-        u.page(text, page_size=3, force=True)
-        self.assertIn("l4", out.getvalue())
-
-    def test_external_pager_used(self) -> None:
-        u, _out, _ = make(env={"PAGER": "sh -c 'cat >/dev/null'"})
-        # output goes to /dev/null; only assert the call reports success
-        self.assertTrue(u._external_pager("x\n"))
 
 
 if __name__ == "__main__":

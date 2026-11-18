@@ -19,9 +19,7 @@ from __future__ import annotations
 
 import os
 import re
-import shlex
 import shutil
-import subprocess
 import sys
 from collections.abc import Callable, Iterable, Mapping, Sequence
 from dataclasses import dataclass
@@ -412,10 +410,6 @@ class Console:
         for line in lines:
             self.out(line)
 
-    def debug(self, text: str) -> None:
-        if self.verbosity > 0:
-            self._write(self.stderr, self.style(text, "dim") + "\n")
-
     def note(self, text: str) -> None:
         self.out(self.style("note: ", "dim") + text)
 
@@ -700,60 +694,3 @@ class Console:
                 return parse_selection(raw, len(rows), selectable=ok, multi=multi)
             except ValueError as exc:
                 self.out(f"   {exc}")
-
-    # -- pager -------------------------------------------------------------
-
-    def page(
-        self,
-        text: str,
-        *,
-        page_size: int | None = None,
-        force: bool = False,
-        external: bool = True,
-    ) -> None:
-        """Show long text: external ``$PAGER`` (default ``less -FRX``), else a
-        built-in Enter-for-more pager; plain print when not interactive or short.
-        """
-        lines = text.split("\n")
-        if lines and lines[-1] == "":
-            lines.pop()
-        height = shutil.get_terminal_size((100, 24)).lines
-        size = page_size if page_size is not None else max(height - 2, 5)
-        paging = self.interactive and (force or self._isatty(self.stdout))
-        if not paging or len(lines) <= size:
-            self.lines(lines)
-            return
-        if external and self._external_pager(text):
-            return
-        i = 0
-        while i < len(lines):
-            self.lines(lines[i : i + size])
-            i += size
-            if i >= len(lines):
-                break
-            raw = self._readline(
-                self.style(
-                    f"-- more ({len(lines) - i} lines; Enter=next, q=stop) --", "dim"
-                )
-            )
-            if raw.strip().lower() == "q":
-                break
-
-    def _external_pager(self, text: str) -> bool:
-        cmd = shlex.split(self.env.get("PAGER") or "less -FRX")
-        if not cmd or shutil.which(cmd[0]) is None:
-            return False
-        try:
-            proc = subprocess.Popen(
-                cmd, stdin=subprocess.PIPE, text=True, encoding="utf-8"
-            )
-        except OSError:
-            return False
-        try:
-            if proc.stdin is not None:
-                proc.stdin.write(text if text.endswith("\n") else text + "\n")
-                proc.stdin.close()
-        except BrokenPipeError:
-            pass
-        proc.wait()
-        return True
