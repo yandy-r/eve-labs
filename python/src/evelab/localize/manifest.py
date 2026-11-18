@@ -184,16 +184,6 @@ class Manifest:
     def segment(self, key: str) -> ManifestSegment | None:
         return next((s for s in self.segments if s.key == key), None)
 
-    def segment_for_network(self, net_id: str) -> ManifestSegment | None:
-        return next((s for s in self.segments if net_id in s.networks), None)
-
-    def param(self, key: str) -> Param | None:
-        return next((p for p in self.params if p.key == key), None)
-
-    def scenario_enabled(self, scenario_id: str) -> bool:
-        pin = self.scenarios.get(scenario_id)
-        return pin is not None and pin.enabled
-
     def matches_lab_id(self, lab_id: str) -> bool:
         return self.lab_id.lower() == lab_id.lower()
 

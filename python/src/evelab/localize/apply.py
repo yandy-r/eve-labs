@@ -134,11 +134,8 @@ class ApplyOptions:
     require_clean: bool = False
     force_running: bool = False
     out_dir: Path | None = None
-    new_lab_id: str | None = None  # copy mode; default reuse dest id or uuid4
     continue_on_error: bool = False
     rescan: RescanHook | None = None
-    check_labs: bool = True
-    check_labs_script: Path = CHECK_LABS
     check_labs_peers: Sequence[Path] | None = None  # None = git-tracked labs
     mark_localized: bool = True  # False for `revert`: clears the state entry
     state_extra: Mapping[str, Mapping[str, Any]] = field(default_factory=dict)
@@ -146,10 +143,6 @@ class ApplyOptions:
     tmp_root: Path = hostenv.UNETLAB_TMP
     docker_names: Callable[[], Iterable[str]] = hostenv.docker_container_names
     use_fcntl: bool | None = None
-    run_id: str | None = None
-    clock: Callable[[], datetime] | None = None
-    user: str | None = None
-    host: str | None = None
 
 
 @dataclass
@@ -203,9 +196,6 @@ class RunRecord:
     journaled: bool = False
     mode: Literal["in-place", "out"] = "in-place"
 
-    def by_status(self, status: LabStatus) -> list[LabResult]:
-        return [r for r in self.labs if r.status == status]
-
     @property
     def ok(self) -> bool:
         return all(r.status in ("localized", "unchanged") for r in self.labs)
@@ -239,8 +229,8 @@ def _sha_file(path: Path) -> str | None:
         return None
 
 
-def _now(opts: ApplyOptions) -> datetime:
-    return opts.clock() if opts.clock else datetime.now(UTC)
+def _now() -> datetime:
+    return datetime.now(UTC)
 
 
 def _err(code: str, msg: str, refs: Iterable[str] = ()) -> Finding:
@@ -525,8 +515,6 @@ def _copy_id(
     another tracked lab (a plain copy of a peer) and not an id this run already
     gave another copy (review fixes, apply-safety).
     """
-    if opts.new_lab_id:
-        return opts.new_lab_id
     dest_id = None
     if dest_lab.is_file():
         with contextlib.suppress(LabParseError):
@@ -902,8 +890,7 @@ def _validate_all(
             changes.lab,
             changes=changes,
             expect_lab_id=changes.lab_id,
-            peers=_peers(plan, opts, dest) if opts.check_labs else (),
-            check_labs_script=opts.check_labs_script if opts.check_labs else None,
+            peers=_peers(plan, opts, dest),
         )
         if opts.rescan is not None and not any(f.severity in BLOCKING for f in found):
             try:
@@ -1251,8 +1238,6 @@ def _backup_rel(path: Path, root: Path | None) -> Path:
 
 
 def _new_run_id(opts: ApplyOptions, now: datetime, journal: dict[str, Any]) -> str:
-    if opts.run_id:
-        return opts.run_id
     base = now.strftime("%Y%m%dT%H%M%SZ")
     used = {r.get("run_id") for r in journal["runs"]}
     backups = _backup_root(opts)
@@ -1518,7 +1503,7 @@ def apply_plans(plans: Sequence[Plan], opts: ApplyOptions) -> RunRecord:
     """
     near = Path(plans[0].lab).parent if plans else None
     opts = replace(opts, state_dir=_state_dir(opts, near))
-    now = _now(opts)
+    now = _now()
     mode: Literal["in-place", "out"] = "out" if opts.out_dir is not None else "in-place"
     with _lock(opts, near):
         journal = load_journal(opts)
@@ -1548,8 +1533,8 @@ def apply_plans(plans: Sequence[Plan], opts: ApplyOptions) -> RunRecord:
                     run_entry = {
                         "run_id": run_id,
                         "ts": record.ts,
-                        "user": opts.user or _user(),
-                        "host": opts.host or socket.gethostname(),
+                        "user": _user(),
+                        "host": socket.gethostname(),
                         "mode": mode,
                         "labs": entries,
                     }
@@ -1672,7 +1657,7 @@ def undo(run_id: str | None, opts: ApplyOptions) -> list[Path]:
                     state[lab_id] = prev
                 else:
                     state.pop(lab_id, None)
-        run["undone"] = _now(opts).isoformat(timespec="seconds")
+        run["undone"] = _now().isoformat(timespec="seconds")
         _write_json(_state_dir(opts) / "journal.json", journal)
         _write_json(_state_dir(opts) / "state.json", state)
     return restored

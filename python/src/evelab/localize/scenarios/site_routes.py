@@ -96,7 +96,6 @@ register_param_kind(
         "site_routes",
         parse_site_routes,
         _validate,
-        fact_kinds=frozenset({"ip_route_dst"}),
     )
 )
 

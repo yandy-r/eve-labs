@@ -19,7 +19,6 @@ from __future__ import annotations
 
 import difflib
 import getpass
-import hashlib
 import re
 from collections.abc import Callable, Iterable, Mapping, Sequence
 from typing import IO
@@ -81,11 +80,6 @@ _STATUS_COLOR = {
 }
 
 
-def sha256_digest(value: str) -> str:
-    """``sha256:<hex>`` digest used instead of a secret in plans and JSON."""
-    return "sha256:" + hashlib.sha256(value.encode("utf-8")).hexdigest()
-
-
 class Redactor:
     """Masks known secret values (design 12.7). ``show=True`` disables masking.
 
@@ -113,24 +107,6 @@ class Redactor:
         for secret in sorted(self._secrets, key=len, reverse=True):
             text = text.replace(secret, MASK)
         return text
-
-    def display(self, value: str) -> str:
-        """The value as it may be shown: itself with ``show``, else ``****``."""
-        return value if self.show else MASK
-
-    @staticmethod
-    def digest(value: str) -> str:
-        """Stable ``sha256:`` digest for storing a secret in plans/JSON."""
-        return sha256_digest(value)
-
-
-def display_value(
-    kind: str, value: str, flags: Iterable[str] = (), *, show: bool = False
-) -> str:
-    """Mask a fact value when it is a secret (kind ``secret`` or flag ``secret``)."""
-    if not show and (kind == "secret" or "secret" in set(flags)):
-        return MASK
-    return value
 
 
 def _short_gateway(subnet: object, gateway: object) -> str:
@@ -435,19 +411,6 @@ class UI(Console):
 
     def plan_summary(self, plan: Plan) -> None:
         self.lines(render_plan_summary(plan, style=self.style))
-
-    def diff(self, before: str, after: str, label: str, *, context: int = 3) -> bool:
-        """Print a decoded unified diff; return False when there is no change."""
-        lines = unified_diff(
-            before,
-            after,
-            label,
-            context=context,
-            redactor=self.redactor,
-            style=self.style,
-        )
-        self.lines(lines)
-        return bool(lines)
 
     def diff_edits(self, text: str, edits: Sequence[Edit], label: str) -> bool:
         lines = diff_edits(

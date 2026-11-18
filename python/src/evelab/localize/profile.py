@@ -225,11 +225,6 @@ def load_profile(paths: list[Path]) -> Profile:
     return profile
 
 
-def load_answers(path: Path) -> Answers:
-    """Load one answers file (same format as a profile)."""
-    return load_profile([path])
-
-
 def _read(path: Path) -> dict[str, TomlValue]:
     try:
         with path.open("rb") as handle:
